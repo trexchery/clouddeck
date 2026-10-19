@@ -20,6 +20,7 @@ Small update to the first alpha release.
 
 ### Verification
 * Expanded local tests for cost approval, setup, JSON output and failure handling. Release workflow checks strict history hygiene, package metadata, wheel/sdist contents and SHA256 sums before publishing.
+* TUI tests wait for a dialog to finish mounting before querying its widgets, removing a race on slow Windows runners.
 
 ## [0.1.0] - 2026-10-18
 
