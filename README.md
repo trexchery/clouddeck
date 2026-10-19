@@ -66,7 +66,7 @@ Akash Console account with a funded balance and an API key. Per-OS commands: [QU
 
 ```bash
 # 1. Install, and try the simulated provider (free; nothing real is touched)
-pipx install clouddeck                   # or: pip install clouddeck (no PyPI? see QUICKSTART step 2)
+pipx install "git+https://github.com/trexchery/clouddeck@claude-skill"   # private repo, no PyPI: `gh auth login` + `gh auth setup-git` first
 clouddeck -p demo
 
 # 2. Create your config and secrets, then paste your Akash API key into the secrets file `ddc init` prints
