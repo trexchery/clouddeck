@@ -3,7 +3,7 @@
 From nothing to a running dev box and back to "nothing is billing", on Windows 11, Linux, WSL or macOS (experimental). Plan on about
 half an hour and **a few dollars at most** for the first real run. Steps 1 to 3 cost nothing.
 
-> **Real money.** Steps 7 and 8 create and close a paid Akash lease. Read the warning block in the [README](../README.md#warning-money-secrets-and-limits)
+> **Real money.** Steps 7 and 8 create and close a paid Akash lease. Read the warning block in the [README](../README.md#good-to-know)
 > and [COSTS-AND-SAFETY.md](COSTS-AND-SAFETY.md) first. Use a dedicated Akash account with a small balance.
 
 ## 1. Prerequisites
@@ -43,17 +43,16 @@ which is too old: install a newer Python first. On WSL, keep everything on the L
 
 **macOS** (unsupported, expect rough edges; there is no watchdog installer): `brew install python git gnupg gh`.
 
-Then `gh auth login` once.
+For checkpoint-backed dev boxes, sign in with `gh auth login` before `ddc install`.
 
 ## 2. Install CloudDeck
 
-This repository is private and has no PyPI package or releases: install from git. Collaborators authenticate once with `gh auth login`
-and `gh auth setup-git`; the `claude-skill` branch is the one to use for now.
+Install CloudDeck directly from GitHub. It is not published on PyPI. No GitHub login is needed when the repository is public.
 
 With [pipx](https://pipx.pypa.io) (its own virtual environment, commands on your PATH):
 
 ```bash
-pipx install "git+https://github.com/trexchery/clouddeck@claude-skill"
+pipx install "git+https://github.com/trexchery/clouddeck.git"
 ddc --version
 clouddeck --help
 ```
@@ -61,7 +60,7 @@ clouddeck --help
 Or with pip (ideally in a virtual environment):
 
 ```bash
-python -m pip install --user "git+https://github.com/trexchery/clouddeck@claude-skill"
+python -m pip install --user "git+https://github.com/trexchery/clouddeck.git"
 ```
 
 This installs three commands: `clouddeck` (the terminal UI), `ddc` (the command-line controller) and `claude-cloud` (attach to the box;
@@ -176,10 +175,11 @@ Open a new terminal on Windows afterwards. Check everything: `clouddeck doctor`.
 
 ```bash
 ddc status                 # balance and limits; "No ddc leases running (nothing is billing)."
-ddc start -p 16            # 16 vCPU dev box; asks nothing, but the guard checks the worst case first
+ddc start -p 16            # shows the worst-case quote; creates nothing without approval
+ddc start -p 16 --approve-usd 1.00  # after approving the $1.00 maximum for this 2 h example
 ```
 
-`ddc start` validates the config, checks tools and keys, then creates the lease, waits for bids, picks the best price per measured speed
+With `--approve-usd`, `ddc start` validates the config, checks tools and keys, then creates the lease, waits for bids, picks the best price per measured speed
 within your cap, installs the lease scripts, restores your newest checkpoint (if any), seeds repos missing from it, and starts a tmux
 session. It prints the host, the price and the hard stop time and ends with:
 
@@ -201,7 +201,7 @@ checkpoints, so you repeat it on each new box. Set `install_claude_code = false`
 
 **Verify the platform hard stop once.** The runtime limit is the only protection that works with your PC off, and it is Akash's
 behaviour, not this program's. Test it cheaply: set `max_runtime_hours = 1`, run `ddc uninstall` (so the watchdog does not close the box
-first), `ddc start -p 16`, do **not** run `ddc stop`, and look at the Console's Deployments page after an hour: the deployment should have
+first), `ddc start -p 16 --approve-usd 0.50`, do **not** run `ddc stop`, and look at the Console's Deployments page after an hour: the deployment should have
 closed by itself. Then run `ddc install` again. Worst case for the test: $0.50.
 
 ## 8. Verify billing stopped, and stop
@@ -235,7 +235,7 @@ Try the smallest one first (CPU only, a price cap of $0.20/h, one hour). The exa
 
 ```bash
 ddc job check examples/cpu-smoke.toml     # preflight, read-only; includes the same spending gate a real lease passes
-ddc job run   examples/cpu-smoke.toml     # costs cents; results land in ./outputs next to the spec
+ddc job run   examples/cpu-smoke.toml --approve-usd 0.20  # after approving the $0.20 maximum; outputs next to the spec
 ddc status                                # job leases show up here (role job); nothing should be left running
 ```
 
@@ -255,11 +255,11 @@ Or type the key then press Ctrl-D (Ctrl-Z, Enter on Windows). It prints what is 
 machine-readable report). Then `ddc job hardware --available` lists what can be rented. Every paid command (`ddc job run`, `ddc start`,
 `ddc scale`) needs `--approve-usd X`: run it once without to see the worst case, then re-run with at least that amount.
 
-To let Claude Code drive it: `npx skills add trexchery/clouddeck#claude-skill -g -a claude-code`.
+To let Claude Code drive it: `npx skills add trexchery/clouddeck -g -a claude-code`.
 
 ## 9. Next steps
 
-* Workers and distributed jobs: `ddc scale 2` (within `max_workers`), `dist.sh` on the box, the TUI's Workers tab. See [CLOUDDECK.md](CLOUDDECK.md).
+* Workers and distributed jobs: `ddc scale 2` (quote first, then approve via `--approve-usd`; within `max_workers`), `dist.sh` on the box, the TUI's Workers tab. See [CLOUDDECK.md](CLOUDDECK.md).
 * Hardware (GPU, custom sizes): the deploy form and [HARDWARE.md](HARDWARE.md).
 * Batch jobs with minimal paid idle time: [JOBS.md](JOBS.md).
 * Checkpoints, restore and failure modes: [CHECKPOINTS.md](CHECKPOINTS.md).

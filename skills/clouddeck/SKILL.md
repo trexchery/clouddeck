@@ -44,17 +44,16 @@ ddc --version || python -m clouddeck.controller --version
 ddc setup --json
 ```
 
-If `ddc` is missing, install it from the private repo (the user must be a collaborator; `gh auth login` then
-`gh auth setup-git` lets git use their GitHub login):
+If `ddc` is missing, install it directly from GitHub:
 
 ```bash
-pipx install "git+https://github.com/trexchery/clouddeck@claude-skill"
-# no pipx: python -m pip install --user "git+https://github.com/trexchery/clouddeck@claude-skill"
+pipx install "git+https://github.com/trexchery/clouddeck.git"
+# no pipx: python -m pip install --user "git+https://github.com/trexchery/clouddeck.git"
 ```
 
 On Windows, if `ddc` is not on PATH after a `pip --user` install, use `python -m clouddeck.controller` in place
-of `ddc` everywhere below. Requirements: Python 3.11+, the OpenSSH client (built into Windows 10/11), and git +
-gh for the install from the private repo only. Running jobs needs no gh, gpg or git.
+of `ddc` everywhere below. Requirements: Python 3.11+, the OpenSSH client (built into Windows 10/11), and git for installation.
+Running jobs needs no gh, gpg or git.
 
 `ddc setup --json` reports `ready_for_jobs` and `next_steps`. It is idempotent and never overwrites user files.
 When the API key is missing, tell the user:
