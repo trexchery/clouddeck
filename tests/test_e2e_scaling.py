@@ -105,7 +105,7 @@ def test_concurrent_scale_ups_cannot_exceed_the_worker_cap(e2e, capsys):
     results = []
 
     def go():
-        results.append(ddc.main(["scale", "3", "--yes"]))
+        results.append(ddc.main(["scale", "3", "--yes", "--approve-usd", "1000"]))
     threads = [threading.Thread(target=go) for _ in range(3)]
     for t in threads:
         t.start()

@@ -75,3 +75,10 @@ rule = "private-word"
 path = "tests/test_safety_watchdog.py"
 contains = "DrillDevCloud-Watchdog"
 reason = "Tests that uninstall / install leave the pre-rename Windows scheduled task alone and only report it."
+
+# ---- job setup test: generic SSH key-generation command identifiers (not private project terms) ----
+[[allow]]
+rule = "private-word"
+path = "tests/test_setup.py"
+contains = "keygen"
+reason = "The job setup test stubs ordinary SSH key creation; the matching identifier is not a private project name."

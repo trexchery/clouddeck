@@ -47,42 +47,25 @@ Then `gh auth login` once.
 
 ## 2. Install CloudDeck
 
+This repository is private and has no PyPI package or releases: install from git. Collaborators authenticate once with `gh auth login`
+and `gh auth setup-git`; the `claude-skill` branch is the one to use for now.
+
 With [pipx](https://pipx.pypa.io) (its own virtual environment, commands on your PATH):
 
 ```bash
-pipx install clouddeck
+pipx install "git+https://github.com/trexchery/clouddeck@claude-skill"
 ddc --version
 clouddeck --help
 ```
 
-Or with pip in a virtual environment:
+Or with pip (ideally in a virtual environment):
 
 ```bash
-python -m venv ~/.venvs/clouddeck            # Windows: python -m venv $HOME\.venvs\clouddeck
-. ~/.venvs/clouddeck/bin/activate            # Windows: & $HOME\.venvs\clouddeck\Scripts\Activate.ps1
-pip install clouddeck
+python -m pip install --user "git+https://github.com/trexchery/clouddeck@claude-skill"
 ```
 
 This installs three commands: `clouddeck` (the terminal UI), `ddc` (the command-line controller) and `claude-cloud` (attach to the box;
-the same as `ddc attach`). To install from source instead: `pip install git+https://github.com/trexchery/clouddeck`.
-
-**Fallback: the wheel from a GitHub release.** Every [release](https://github.com/trexchery/clouddeck/releases) carries the same wheel
-and sdist as PyPI plus a `SHA256SUMS` file. Check the wheel before you install it:
-
-```bash
-V=0.1.0
-curl -fLO "https://github.com/trexchery/clouddeck/releases/download/v$V/clouddeck-$V-py3-none-any.whl"
-curl -fLO "https://github.com/trexchery/clouddeck/releases/download/v$V/SHA256SUMS"
-sha256sum --ignore-missing -c SHA256SUMS     # macOS: shasum -a 256 --ignore-missing -c SHA256SUMS; must print "...whl: OK"
-pipx install "./clouddeck-$V-py3-none-any.whl"
-```
-
-```powershell
-# Windows: download the same two files (or `gh release download v0.1.0 --repo trexchery/clouddeck`), then compare the hashes
-(Get-FileHash .\clouddeck-0.1.0-py3-none-any.whl -Algorithm SHA256).Hash.ToLower()
-Select-String "clouddeck-0.1.0-py3-none-any.whl" .\SHA256SUMS           # the two hashes must be identical
-pipx install .\clouddeck-0.1.0-py3-none-any.whl
-```
+the same as `ddc attach`). To update, run the same command again with `--force` (pipx) or `--upgrade` (pip).
 
 ## 3. Try the simulated provider (free)
 
@@ -258,6 +241,21 @@ ddc status                                # job leases show up here (role job); 
 
 A job lease counts toward `max_total_leases` and the budget like any other, and `ddc watchdog` closes one whose runner died. If you
 set `unsafe_disable_limits` or raised `max_price_usd_hr`, read [JOBS.md](JOBS.md) first.
+
+### Jobs-only setup (GPU/CPU batch jobs)
+
+For batch jobs you need only Python, OpenSSH and an Akash Console API key (no `gh`, `gpg` or state repo). Install as in step 2, then one
+command creates the config, secrets and ssh key, stores the key and registers the watchdog (Windows: only the `CloudDeck-Watchdog` task):
+
+```powershell
+Get-Content key.txt | ddc setup --api-key-stdin --watchdog      # bash: ddc setup --api-key-stdin --watchdog < key.txt
+```
+
+Or type the key then press Ctrl-D (Ctrl-Z, Enter on Windows). It prints what is missing and exits 0 only when ready (`--json` for a
+machine-readable report). Then `ddc job hardware --available` lists what can be rented. Every paid command (`ddc job run`, `ddc start`,
+`ddc scale`) needs `--approve-usd X`: run it once without to see the worst case, then re-run with at least that amount.
+
+To let Claude Code drive it: `npx skills add trexchery/clouddeck#claude-skill -g -a claude-code`.
 
 ## 9. Next steps
 

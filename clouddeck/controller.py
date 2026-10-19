@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures as cf
+import contextlib
 import datetime as dt
 import hashlib
 import html
@@ -189,9 +190,12 @@ GPG = resolve_gpg()
 
 
 # ---------------------------------------------------------------- basics
+LOG_STDERR = False   # --json commands: stdout carries only the JSON
+
+
 def log(msg: str) -> None:
     line = f"[{dt.datetime.now().strftime('%H:%M:%S')}] {msg}"
-    print(line, flush=True)
+    print(line, flush=True, file=sys.stderr if LOG_STDERR else None)
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     with LOG.open("a", encoding="utf-8") as f:
         f.write(dt.datetime.now().isoformat(timespec="seconds") + " " + msg + "\n")
@@ -448,6 +452,58 @@ class _StateLock:
 
 _state_lock = _StateLock()
 _create_lock = threading.Lock()  # limit check + write-ahead record of a new lease are one step
+
+# ---------------------------------------------------------------- per-operation cost approval
+# A paid CLI command (`ddc start`, `ddc scale` up, `ddc job run`) needs `--approve-usd X`: X is what the owner explicitly approved for THIS
+# one command. It covers the command's total exposure: closed leases at what they cost, live ones at their worst case (cap x runtime limit).
+# A lease that would push the exposure past X is refused, so a fallback or retry never spends beyond the approval. There is no env var or
+# config key for it on purpose: an approval lasts one process and is never persisted.
+APPROVAL: dict[str, Any] | None = None   # {"usd": X, "live": {name|dseq: worst}, "spent": float}
+_approval_lock = threading.Lock()
+
+
+def approve_hint(worst: float) -> float:
+    return math.ceil(round(worst * 100, 6)) / 100
+
+
+def require_approval(usd: float | None, worst: float, what: str) -> None:
+    """Called by a paid CLI command before it creates anything; `worst` is the command's worst case at the price caps."""
+    global APPROVAL
+    if usd is None:
+        die(f"{what} creates paid lease(s): worst case ${worst:.2f} (price cap x runtime limit). Nothing was created. "
+            f"Ask the owner to approve that amount, then re-run with --approve-usd {approve_hint(worst):.2f}")
+    if not (isinstance(usd, int | float) and math.isfinite(usd) and usd > 0):
+        die(f"--approve-usd must be a positive amount, not {usd!r}")
+    if worst > usd + 1e-9:
+        die(f"{what}: worst case ${worst:.2f} is above the approved ${usd:.2f}; nothing was created (approve at least {approve_hint(worst):.2f}, or lower the price cap / runtime)")
+    with _approval_lock:
+        if APPROVAL is None:   # `ddc start -w N` approves dev box + workers once, its inner scale call keeps that approval
+            APPROVAL = {"usd": float(usd), "live": {}, "spent": 0.0}
+
+
+def _approval_reserve(name: str, worst: float) -> None:
+    if APPROVAL is None:
+        return
+    with _approval_lock:
+        exposure = APPROVAL["spent"] + sum(APPROVAL["live"].values()) + worst
+        if exposure > APPROVAL["usd"] + 1e-9:
+            die(f"refusing to create {name}: this command's exposure would reach ${exposure:.2f}, above the ${APPROVAL['usd']:.2f} approved "
+                f"(--approve-usd); no further paid attempt without a new approval")
+        APPROVAL["live"][name] = worst
+
+
+def _approval_rekey(name: str, dseq: str) -> None:
+    if APPROVAL is not None:
+        with _approval_lock:
+            if name in APPROVAL["live"]:
+                APPROVAL["live"][dseq] = APPROVAL["live"].pop(name)
+
+
+def _approval_closed(dseq: str, cost: float) -> None:
+    if APPROVAL is not None:
+        with _approval_lock:
+            if APPROVAL["live"].pop(dseq, None) is not None:
+                APPROVAL["spent"] += max(0.0, float(cost))
 
 
 # ---------------------------------------------------------------- config validation
@@ -1232,6 +1288,7 @@ def launch_lease(name: str, sdl: str, *, role: str, limit_h: int, cap_usd_hr: fl
             die(f"refusing to create {name}: {e}")
         if usd_hr_from_uact_block(ordered) > cap_usd_hr * 1.001:
             die(f"refusing to create {name}: the SDL orders at {ordered} uact/block = ${usd_hr_from_uact_block(ordered):.4f}/h, above the ${cap_usd_hr:g}/h cap the budget check used")
+        _approval_reserve(name, cap_usd_hr * limit_h)   # an unknown create outcome stays reserved: it may be billing
         update_state(lambda st: st.setdefault("pending", {}).__setitem__(
             name, {"role": role, "profile": profile, "idx": idx, "limit_h": limit_h, "max_usd_hr": cap_usd_hr, "created_at": now(), **extra}))
     created = _post_deployment(name, sdl, limit_h)
@@ -1242,6 +1299,7 @@ def launch_lease(name: str, sdl: str, *, role: str, limit_h: int, cap_usd_hr: fl
                                                limit_h=limit_h, max_usd_hr=cap_usd_hr, **extra)
         (st.get("pending") or {}).pop(name, None)
     update_state(promote)
+    _approval_rekey(name, dseq)
     ledger_add({"event": "created", "dseq": dseq, "name": name, "role": role, "profile": profile})
     return created
 
@@ -1407,6 +1465,7 @@ def close_box(dseq: str, listed: dict[str, Any] | None = None) -> float:
     rec = listed if listed is not None else load_state()["deps"][dseq]
     if listed is None and rec.get("status") == "closed":  # another process (watchdog, runner, stop) booked this close while we waited: never book a lease twice
         log(f"{rec.get('name')} dseq={dseq}: already recorded as closed by another ddc process")
+        _approval_closed(dseq, float(rec.get("cost_usd") or 0))
         return float(rec.get("cost_usd") or 0)
     transferred = _transferred_usd(det)
     est, _ = dep_running_cost(rec)
@@ -1422,6 +1481,7 @@ def close_box(dseq: str, listed: dict[str, Any] | None = None) -> float:
         update_dep(dseq, status="closed", closed_at=now(), cost_usd=cost)
     ledger_add({"event": "closed", "dseq": dseq, "cost_usd": round(cost, 4), "transferred_usd": round(transferred, 4), **({"by": "fallback-listing"} if listed is not None else {})})
     log(f"closed {rec.get('name')} dseq={dseq}: confirmed closed, billing stopped, cost ${cost:.3f}")
+    _approval_closed(dseq, cost)
     return cost
 
 
@@ -2111,6 +2171,11 @@ def cmd_start(a: argparse.Namespace) -> None:
     if a.workers:  # refuse an impossible request before the dev box exists and starts billing
         check_worker_count(a.workers, with_dev=dev_box() is None)
         require_config(a.worker_profile or a.profile)
+    if getattr(a, "cli_paid", False):
+        worst = (0 if dev_box() else CFG["profiles"][a.profile]["max_usd_hr"] * int(CFG["max_runtime_hours"])) \
+            + a.workers * CFG["profiles"][a.worker_profile or a.profile]["max_usd_hr"] * int(CFG["worker_runtime_hours"])
+        if worst > 0:
+            require_approval(a.approve_usd, worst, "ddc start")
     if not state_repo():
         log("WARNING: state_repo is empty, checkpoints are disabled: stopping this box discards anything not pushed to GitHub")
     bad = preflight("dev")
@@ -2140,6 +2205,9 @@ def cmd_start(a: argparse.Namespace) -> None:
                     _close_unready(dseq, rec, errs)
                     if errs:
                         die(errs[0])
+            if getattr(a, "cli_paid", False):   # priced again after refresh_live: a stale record of a dead dev box must not skip the approval
+                require_approval(a.approve_usd, CFG["profiles"][a.profile]["max_usd_hr"] * int(CFG["max_runtime_hours"])
+                                 + a.workers * CFG["profiles"][a.worker_profile or a.profile]["max_usd_hr"] * int(CFG["worker_runtime_hours"]), "ddc start")
             check_budget(a.profile, 1, int(CFG["max_runtime_hours"]), role="dev")
             d = None
             for attempt in range(2):
@@ -2256,6 +2324,8 @@ def cmd_scale(a: argparse.Namespace) -> None:
             if dry:
                 print(f"Would create {add} worker lease(s) of profile {a.profile}: worst case ${pr['max_usd_hr'] * add * hours:.2f} at the price cap ({hours} h limit)")
                 return
+            if getattr(a, "cli_paid", False):
+                require_approval(a.approve_usd, pr["max_usd_hr"] * add * hours, "ddc scale")
             check_budget(a.profile, add, hours, role="worker")
             used = {w["idx"] for w in cur}
             idxs = [i for i in range(1, 100) if i not in used][:add]
@@ -2479,7 +2549,54 @@ def cmd_stop(a: argparse.Namespace) -> None:
         log(f"closed {len(sel)} lease(s){spent}" + (f"; left running: {', '.join(left)}" if left else ""))
 
 
+def status_json() -> dict[str, Any]:
+    """`ddc status --json`: our records plus two independent platform views (spend-rate = what is billing, the account's active deployments).
+    `nothing_billing` is true only when all three agree that nothing runs; an unreadable platform view makes it false, never true."""
+    out: dict[str, Any] = {"warnings": config_warnings(), "alerts": recent_alerts()}
+    try:
+        refresh_live()
+        deps, pend = active_deps(), pending_creations()
+        out["state_ok"] = True
+    except StateCorrupt as e:
+        deps, pend = {}, {}
+        out.update(state_ok=False, state_problem=str(e))
+    try:
+        out["balance_usd"] = round(balance_usd(), 4)
+    except DdcError as e:
+        out["balance_usd"], out["balance_error"] = None, str(e)
+    out["budget"] = {k: round(float(v), 4) for k, v in budget_view().items()} if out["state_ok"] else None
+    out["reserve_usd"], out["budget_guard"] = CFG.get("reserve_usd"), CFG.get("budget_guard") is not False
+    leases = []
+    for k, d in sorted(deps.items()):
+        spent, _ = dep_running_cost(d)
+        leases.append({"dseq": k, "spent_usd": round(spent, 4), **{f: d.get(f) for f in ("name", "role", "job", "status", "usd_hr", "max_usd_hr", "limit_h",
+                       "provider", "provider_host", "image", "created_at", "lease_at", "deadline_at", "heartbeat_at")}})
+    out["leases"], out["pending"] = leases, sorted(pend)
+    out["burn_usd_hr"] = round(sum(_finite(d.get("usd_hr")) for d in deps.values()), 4)
+    billing = billing_dseqs()
+    out["billing_dseqs"] = sorted(billing) if billing is not None else None
+    try:
+        out["account_active"] = list_account_deployments()
+    except DdcError as e:
+        out["account_active"], out["account_error"] = None, str(e)
+    out["nothing_billing"] = bool(out["state_ok"] and not leases and not pend and billing == set() and out["account_active"] == [])
+    # the same, limited to ddc: deployments named ddc-* or ever recorded by us (other deployments on the account are never ours to judge or touch)
+    acct = out["account_active"]
+    known = set((load_state().get("deps") or {}) if out["state_ok"] else ())
+    ours = sorted({x["dseq"] for x in acct or [] if x["name"].startswith(NAME_PREFIX)} | ((billing or set()) & known))
+    out["ddc_active_on_account"] = ours
+    out["foreign_active"] = [x for x in acct or [] if not x["name"].startswith(NAME_PREFIX) and x["dseq"] not in known]
+    out["ddc_nothing_billing"] = bool(out["state_ok"] and not leases and not pend and billing is not None and acct is not None and not ours)
+    return out
+
+
 def cmd_status(a: argparse.Namespace) -> None:
+    if getattr(a, "json", False):
+        import contextlib
+        with contextlib.redirect_stdout(sys.stderr):   # log lines go to stderr, stdout carries only the JSON
+            out = status_json()
+        print(json.dumps(out, indent=1, default=str))
+        return
     for w in config_warnings()[:3]:
         print(f"WARNING: {w}")
     try:
@@ -2912,12 +3029,11 @@ def default_config_path() -> Path:
     return Path(os.environ["DDC_CONFIG"]).expanduser() if os.environ.get("DDC_CONFIG") else user_config_dir(os.environ, HOME, WIN) / "config.toml"
 
 
-def cmd_init(a: argparse.Namespace) -> None:
-    target = default_config_path()
-    if target.exists():
-        die(f"{target} already exists; not overwriting it (edit it, or delete it to start over)")
+def init_files(target: Path) -> Path:
+    """Write the starter config at `target` (when absent) plus the secrets dir / secrets.env / keys dir (an existing secrets.env is kept); returns secrets.env."""
     target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(data_file("config.example.toml"), target)
+    if not target.exists():
+        shutil.copyfile(data_file("config.example.toml"), target)
     SECRETS_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
     KEYS.mkdir(exist_ok=True, mode=0o700)
     sf = SECRETS_DIR / "secrets.env"
@@ -2925,6 +3041,14 @@ def cmd_init(a: argparse.Namespace) -> None:
         log(f"kept existing {sf}")
     else:
         write_private(sf, SECRETS_TEMPLATE)
+    return sf
+
+
+def cmd_init(a: argparse.Namespace) -> None:
+    target = default_config_path()
+    if target.exists():
+        die(f"{target} already exists; not overwriting it (edit it, or delete it to start over)")
+    sf = init_files(target)
     log(f"wrote {target} and {sf}")
     print(f"\nNext: put your AKASH_API_KEY into {sf}, edit [[repos]] in {target}, then run: ddc install")
 
@@ -2942,6 +3066,19 @@ def ensure_state_repo_is_ours(repo: str) -> None:
     if set(names) - {"main", "prev"} or "main" not in names or not has_manifest:
         die(f"{repo} already holds other content (branches: {', '.join(names)}): it is not a ddc state repo and checkpoints would overwrite it. "
             "Use an empty private repo (or a new name) for state_repo")
+
+
+def ensure_key(k: str) -> None:
+    """Generate the ed25519 key KEYS/k when missing (never replaces one)."""
+    if (KEYS / k).exists():
+        return
+    subprocess.run([SSH_KEYGEN, "-q", "-t", "ed25519", "-N", "", "-C", f"ddc-{k}", "-f", str(KEYS / k)], check=True)
+    if os.name == "nt":  # owner-only, as OpenSSH requires: a profile with extra inherited ACEs would otherwise make ssh refuse the key
+        try:
+            owner_only(KEYS / k)
+        except (OSError, subprocess.SubprocessError, DdcError) as e:  # the key check below (and preflight) still reports a refused key
+            log(f"warning: could not restrict {KEYS / k} to this account: {e}")
+    log(f"generated key {k}")
 
 
 def cmd_install(a: argparse.Namespace) -> None:
@@ -2973,14 +3110,7 @@ def cmd_install(a: argparse.Namespace) -> None:
         set_secret("DDC_BACKUP_PASSPHRASE", pysecrets.token_urlsafe(48))
         log("generated DDC_BACKUP_PASSPHRASE (back up secrets.env in your password manager: without it checkpoints cannot be decrypted)")
     for k in ["access", "worker"] + (["state_deploy"] if repo else []) + [k for k, _ in repo_keys]:
-        if not (KEYS / k).exists():
-            subprocess.run([SSH_KEYGEN, "-q", "-t", "ed25519", "-N", "", "-C", f"ddc-{k}", "-f", str(KEYS / k)], check=True)
-            if os.name == "nt":  # owner-only, as OpenSSH requires: a profile with extra inherited ACEs would otherwise make ssh refuse the key
-                try:
-                    owner_only(KEYS / k)
-                except (OSError, subprocess.SubprocessError, DdcError) as e:  # the key check below (and preflight) still reports a refused key
-                    log(f"warning: could not restrict {KEYS / k} to this account: {e}")
-            log(f"generated key {k}")
+        ensure_key(k)
     if (KEYS / "access").is_file() and (bad := key_problem(KEYS / "access")):
         log(f"warning: {bad}")
     if repo:
@@ -3044,7 +3174,6 @@ def windows_shims(migrate: bool) -> list[tuple[Path, str]]:
 
 def install_windows(migrate: bool = False) -> None:
     run = launcher()
-    pyw = str(Path(run[0]).with_name("pythonw.exe"))
     bindir = HOME / "bin"
     bindir.mkdir(exist_ok=True)
     for path, body in windows_shims(migrate):
@@ -3065,10 +3194,18 @@ def install_windows(migrate: bool = False) -> None:
     subprocess.run(["powershell", "-NoProfile", "-Command",
                     f"$p=[Environment]::GetEnvironmentVariable('Path','User'); if (($p -split ';') -notcontains '{bindir}') "
                     f"{{ [Environment]::SetEnvironmentVariable('Path', ($p.TrimEnd(';') + ';{bindir}'), 'User') }}"], check=True)
+    if install_windows_task(migrate):
+        log(f"installed claude-cloud + ddc into {bindir}, desktop shortcuts, watchdog task {TASK} (every 5 min)")
+
+
+def install_windows_task(migrate: bool = False) -> bool:
+    """Register the CloudDeck-Watchdog scheduled task (every 5 min). False when a legacy task was left in place (no --migrate)."""
+    run = launcher()
+    pyw = str(Path(run[0]).with_name("pythonw.exe"))
     legacy = subprocess.run(["schtasks", "/Query", "/TN", LEGACY_TASK], capture_output=True).returncode == 0
     if legacy and not migrate:
         log(f"legacy watchdog task {LEGACY_TASK} is present: left untouched and no second task created (`ddc install --migrate` replaces it with {TASK})")
-        return
+        return False
     cfg = ["--config", str(CONFIG_FILE)] if CONFIG_FILE and CONFIG_FILE.is_file() else []  # the task never depends on config discovery
     tr = f"{cmdline([pyw, *run[1:], *cfg])} watchdog"
     if len(tr) > 261:  # schtasks /TR limit: fail with a reason instead of a bare CalledProcessError (the legacy task, if any, is kept)
@@ -3077,7 +3214,7 @@ def install_windows(migrate: bool = False) -> None:
     if legacy:
         subprocess.run(["schtasks", "/Delete", "/F", "/TN", LEGACY_TASK], check=True, capture_output=True)
         log(f"replaced legacy task {LEGACY_TASK} with {TASK}")
-    log(f"installed claude-cloud + ddc into {bindir}, desktop shortcuts, watchdog task {TASK} (every 5 min)")
+    return True
 
 # ---------------------------------------------------------------- watchdog scheduling on Linux / WSL (systemd user timer, else cron)
 UNIT = "clouddeck-watchdog"
@@ -3270,6 +3407,62 @@ def cmd_uninstall(a: argparse.Namespace) -> None:
     gone = uninstall_watchdog()
     log("removed: " + ", ".join(gone) if gone else "no watchdog registration found")
 
+def cmd_setup(a: argparse.Namespace) -> int:
+    """One noninteractive step to 'ready for `ddc job run`': config, secrets.env (+ API key from stdin), access key, optional watchdog; 0 when ready, else 2."""
+    key = ""
+    if a.api_key_stdin:
+        key = sys.stdin.read().strip()
+        if len(key) < 8 or not re.fullmatch(r"[!-~]+", key):
+            die("the API key read from stdin is empty, too short or contains whitespace/non-printable characters: pipe only the key (Akash Console > API Keys)")
+    with contextlib.redirect_stdout(sys.stderr if a.json else sys.stdout):  # --json: stdout carries only the report
+        target = CONFIG_FILE or default_config_path()   # an existing config (also a legacy one) is used as is: a new starter file would shadow its limits
+        if not target.exists() or not (SECRETS_DIR / "secrets.env").exists():
+            init_files(target)
+            if CONFIG_ERROR:
+                reload_config(str(target))
+        sf = SECRETS_DIR / "secrets.env"
+        if key:
+            lines = [ln for ln in sf.read_text(encoding="utf-8").splitlines() if not re.match(r"\s*AKASH_API_KEY\s*=", ln)]
+            write_private(sf, "\n".join(lines + [f"AKASH_API_KEY={key}"]) + "\n")
+            log(f"stored AKASH_API_KEY in {sf}")
+        ensure_key("access")
+        if a.watchdog:
+            try:
+                if WIN:
+                    install_windows_task()
+                else:
+                    install_watchdog()
+            except (DdcError, OSError, subprocess.SubprocessError) as e:
+                log(f"watchdog not registered: {e}")
+        key_set, valid, bal = bool(load_secrets().get("AKASH_API_KEY")), None, None
+        if key_set:
+            try:
+                bal, valid = balance_usd(), True
+            except DdcError as e:
+                valid = False if re.search(r"\b(401|403)\b|unauthori|forbidden", str(e), re.I) else None
+                log(f"Akash API key {'not accepted' if valid is False else 'not checked (API unreachable?)'}: {str(e)[:200]}")
+    ssh_ok = shutil.which(SSH) is not None or Path(SSH).exists()
+    cfg_ok = not CONFIG_ERROR and not config_problems()
+    access = (KEYS / "access").is_file() and not key_problem(KEYS / "access")
+    wd = watchdog_installed()
+    ready = bool(cfg_ok and key_set and valid and access and ssh_ok)
+    todo = ([f"fix the config: {CONFIG_ERROR or '; '.join(config_problems())}"] if not cfg_ok else []) + \
+        ([f"put your Akash Console API key into {sf}, or run: ddc setup --api-key-stdin"] if not key_set else
+         [f"the Akash API key was not accepted: check it in {sf}"] if valid is False else
+         ["could not reach the Akash API to check the key: check the network and run ddc setup again"] if valid is None else []) + \
+        ([] if ssh_ok else ["install OpenSSH (the `ssh` and `ssh-keygen` programs)"]) + \
+        ([] if access else [f"the ssh access key in {KEYS} is missing or refused: {key_problem(KEYS / 'access') if (KEYS / 'access').is_file() else 'missing'}"]) + \
+        ([] if wd else ["recommended: ddc setup --watchdog (closes a job lease whose runner died; without it only the runtime limit does)"]) + \
+        (["run: ddc job hardware --available"] if ready else [])
+    out = {"config_file": str(CONFIG_FILE or target), "secrets_file": str(sf), "api_key_set": key_set, "api_key_valid": valid, "balance_usd": bal, "access_key": access,
+           "ssh": ssh_ok, "watchdog": wd, "ready_for_jobs": ready, "next_steps": todo}
+    if a.json:
+        print(json.dumps(out, indent=2))
+    else:
+        print("\n".join(f"{k}: {v}" for k, v in out.items() if k != "next_steps") + "\n" + ("next steps:\n  - " + "\n  - ".join(todo) if todo else "ready"))
+    return 0 if ready else 2
+
+
 def setup_alerts() -> None:
     chans = api("GET", "/v1/notification-channels").get("data") or []
     if not chans:
@@ -3300,6 +3493,9 @@ def reload_config(path: str) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    global APPROVAL, LOG_STDERR
+    APPROVAL = None   # an approval never outlives the command it was given to
+    LOG_STDERR = "--json" in (sys.argv[1:] if argv is None else argv)
     pre = argparse.ArgumentParser(add_help=False)  # profile choices below depend on the config, so --config is applied first
     pre.add_argument("--config")
     cfg_arg = pre.parse_known_args(argv)[0].config
@@ -3321,13 +3517,19 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--no-watchdog", action="store_true", help="Linux/WSL: do not register the systemd timer / cron entry")
     s.add_argument("--yes", "-y", action="store_true", help="do not ask before creating the state repo / adding deploy keys on GitHub")
     s.add_argument("--dry-run", action="store_true", help="only list the GitHub actions install would take")
+    s = sub.add_parser("setup", help="jobs-only setup in one command: config, secrets, ssh access key, optional watchdog; exit 0 when ready for `ddc job run`")
+    s.add_argument("--api-key-stdin", action="store_true", help="read the Akash Console API key from stdin and store it in secrets.env")
+    s.add_argument("--watchdog", action="store_true", help="also register the watchdog (Windows: the scheduled task only)")
+    s.add_argument("--json", action="store_true", help="machine-readable report")
     sub.add_parser("uninstall", help="remove the watchdog registration (keys, config and state are kept)")
     s = sub.add_parser("start")
     s.add_argument("-p", "--profile", default=default_profile(), choices=sorted(CFG["profiles"]))
     s.add_argument("-w", "--workers", type=int, default=0)
     s.add_argument("--worker-profile", choices=sorted(CFG["profiles"]))
+    s.add_argument("--approve-usd", type=float, metavar="USD", help="the spend the owner approved for this command (required; run without it to see the worst case)")
     s = sub.add_parser("scale")
     s.add_argument("n", type=int)
+    s.add_argument("--approve-usd", type=float, metavar="USD", help="scaling up: the spend the owner approved for this command (required; run without it to see the worst case)")
     s.add_argument("--explore", action="store_true", help="one lease per not-yet-benchmarked provider (CPU comparison)")
     s.add_argument("-p", "--profile", default=default_profile(), choices=sorted(CFG["profiles"]))
     safety_flags(s, "when scaling down, close this worker (dseq, name or wNN) instead of the highest-numbered ones")
@@ -3337,7 +3539,8 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--discard-workspace", action="store_true", help="checkpoints are disabled (empty state_repo): close the dev box anyway and DESTROY its workspace")
     s.add_argument("--allow-shrink", action="store_true", help="let the final checkpoint replace one that is much larger (a workspace was removed on purpose)")
     safety_flags(s, "close only this lease (dseq, name or wNN); the only way to close a lease that is not a dev box/worker")
-    sub.add_parser("status")
+    s = sub.add_parser("status")
+    s.add_argument("--json", action="store_true", help="machine-readable: our leases + spend-rate + the account's active deployments, and nothing_billing")
     s = sub.add_parser("attach")
     s.add_argument("window", nargs="?", choices=["claude", "workers", "shell"])
     s = sub.add_parser("bench")
@@ -3367,7 +3570,7 @@ def main(argv: list[str] | None = None) -> int:
         toks = toks[1:] if "=" in toks[0] else toks[2:]
     a = argparse.Namespace(cmd="job", job_args=toks[1:]) if toks[:1] == ["job"] else p.parse_args(argv)
     try:
-        if CONFIG_ERROR and a.cmd != "init":
+        if CONFIG_ERROR and a.cmd not in ("init", "setup") and not (a.cmd == "job" and a.job_args[:1] == ["hardware"]):   # the public price table needs no config
             if a.cmd == "watchdog":  # a scheduled run has nobody watching its exit code: idle/budget enforcement is off until this is fixed
                 alert_once("wd-config", f"watchdog NOT running: {CONFIG_ERROR}")
             die(CONFIG_ERROR)
@@ -3375,13 +3578,15 @@ def main(argv: list[str] | None = None) -> int:
         if conflict:
             if a.cmd == "watchdog":
                 alert_once("wd-state-dir", f"watchdog NOT running: {conflict}")
-            if a.cmd in ("start", "scale", "heal", "install", "stop", "watchdog", "job"):
+            if a.cmd in ("start", "scale", "heal", "install", "setup", "stop", "watchdog", "job"):
                 die(conflict)
             log("warning: " + conflict)
         if limits_unsafe():
             log("WARNING: unsafe_disable_limits = true: the hard spending ceilings (lease count, price cap, runtime, scale size) are OFF")
         if a.cmd in ("start", "scale", "heal", "install", "bench", "checkpoint"):
             require_config()
+        if a.cmd in ("start", "scale"):
+            a.cli_paid = True  # only the CLI needs --approve-usd; CloudDeck's TUI asks its own confirmation, the watchdog never creates
         if a.cmd in ("stop", "scale") or (a.cmd == "reconcile" and a.adopt):
             a.confirm_needed = True  # only the CLI asks; the watchdog and CloudDeck call cmd_stop/cmd_scale without it
         if a.cmd == "stop":
@@ -3401,7 +3606,7 @@ def main(argv: list[str] | None = None) -> int:
         if a.cmd == "verify":
             verify_checkpoint()
             return 0
-        rc = {"init": cmd_init, "install": cmd_install, "uninstall": cmd_uninstall, "start": cmd_start, "scale": cmd_scale, "stop": cmd_stop,
+        rc = {"init": cmd_init, "setup": cmd_setup, "install": cmd_install, "uninstall": cmd_uninstall, "start": cmd_start, "scale": cmd_scale, "stop": cmd_stop,
               "status": cmd_status, "bench": cmd_bench, "checkpoint": cmd_checkpoint, "heal": cmd_heal, "watchdog": cmd_watchdog,
               "reconcile": cmd_reconcile}[a.cmd](a)
         return rc if isinstance(rc, int) else 0

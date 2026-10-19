@@ -36,8 +36,12 @@ START = argparse.Namespace(profile="32", workers=0, worker_profile=None)
 
 # ---------------------------------------------------------------------------------------------- small helpers
 def run_ddc(capsys: Any, *argv: str) -> tuple[int, str]:
-    """`ddc <argv>` through the real argument parser: (exit status, everything it printed)."""
-    rc = ddc.main(list(argv))
+    """`ddc <argv>` through the real argument parser: (exit status, everything it printed). Paid commands get a generous --approve-usd
+    unless the test passes its own (test_cost_approval.py covers the refusals)."""
+    argv = list(argv)
+    if argv[:1] in (["start"], ["scale"]) and "--approve-usd" not in argv:
+        argv += ["--approve-usd", "1000"]
+    rc = ddc.main(argv)
     cap = capsys.readouterr()
     return rc, cap.out + cap.err
 

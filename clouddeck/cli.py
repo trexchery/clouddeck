@@ -13,6 +13,7 @@ from pathlib import Path
 from . import __version__
 
 PLACEHOLDER_REPO = re.compile(r"OWNER|your-private-state-repo")   # what the docs and config.example.toml use; `ddc install` refuses it too
+GIT_INSTALL = 'pipx install "git+https://github.com/trexchery/clouddeck@claude-skill"'   # private repo, no PyPI release: collaborators run `gh auth login` + `gh auth setup-git` first
 WARNING_FIXES = [   # (start of the controller's warning, what to do about it)
     ("unsafe_disable_limits", "Fix: remove `unsafe_disable_limits` from config.toml"),
     ("budget_guard = false", "Fix: set budget_guard = true in config.toml"),
@@ -43,7 +44,7 @@ def cmd_tui(a: argparse.Namespace) -> int:
     try:
         from .tui.app import CloudDeckApp
     except ImportError as e:
-        print(f"Missing dependency ({e}). Install with: pip install clouddeck", file=sys.stderr)
+        print(f"Missing dependency ({e}). Install with: {GIT_INSTALL}", file=sys.stderr)
         return 2
     CloudDeckApp(_provider(a.provider)).run()
     return 0
@@ -91,7 +92,7 @@ def cmd_doctor(a: argparse.Namespace) -> int:
         import textual
         line(True, f"Textual {textual.__version__}")
     except ImportError:
-        line(False, "Textual not installed", "pip install clouddeck")
+        line(False, "Textual not installed", GIT_INSTALL)
     demo = (a.provider or os.environ.get("CLOUDDECK_PROVIDER") or "akash") == "demo"
     if ddc.CONFIG_ERROR:
         if demo and ddc.CONFIG_FILE is None:   # the simulated provider needs no config; every real provider does
@@ -115,10 +116,11 @@ def cmd_doctor(a: argparse.Namespace) -> int:
         print("  ----  demo provider: simulated, nothing else to check")
         return 1 if bad else 0
     line(shutil.which(ddc.SSH) is not None or Path(ddc.SSH).exists(), f"ssh client: {ddc.SSH}")
-    line(shutil.which(ddc.GPG) is not None or Path(ddc.GPG).exists(), f"gpg (checkpoint verification): {ddc.GPG}")
+    cp = bool(ddc.state_repo())  # without checkpoints (jobs-only setup) gpg and the backup passphrase are optional
+    line(shutil.which(ddc.GPG) is not None or Path(ddc.GPG).exists() or (None if not cp else False), f"gpg (checkpoint verification): {ddc.GPG}")
     secrets = ddc.load_secrets()
     line("AKASH_API_KEY" in secrets, f"AKASH_API_KEY present in {ddc.SECRETS_DIR / 'secrets.env'}")
-    line("DDC_BACKUP_PASSPHRASE" in secrets, "DDC_BACKUP_PASSPHRASE present (needed to decrypt checkpoints)")
+    line("DDC_BACKUP_PASSPHRASE" in secrets or (None if not cp else False), "DDC_BACKUP_PASSPHRASE present (needed to decrypt checkpoints)")
     line((ddc.KEYS / "access").exists(), f"ssh access key in {ddc.KEYS}")
     try:
         n = len(ddc.public_get("/v1/providers"))
