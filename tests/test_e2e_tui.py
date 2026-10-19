@@ -192,7 +192,8 @@ async def wait_for(pred, pilot, what="the expected state", timeout=WAIT):
 
 
 async def screen_is(pilot, app, cls):
-    await wait_for(lambda: isinstance(app.screen, cls), pilot, f"the {cls.__name__} to open")
+    """The screen is on the stack before it has composed its widgets: wait until it is mounted, or a query for its children races the compose."""
+    await wait_for(lambda: isinstance(app.screen, cls) and app.screen.is_mounted, pilot, f"the {cls.__name__} to open")
     return app.screen
 
 
