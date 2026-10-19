@@ -1,0 +1,58 @@
+# Test fixture: same shape as a real config.toml, safe values. Tests copy it to a temp dir and never touch a real one.
+
+budget_guard = true       # tests assert CloudDeck never changes this key
+budget_usd = 70.0          # max aggregate spend
+reserve_usd = 10.0
+idle_minutes = 40          # dev box idle -> checkpoint + stop
+max_runtime_hours = 8
+worker_runtime_hours = 4
+worker_idle_minutes = 10
+checkpoint_minutes = 15    # periodic checkpoints
+state_repo = "example/state"
+image = "node:22-bookworm"
+min_uptime_7d = 0.95
+max_leases_per_provider = 4
+max_total_leases = 4
+max_workers = 4
+
+[profiles.16]
+cpu = 16
+mem = "32Gi"
+disk = "100Gi"
+max_usd_hr = 0.50
+[profiles.32]
+cpu = 32
+mem = "64Gi"
+disk = "100Gi"
+max_usd_hr = 0.90
+[profiles.64]
+cpu = 64
+mem = "128Gi"
+disk = "150Gi"
+max_usd_hr = 1.70
+
+[environments.ml]
+profile = "32"
+workers = 4
+
+[[workloads]]
+name = "Unit tests"
+command = "npm test"
+target = "workers"
+description = "run the test suite"
+
+[[repos]]
+name = "web-app"
+path = "/fixtures/web-app"
+github = "example/web-app"
+push = true
+
+[[repos]]
+name = "cli-tool"
+path = "/fixtures/cli-tool"
+push = false
+
+[[dirs]]
+name = "notes"
+path = "/fixtures/notes"
+exclude = ["tmp"]

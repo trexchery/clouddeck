@@ -1,0 +1,134 @@
+{
+ "cpu16_mem32Gi_disk100Gi": {
+  "providers": [
+   {
+    "owner": "akash1FIXTURE_BS01",
+    "hostUri": "https://bs01.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-09T09:26:14.529Z",
+    "location": "eu-west",
+    "organization": "org-bs01",
+    "availableGpus": 0,
+    "incidents": []
+   },
+   {
+    "owner": "akash1FIXTURE_BS02",
+    "hostUri": "https://bs02.example:8443",
+    "isAudited": false,
+    "createdAt": "2026-08-22T19:02:29.771Z",
+    "location": "in-central",
+    "organization": "org-bs02",
+    "availableGpus": 0,
+    "incidents": []
+   },
+   {
+    "owner": "akash1FIXTURE_BS03",
+    "hostUri": "https://bs03.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-09T09:26:14.529Z",
+    "location": "eu-west",
+    "organization": "org-bs03",
+    "availableGpus": 0,
+    "incidents": [
+     {
+      "date": "2026-10-11",
+      "hasOpenIncident": false,
+      "incidentCount": 68,
+      "downtimeSeconds": 26491
+     }
+    ]
+   },
+   {
+    "owner": "akash1FIXTURE_BS04",
+    "hostUri": "https://bs04.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-18T18:19:16.006Z",
+    "location": "na-us-southwest",
+    "organization": "org-bs04",
+    "availableGpus": 0,
+    "incidents": []
+   },
+   {
+    "owner": "akash1FIXTURE_BS05",
+    "hostUri": "https://bs05.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-09T09:26:14.529Z",
+    "location": "na-us-southwest",
+    "organization": "org-bs05",
+    "availableGpus": 0,
+    "incidents": []
+   },
+   {
+    "owner": "akash1FIXTURE_BS06",
+    "hostUri": "https://bs06.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-09T09:26:14.529Z",
+    "location": "na-us-west",
+    "organization": "org-bs06",
+    "availableGpus": 0,
+    "incidents": []
+   },
+   {
+    "owner": "akash1FIXTURE_BS07",
+    "hostUri": "https://bs07.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-09T09:26:14.529Z",
+    "location": "ap-southeast",
+    "organization": "org-bs07",
+    "availableGpus": 0,
+    "incidents": []
+   },
+   {
+    "owner": "akash1FIXTURE_BS08",
+    "hostUri": "https://bs08.example:8443",
+    "isAudited": false,
+    "createdAt": "2026-09-23T23:50:05.366Z",
+    "location": "na-us-west",
+    "organization": "org-bs08",
+    "availableGpus": 0,
+    "incidents": []
+   }
+  ]
+ },
+ "gpu_rtx4090_x1": {
+  "providers": [
+   {
+    "owner": "akash1FIXTURE_BS01",
+    "hostUri": "https://bs01.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-09T09:26:14.529Z",
+    "location": "eastern-europe",
+    "organization": "org-bs01",
+    "availableGpus": 1,
+    "incidents": [
+     {
+      "date": "2026-10-11",
+      "hasOpenIncident": false,
+      "incidentCount": 1,
+      "downtimeSeconds": 86400
+     }
+    ]
+   }
+  ]
+ },
+ "gpu_a100_x8": {
+  "providers": [
+   {
+    "owner": "akash1FIXTURE_BS01",
+    "hostUri": "https://bs01.example:8443",
+    "isAudited": true,
+    "createdAt": "2026-06-18T18:19:16.006Z",
+    "location": "na-us-southwest",
+    "organization": "org-bs01",
+    "availableGpus": 8,
+    "incidents": []
+   }
+  ]
+ },
+ "gpu_rtx4090_x2_no_match": {
+  "providers": []
+ },
+ "gpu_h100_sxm_ram80Gi_pinned_no_match": {
+  "providers": []
+ }
+}

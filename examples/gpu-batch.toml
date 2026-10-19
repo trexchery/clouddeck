@@ -1,0 +1,62 @@
+# A GPU pipeline with local prep, a model cache with mirror + origin fallback, a prebuilt image with stock fallback,
+# and a canary step so a bad configuration fails after minutes instead of after the whole run.
+# Everything below is a PLACEHOLDER: replace the images, URLs, digest and commands with your own, and pick GPU ids from `ddc job hardware`.
+name = "gpu-batch"
+runtime_hours = 3
+max_cost_usd = 10.0           # worst case = 3 h x $3.00 cap = $9.00 <= $10
+estimated_runtime_min = 45    # used to weigh a cold image pull against a dearer provider that already has the image
+setup_estimate_s = 200        # downloads after boot; the lease is timed so setup ends when local prep ends
+cold_boot_s = 240             # expected lease->sshd on a provider that has not run this image before
+idle_abort_s = 600            # abort (and close) if nothing runs or transfers for 10 minutes
+artifacts_dir = "outputs"
+
+[hardware]
+cpu = 8
+memory = "64Gi"
+disk = "150Gi"
+max_usd_hr = 3.00             # above the default $2/h per-lease ceiling: needs `max_price_usd_hr = 3.0` (or more) in config.toml, otherwise it is lowered to the ceiling
+min_uptime = 0.95
+[hardware.gpu]
+units = 1
+vendor = "nvidia"
+models = ["h100:80Gi", "a100:80Gi"]   # EXAMPLE ids only: any of these; "model" alone (no :VRAM) also works. Nothing in ddc is limited to these.
+min_vram_gi = 40
+
+[image]
+prebuilt = "ghcr.io/OWNER/ddc-base:cuda-1"      # see docs/prebuilt-image.md; pin a tag (better: @sha256:<digest>), never :latest
+stock = "example/stock-image:1"                  # used if the prebuilt image does not boot within prebuilt_timeout_s
+prebuilt_timeout_s = 300
+apt = ["libgl1"]                                  # installed at start only if the image lacks it
+
+[env]
+EXAMPLE_FLAG = "1"
+secrets = ["EXAMPLE_API_TOKEN"]   # NAMES only: values come from your environment and go over SSH, never into the SDL. The rented host can read them while the lease runs.
+
+[prep]                        # runs on this PC while bids arrive and the box boots
+cmd = "python prepare.py"
+estimate_s = 300              # slightly OVER-estimate: too low costs paid idle, too high only delays the start
+produces = ["work/ref.bin"]
+
+inputs = ["inputs/clip.bin", "work/ref.bin"]   # below this directory only; uploaded as soon as they exist (resumable, sha256 verified) to /work/in/
+inputs_dest = "in"
+
+[cache]
+mirrors = ["https://models.example.com/mirror"]   # optional: tried before the origin URLs, any HTTP(S) store
+[[cache.item]]
+name = "weights"
+dest = "models/weights.bin"
+url = "https://origin.example.com/models/weights.bin"   # origin: always the last source
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"  # DUMMY (all zeros): replace with the real digest
+size_gb = 30
+path = "weights.bin"                              # name under each mirror
+
+[[step]]
+name = "canary"               # short first run: fails fast on a bad config, streams its output out first
+run = "python work.py --short --out out/canary.bin"
+artifacts = ["out/canary.bin"]
+
+[[step]]
+name = "main"
+needs = ["canary"]            # default needs = inputs + every cache item + the previous step
+run = "python work.py --out out/final.bin"
+artifacts = ["out/final.bin"]

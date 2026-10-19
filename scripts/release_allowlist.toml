@@ -1,0 +1,77 @@
+# Allowlist for scripts/release_check.py.  Every entry MUST carry a `reason`.
+#   rule      rule id printed by the checker ("*" = any rule; prefer the specific id)
+#   path      optional fnmatch glob against the repo-relative posix path
+#   contains  optional text; the MATCHED text must lie inside an occurrence of it on the line (case-insensitive), so allowing a legacy
+#             string cannot hide a second leak on the same line.
+# At least one of path/contains is required.  This file is scanned like any other, except inside its own `contains = "..."` values.
+# Private words come from the local, gitignored scripts/release_denylist.local.txt (see release_check.py), never from this file.
+# Keep it small: an entry here is a promise that the string is public-safe.
+
+# ---- legacy compatibility: existing installs keep their pre-rename directories and Windows task ----
+[[allow]]
+rule = "private-word"
+path = "clouddeck/controller.py"
+contains = "drill-dev-cloud"
+reason = "Controller lookup code for the legacy config/state directories and the legacy 'low balance' alert name (an old alert counts as the same alert)."
+
+[[allow]]
+rule = "private-word"
+path = "clouddeck/controller.py"
+contains = "DrillDevCloud-Watchdog"
+reason = "Name of the pre-rename Windows scheduled task, only reported / removed by `ddc install --migrate`."
+
+[[allow]]
+rule = "private-word"
+path = "tests/test_controller.py"
+contains = "drill-dev-cloud"
+reason = "Tests of the legacy directory / alert-name fallbacks (same strings as in the controller)."
+
+[[allow]]
+rule = "private-word"
+path = "tests/test_controller.py"
+contains = "DrillDevCloud-Watchdog"
+reason = "Test of the legacy scheduled-task handling (`ddc install --migrate`)."
+
+# ---- tests that assert the release tree is clean ----
+[[allow]]
+rule = "private-word"
+path = "tests/test_controller.py"
+contains = '"drill" not in text'
+reason = "Assertion that generated text (ddc init output) does not contain the private word."
+
+[[allow]]
+rule = "private-word"
+path = "tests/test_controller.py"
+contains = '"Drill" not in ps'
+reason = "Assertion that the generated PowerShell no longer references the old shortcut names."
+
+[[allow]]
+rule = "user-path"
+path = "tests/test_controller.py"
+contains = "C:/Users/x/proj"
+reason = "Deliberately wrong Windows-style path ('x' is a dummy user) used to test the repo_path error message."
+
+[[allow]]
+rule = "private-word"
+path = "tests/test_lease_scripts.py"
+contains = "drill|stryker(?!-tmp)"
+reason = "Regex asserting the lease scripts contain none of the private names (an absence test, not a use)."
+
+# ---- test fixtures ----
+[[allow]]
+rule = "forbidden-path"
+path = "tests/fixtures/config.toml"
+reason = "Neutral, secret-free test config (demo values only). The forbidden pattern targets a user's real top-level config.toml."
+
+# ---- safety tests of the legacy-compat behaviour (same strings as in the controller) ----
+[[allow]]
+rule = "private-word"
+path = "tests/test_safety_state.py"
+contains = "drill-dev-cloud"
+reason = "Test that an existing legacy state directory keeps winning over the new default (data-compat freeze); the string is a directory name, not an identity."
+
+[[allow]]
+rule = "private-word"
+path = "tests/test_safety_watchdog.py"
+contains = "DrillDevCloud-Watchdog"
+reason = "Tests that uninstall / install leave the pre-rename Windows scheduled task alone and only report it."

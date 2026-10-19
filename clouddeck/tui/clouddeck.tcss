@@ -1,0 +1,109 @@
+/* CloudDeck layout. Colors come from the active Textual theme (Ctrl+P → "Change theme"). */
+
+Screen { background: $background; }
+
+#summary { height: 1; padding: 0 1; background: $panel; color: $text; text-wrap: nowrap; text-overflow: ellipsis; }
+
+#tabs { height: 1fr; }
+TabbedContent ContentSwitcher { height: 1fr; }
+TabPane { padding: 0; height: 1fr; }
+Pane { height: 1fr; }
+
+.section { text-style: bold; color: $accent; padding: 0 1; margin-top: 1; height: 1; }
+.hint { color: $text-muted; padding: 0 1; }
+.error { color: $error; padding: 0 1; }
+.ok { color: $success; padding: 0 1; }
+.field-label { color: $text-muted; margin-top: 1; height: 1; }
+.empty { color: $text-muted; padding: 2 3; }
+
+/* ---------- master/detail ---------- */
+.split { height: 1fr; }
+.split FilterTable { width: 1fr; }
+.main-col { width: 1fr; }
+.detail { width: 46; min-width: 34; padding: 0 1; border-left: tall $primary 40%; overflow-y: auto; }
+Screen.-narrow .detail { display: none; }
+Screen.-wide .detail { width: 60; }
+
+FilterTable { height: 1fr; }
+FilterTable DataTable { height: 1fr; }
+FilterTable .filter-input { margin: 0; }
+DataTable { background: $background; }
+DataTable > .datatable--cursor { background: $primary 45%; text-style: bold; }
+DataTable > .datatable--header { background: $panel; color: $text; text-style: bold; }
+
+/* ---------- monitor ---------- */
+#cards { grid-size: 6; grid-gutter: 1; height: 6; padding: 0 1; margin-top: 1; }
+Card { border: round $primary 50%; padding: 0 1; height: 100%; }
+Screen.-narrow #cards { grid-size: 3; height: 12; }
+Screen.-short #cards { display: none; }
+#mon-main { height: 2fr; min-height: 8; }
+#logbar { height: 3; margin-top: 1; }
+#logbar Label { margin-top: 1; }
+#logsrc { width: 40; }
+#logstate { margin-top: 1; }
+#log { height: 1fr; min-height: 5; border-top: tall $primary 40%; padding: 0 1; }
+Screen.-short #log { display: none; }
+Sparkline { height: 3; margin: 0 0 1 0; }
+Sparkline > .sparkline--max-color { color: $error; }
+Sparkline > .sparkline--min-color { color: $success; }
+
+/* ---------- recovery ---------- */
+#dev-status { padding: 1 2; height: auto; }
+#actions { height: auto; padding: 1 1; }
+#actions Button { margin-right: 1; }
+Screen.-narrow #actions { layout: grid; grid-size: 2; grid-gutter: 0 1; height: auto; }
+
+/* ---------- dialogs ---------- */
+ModalScreen { align: center middle; background: $background 60%; }
+#dialog { width: 64; max-width: 96%; height: auto; max-height: 92%; padding: 1 2; background: $surface; border: thick $primary; }
+#dialog.wide { width: 110; }
+#dialog.tall { height: 88%; }
+#dialog.danger { border: thick $error; }
+Screen.-narrow #dialog.wide { width: 98%; }
+#dialog-title { text-style: bold; color: $accent; margin-bottom: 1; width: 100%; }
+#dialog.danger #dialog-title { color: $error; }
+#dialog-body { margin-bottom: 1; }
+#dialog .buttons { height: auto; align: right middle; margin-top: 1; }
+#dialog .buttons Button { margin-left: 2; }
+#form { height: 1fr; padding-right: 1; }
+#dialog Input { margin: 0; }
+#dialog OptionList { height: 1fr; min-height: 6; max-height: 24; margin: 1 0; }
+#tlog, #out { height: 1fr; border: round $primary 40%; padding: 0 1; }
+
+.deploy-cols { height: 1fr; }
+.deploy-cols #form { width: 1fr; }
+.deploy-cols #quote { width: 1fr; padding: 1 2; border-left: tall $primary 40%; overflow-y: auto; }
+Screen.-narrow .deploy-cols { layout: vertical; }
+Screen.-narrow .deploy-cols #quote { border-left: none; border-top: tall $primary 40%; height: 14; }
+.trio { grid-size: 3; grid-gutter: 0 1; height: auto; }
+.duo { grid-size: 2; grid-gutter: 0 1; height: auto; }
+.gpu-row { height: auto; }
+.gpu-row Input { width: 10; margin-right: 1; }
+.gpu-row Select { width: 1fr; }
+
+#dispatch-form { height: auto; }
+#node-info { height: auto; margin-bottom: 1; }
+#task-status { margin-top: 1; }
+
+#sess { height: 12; }
+#proj-detail { margin-top: 1; }
+
+/* ---------- hardware picker ---------- */
+#dialog.hw { width: 96%; max-width: 170; }
+#mode { layout: horizontal; height: auto; border: none; padding: 0; background: transparent; }
+#mode RadioButton { margin-right: 3; background: transparent; }
+.hw-cols #form { width: 48; min-width: 38; }
+.hw-cols #hw-right { width: 1fr; padding-left: 1; }
+.hw-cols FilterTable { height: 1fr; min-height: 5; }
+#offers-note { height: auto; }
+#hw-summary { height: auto; max-height: 15; padding: 0 1; border-top: tall $primary 40%; overflow-y: auto; }
+#gpu-box { height: auto; }
+.trio-row { height: auto; }
+.trio-row Label { width: 1fr; }
+.trio-row Input { width: 1fr; margin-right: 1; }
+.switch-row { height: 3; }
+.switch-row Label { margin: 1 0 0 1; }
+Screen.-narrow .hw-cols { layout: vertical; }
+Screen.-narrow .hw-cols #form { width: 1fr; height: 14; }
+Screen.-narrow .hw-cols #hw-right { padding-left: 0; }
+Screen.-narrow #hw-summary { max-height: 8; }

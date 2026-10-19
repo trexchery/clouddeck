@@ -1,0 +1,102 @@
+name: Security
+
+# Secret scan over the FULL history, dependency audit, dependency review on PRs and the release-hygiene gate.
+# Weekly schedule so new advisories surface without a push.  The only secret is RELEASE_DENYLIST (private words for release_check;
+# absent on pull requests from forks); the default token is read-only.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 5 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # every commit on every branch/tag that was fetched
+          persist-credentials: false
+      - name: gitleaks (pinned release, checksum verified)
+        env:
+          GITLEAKS_VERSION: "8.30.1"
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/gitleaks.tgz" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $RUNNER_TEMP/gitleaks.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP" gitleaks
+          # history of all fetched refs, then the working tree; findings are redacted in the log
+          "$RUNNER_TEMP/gitleaks" git --config .gitleaks.toml --redact --no-banner --verbose --log-opts="--all" .
+          "$RUNNER_TEMP/gitleaks" dir --config .gitleaks.toml --redact --no-banner --verbose .
+
+  pip-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Resolve runtime + dev + pty-tests dependencies
+        run: |
+          python -m venv "$RUNNER_TEMP/target"
+          "$RUNNER_TEMP/target/bin/python" -m pip install ".[dev,pty-tests]"
+          "$RUNNER_TEMP/target/bin/python" -m pip freeze --exclude clouddeck > "$RUNNER_TEMP/frozen.txt"
+          wc -l "$RUNNER_TEMP/frozen.txt"
+      - name: pip-audit
+        run: |
+          python -m pip install pip-audit==2.10.1
+          pip-audit --no-deps --disable-pip -r "$RUNNER_TEMP/frozen.txt"
+
+  dependency-review:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: never
+
+  release-hygiene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      # tree + full history; prints file:line and rule ids only, never the matched text.  Not --strict, so placeholders only warn here:
+      # release.yml runs it with --strict on every tag.  The private-word patterns come from the RELEASE_DENYLIST secret when it is
+      # available (not on pull requests from forks, which then get the generic rules only).
+      - name: release_check
+        env:
+          RELEASE_DENYLIST: ${{ secrets.RELEASE_DENYLIST }}
+        run: |
+          if [ -n "$RELEASE_DENYLIST" ]; then
+            printf '%s\n' "$RELEASE_DENYLIST" > "$RUNNER_TEMP/denylist.txt"
+            export CLOUDDECK_RELEASE_DENYLIST="$RUNNER_TEMP/denylist.txt"
+          fi
+          python scripts/release_check.py

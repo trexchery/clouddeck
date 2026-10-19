@@ -1,0 +1,67 @@
+---
+# Rendered by the ddc controller (clouddeck/controller.py) from validated config values only. Contains only PUBLIC keys; every secret is pushed
+# over SSH after the lease starts. The boot script installs packages as root from the image's apt mirrors: pin `image` by digest to control that.
+version: "2.0"
+
+services:
+  box:
+    image: node:22-bookworm
+    env:
+      - DDC_ROLE=box
+      - DDC_AUTHORIZED_KEYS_B64=c3NoLWVkMjU1MTkgQUFBQVBVQkxJQyBhY2Nlc3MK
+    command:
+      - bash
+      - -c
+    args:
+      - |
+        set -e
+        export DEBIAN_FRONTEND=noninteractive
+        for i in 1 2 3; do apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+          openssh-server tmux rsync parallel htop procps time pigz jq bc python3-venv less vim-tiny ca-certificates >/dev/null && break; sleep 5; done
+        id dev >/dev/null 2>&1 || useradd -m -s /bin/bash dev
+        for u in root dev; do
+          h=$(getent passwd $u | cut -d: -f6); mkdir -p $h/.ssh
+          echo "$DDC_AUTHORIZED_KEYS_B64" | base64 -d > $h/.ssh/authorized_keys
+          chmod 700 $h/.ssh; chmod 600 $h/.ssh/authorized_keys; chown -R $u: $h/.ssh
+        done
+        mkdir -p /run/sshd /work /opt/ddc && chown dev: /work
+        printf '%s\n' 'PasswordAuthentication no' 'KbdInteractiveAuthentication no' 'PermitRootLogin prohibit-password' \
+          'ClientAliveInterval 30' 'ClientAliveCountMax 6' 'AcceptEnv COLORTERM TERM_PROGRAM' 'MaxStartups 100:30:200' 'MaxSessions 64' \
+          > /etc/ssh/sshd_config.d/ddc.conf
+        ssh-keygen -A >/dev/null
+        echo "$DDC_ROLE" > /run/ddc-role
+        exec /usr/sbin/sshd -D -e
+    expose:
+      - port: 22
+        as: 22
+        to:
+          - global: true
+
+profiles:
+  compute:
+    box:
+      resources:
+        cpu:
+          units: 8
+        memory:
+          size: 32Gi
+        storage:
+          - size: 100Gi
+        gpu:
+          units: 1
+          attributes:
+            vendor:
+              nvidia:
+                - model: rtx4090
+  placement:
+    akash:
+      pricing:
+        box:
+          denom: uact
+          amount: 1333
+
+deployment:
+  box:
+    akash:
+      profile: box
+      count: 1

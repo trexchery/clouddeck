@@ -1,0 +1,19 @@
+# Smallest possible job: CPU only, stock image, no inputs, no downloads. Costs cents. Use it to check the whole flow
+# end to end before pointing `ddc job` at a real workload:  ddc job run examples/cpu-smoke.toml
+name = "cpu-smoke"
+runtime_hours = 1          # platform-enforced backstop (runtimeLimitHours); never above the 24 h hard ceiling
+max_cost_usd = 1.00        # job-level budget guard: refuses to start if runtime x price cap is higher (also clamped to budget_usd in config.toml)
+
+[hardware]
+cpu = 2
+memory = "4Gi"
+disk = "20Gi"
+max_usd_hr = 0.20          # becomes the SDL price cap: no bid above it can win (and never above max_price_usd_hr in config.toml)
+
+[image]
+stock = "ubuntu:24.04"     # Debian/Ubuntu based; boot.sh installs sshd/rsync/aria2 if the image lacks them. Pin by @sha256:<digest> for reproducibility.
+
+[[step]]
+name = "hello"
+run = "mkdir -p out && uname -a > out/hello.txt && nproc >> out/hello.txt && sleep 5"
+artifacts = ["out/*.txt"]   # globs relative to /work, pulled and sha256-verified, then the lease is closed

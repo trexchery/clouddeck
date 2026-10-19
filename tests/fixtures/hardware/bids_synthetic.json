@@ -1,0 +1,68 @@
+{
+ "_synthetic": "derived from GET /v1/bids OpenAPI schema + ddc test fixture; authenticated endpoint, never called",
+ "data": [
+  {
+   "bid": {
+    "id": {
+     "owner": "akash1OWNER",
+     "dseq": "1",
+     "gseq": 1,
+     "oseq": 1,
+     "provider": "akash1FIXTURE001",
+     "bseq": 0
+    },
+    "state": "open",
+    "price": {
+     "denom": "uact",
+     "amount": "250"
+    },
+    "created_at": "1",
+    "resources_offer": [
+     {
+      "resources": {
+       "cpu": {
+        "units": {
+         "val": "16000"
+        },
+        "attributes": []
+       },
+       "gpu": {
+        "units": {
+         "val": "1"
+        },
+        "attributes": [
+         {
+          "key": "vendor/nvidia/model/rtx4090",
+          "value": "true"
+         }
+        ]
+       },
+       "memory": {
+        "quantity": {
+         "val": "34359738368"
+        },
+        "attributes": []
+       },
+       "storage": [
+        {
+         "name": "default",
+         "quantity": {
+          "val": "107374182400"
+         },
+         "attributes": []
+        }
+       ],
+       "endpoints": [
+        {
+         "kind": "SHARED_HTTP",
+         "sequence_number": 0
+        }
+       ]
+      },
+      "count": 1
+     }
+    ]
+   }
+  }
+ ]
+}

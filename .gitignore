@@ -1,0 +1,75 @@
+# Python / build / test caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+build/
+dist/
+*.whl
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage*
+coverage.xml
+htmlcov/
+coverage/
+.venv/
+.venv*/
+venv/
+env/
+
+# Secrets and key material: never commit
+.env
+.env.*
+!.env.example
+*.env
+!*.env.example
+secrets.env
+keys/
+*.pem
+*.key
+*.p12
+*.pfx
+id_*
+known_hosts*
+claude-credentials.json
+
+# Local state, logs, checkpoints (encrypted archives belong in the private state repo only)
+state.json
+ledger.jsonl
+perf.json
+*.jsonl
+*.log
+checkpoints/
+*.tar
+*.tar.*
+*.tgz
+*.gpg
+*.gpg.*
+rendered*.yaml
+
+# Your own config (config.example.toml is the tracked template)
+config.toml
+config.toml.tmp
+config.toml.bak
+clouddeck.toml
+!config.example.toml
+!tests/fixtures/config.toml
+
+# Editors, tools, OS junk
+.claude/
+.idea/
+.vscode/
+*.swp
+*.bak
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# `ddc job` results of the shipped examples (artifacts_dir next to the spec)
+examples/outputs/
+
+# Private words for scripts/release_check.py (see its docstring); local only
+scripts/release_denylist.local.txt

@@ -1,0 +1,14 @@
+include LICENSE README.md SECURITY.md CONTRIBUTING.md CODE_OF_CONDUCT.md CHANGELOG.md THIRD_PARTY_NOTICES.md
+include .env.example .gitleaks.toml
+include config.example.toml sdl.yaml.tmpl ddc.py conftest.py test_ddc.py requirements.txt
+recursive-include lease *
+recursive-include jobremote *
+recursive-include docker *
+recursive-include examples *
+recursive-include tests *
+recursive-include scripts *
+recursive-include windows *
+recursive-include bin *
+recursive-include docs *
+global-exclude __pycache__ *.py[cod]
+exclude scripts/release_denylist.local*

@@ -1,0 +1,27 @@
+title = "CloudDeck gitleaks config"
+
+# Start from gitleaks' built-in rules (GitHub/AWS/GCP tokens, private keys, generic API keys, ...) and add project-specific ones.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "akash-api-key-assignment"
+description = "Akash console API key assigned a real-looking value"
+regex = '''(?i)AKASH_API_KEY["']?\s*[=:]\s*["']?[A-Za-z0-9._\-]{16,}'''
+keywords = ["akash_api_key"]
+
+[rules.allowlist]
+description = "placeholders and obviously fake values"
+regexes = ['''(?i)(your|xxx|example|placeholder|changeme|redacted|dummy|fake|sample|test|\$\{)''']
+
+[[rules]]
+id = "akash-address"
+description = "Akash account address (identifies the owner's wallet; not a secret, but must not ship in examples)"
+regex = '''\bakash1[0-9a-z]{38}\b'''
+keywords = ["akash1"]
+
+# No broad allowlist. The one entry below is a verified false positive: the fixture is a trimmed capture of Akash's public provider
+# listing, whose attribute keys (capabilities/gpu/vendor/nvidia/<model>, ...) look like generic API keys. It holds no credentials.
+[allowlist]
+description = "public Akash provider attribute keys in the hardware test fixture"
+paths = ['''^tests/fixtures/hardware/providers_sample\.json$''']

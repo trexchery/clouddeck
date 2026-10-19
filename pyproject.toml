@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clouddeck"
+version = "0.1.0"
+description = "CloudDeck: terminal UI and `ddc` controller (Disposable Dev Cloud) for on-demand Akash dev boxes and test workers"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "CloudDeck contributors" }]
+keywords = ["akash", "akash-network", "cloud", "dev-environment", "remote-development", "tui", "textual", "claude-code", "gpu", "workers"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development",
+  "Topic :: System :: Systems Administration",
+]
+dependencies = ["textual>=8.2,<9", "rich>=14", "tomlkit>=0.12"]
+
+[project.urls]
+Homepage = "https://github.com/trexchery/clouddeck"
+Documentation = "https://github.com/trexchery/clouddeck/tree/main/docs"
+Source = "https://github.com/trexchery/clouddeck"
+Issues = "https://github.com/trexchery/clouddeck/issues"
+Changelog = "https://github.com/trexchery/clouddeck/blob/main/CHANGELOG.md"
+Security = "https://github.com/trexchery/clouddeck/security/policy"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pyyaml>=6"]   # pyyaml: tests/test_hardware_sdl.py parses the generated SDL
+pty-tests = ["pywinpty; sys_platform == 'win32'", "pyte"]
+
+[project.scripts]
+clouddeck = "clouddeck.cli:main"
+ddc = "clouddeck.controller:main"
+claude-cloud = "clouddeck.cli:claude_cloud"   # same as `ddc attach`
+
+# sdl.yaml.tmpl, config.example.toml, lease/ and jobremote/ live at the repo root (so a checkout runs as-is) and are copied into
+# clouddeck/data by setup.py when a wheel is built.
+[tool.setuptools.packages.find]
+include = ["clouddeck*"]
+
+[tool.setuptools.package-data]
+"clouddeck.tui" = ["*.tcss"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "test_ddc.py"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 200           # the code base is written in long lines; this keeps `ruff check` about real problems
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = [
+  "E501",   # line length is not enforced
+  "E741",   # short names (l, O) are used in small helpers
+  "B904",   # raise ... from err: error text matters more than chaining here
+  "B905",   # zip() without strict=
+  "UP031",  # %-formatting is used in a few log/ssh command strings
+]
+
+[tool.coverage.run]
+source = ["clouddeck"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 55          # floor (measured 66% on Windows py3.12); ratchet up as tests land
+show_missing = true
+skip_empty = true
+exclude_also = ["if __name__ == .__main__.:", "raise NotImplementedError"]

@@ -1,0 +1,25 @@
+{
+ "status": 400,
+ "body": {
+  "error": "BadRequestError",
+  "message": "Validation error",
+  "code": "validation_error",
+  "type": "validation_error",
+  "data": [
+   {
+    "validation": "regex",
+    "code": "invalid_string",
+    "message": "Invalid attribute key format",
+    "path": [
+     "resources",
+     0,
+     "resource",
+     "gpu",
+     "attributes",
+     0,
+     "key"
+    ]
+   }
+  ]
+ }
+}

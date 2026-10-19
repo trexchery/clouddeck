@@ -1,0 +1,643 @@
+{
+ "regions": [
+  "ap-southeast",
+  "eastern-europe",
+  "eu-central",
+  "eu-east",
+  "eu-north",
+  "eu-southeast",
+  "eu-southwest",
+  "eu-west",
+  "na-us-northeast",
+  "na-us-southeast",
+  "na-us-southwest",
+  "na-us-west",
+  "northern-america"
+ ],
+ "regionProviderCounts": {
+  "ap-southeast": 2,
+  "eastern-europe": 1,
+  "eu-central": 3,
+  "eu-east": 3,
+  "eu-north": 2,
+  "eu-southeast": 1,
+  "eu-southwest": 1,
+  "eu-west": 2,
+  "na-us-northeast": 1,
+  "na-us-southeast": 1,
+  "na-us-southwest": 6,
+  "na-us-west": 5,
+  "northern-america": 1
+ },
+ "gpus": [
+  {
+   "vendor": "nvidia",
+   "models": [
+    {
+     "name": "a100",
+     "memory": [
+      "80Gi"
+     ],
+     "interface": [
+      "sxm"
+     ],
+     "providerCount": 2,
+     "availableUnits": 33,
+     "maxNodeFreeUnits": 8,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 2,
+       "availableUnits": 33,
+       "maxNodeFreeUnits": 8
+      },
+      {
+       "memory": "80Gi",
+       "interface": null,
+       "providerCount": 2,
+       "availableUnits": 33,
+       "maxNodeFreeUnits": 8
+      },
+      {
+       "memory": null,
+       "interface": "sxm",
+       "providerCount": 2,
+       "availableUnits": 33,
+       "maxNodeFreeUnits": 8
+      },
+      {
+       "memory": "80Gi",
+       "interface": "sxm",
+       "providerCount": 2,
+       "availableUnits": 33,
+       "maxNodeFreeUnits": 8
+      }
+     ]
+    },
+    {
+     "name": "h100",
+     "memory": [
+      "80Gi"
+     ],
+     "interface": [
+      "sxm"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "80Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "sxm",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "m4000",
+     "memory": [
+      "8Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "8Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "8Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "p2000",
+     "memory": [
+      "5Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 11,
+     "maxNodeFreeUnits": 4,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 11,
+       "maxNodeFreeUnits": 4
+      },
+      {
+       "memory": "5Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 11,
+       "maxNodeFreeUnits": 4
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 11,
+       "maxNodeFreeUnits": 4
+      },
+      {
+       "memory": "5Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 11,
+       "maxNodeFreeUnits": 4
+      }
+     ]
+    },
+    {
+     "name": "p4",
+     "memory": [
+      "8Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "8Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "8Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "p40",
+     "memory": [
+      "24Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "24Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "24Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "pro6000se",
+     "memory": [
+      "96Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "96Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "96Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "rtx3060ti",
+     "memory": [
+      "8Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 3,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 3,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "8Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 3,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 3,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "8Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 3,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "rtx3090",
+     "memory": [
+      "24Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 2,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 2,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "24Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 2,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 2,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "24Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 2,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "rtx4000ada",
+     "memory": [
+      "20Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "20Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "20Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "rtx4090",
+     "memory": [
+      "24Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "24Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "24Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "rtx5090",
+     "memory": [
+      "32Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "32Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "32Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "t4",
+     "memory": [
+      "16Gi"
+     ],
+     "interface": [
+      "pcie"
+     ],
+     "providerCount": 1,
+     "availableUnits": 1,
+     "maxNodeFreeUnits": 1,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "16Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      },
+      {
+       "memory": "16Gi",
+       "interface": "pcie",
+       "providerCount": 1,
+       "availableUnits": 1,
+       "maxNodeFreeUnits": 1
+      }
+     ]
+    },
+    {
+     "name": "v100",
+     "memory": [
+      "16Gi",
+      "32Gi"
+     ],
+     "interface": [
+      "sxm",
+      "pcie"
+     ],
+     "providerCount": 2,
+     "availableUnits": 8,
+     "maxNodeFreeUnits": 4,
+     "variants": [
+      {
+       "memory": null,
+       "interface": null,
+       "providerCount": 2,
+       "availableUnits": 8,
+       "maxNodeFreeUnits": 4
+      },
+      {
+       "memory": "16Gi",
+       "interface": null,
+       "providerCount": 1,
+       "availableUnits": 4,
+       "maxNodeFreeUnits": 4
+      },
+      {
+       "memory": null,
+       "interface": "sxm",
+       "providerCount": 1,
+       "availableUnits": 4,
+       "maxNodeFreeUnits": 4
+      },
+      {
+       "memory": "16Gi",
+       "interface": "sxm",
+       "providerCount": 1,
+       "availableUnits": 4,
+       "maxNodeFreeUnits": 4
+      },
+      {
+       "memory": "32Gi",
+       "interface": null,
+       "providerCount": 2,
+       "availableUnits": 4,
+       "maxNodeFreeUnits": 2
+      },
+      {
+       "memory": null,
+       "interface": "pcie",
+       "providerCount": 2,
+       "availableUnits": 4,
+       "maxNodeFreeUnits": 2
+      },
+      {
+       "memory": "32Gi",
+       "interface": "pcie",
+       "providerCount": 2,
+       "availableUnits": 4,
+       "maxNodeFreeUnits": 2
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

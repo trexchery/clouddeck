@@ -1,0 +1,94 @@
+# ddc / CloudDeck settings. Create your own copy with `ddc init`; it is read from (first match wins):
+#   --config PATH or $DDC_CONFIG, then $XDG_CONFIG_HOME/clouddeck/config.toml (~/.config/clouddeck/ on Linux, WSL, macOS;
+#   %APPDATA%\clouddeck\ on Windows).
+# No secrets here: those live in secrets.env (see `ddc init`), outside git.
+
+# --- Spending limits. The defaults are deliberately small: raise them on purpose.
+budget_guard = true        # false disables the budget/reserve checks below. The hard ceilings further down still apply.
+budget_usd = 25.0          # max aggregate Akash spend by ddc (ledger + worst case still committed to running leases)
+reserve_usd = 5.0          # the Akash account total may never be planned below this
+max_total_leases = 4       # most ddc leases (dev box + workers + `ddc job` leases) alive at once (hard ceiling 8)
+max_workers = 4            # most worker leases alive at once (hard ceiling 7)
+
+# Hard ceilings, enforced for every lease even with budget_guard = false (they cannot be raised by the numbers above):
+#   8 leases alive, 7 workers, a price cap of $2.00/h per profile or per job (max_usd_hr), 24 h runtime limit, 8 leases per start/scale call.
+# The price ceiling alone can be raised on purpose (GPU profiles, say), up to $100/h; it caps each profile's max_usd_hr:
+# max_price_usd_hr = 2.0
+# `clouddeck serve` (remote control from the dev box): most workers a remote caller may ask for (max_workers still applies):
+# remote_max_workers = 4
+# The only way past the other ceilings is an explicit, loudly warned override. Almost certainly leave it out:
+# unsafe_disable_limits = true
+
+# --- Lifetimes
+max_runtime_hours = 8      # Akash runtimeLimitHours for the dev box (platform-enforced close)
+worker_runtime_hours = 4   # platform-enforced close for workers
+idle_minutes = 45          # dev box idle -> final checkpoint + stop
+worker_idle_minutes = 10   # workers are closed when no distributed job ran for this long
+checkpoint_minutes = 15    # periodic encrypted checkpoint while the box is up
+job_orphan_minutes = 30    # at least 10; `ddc job` lease whose runner (the `ddc job run` process) has been silent this long is closed by the watchdog
+
+# --- Checkpoints: encrypted archives pushed to a PRIVATE GitHub repo you own (gpg AES256 only).
+# Empty = checkpoints disabled. `ddc stop` then REFUSES to close the dev box (everything on it would be lost) unless you pass
+# --discard-workspace, and the idle watchdog only alerts instead of stopping it (set idle_discards_workspace = true to let it
+# discard the workspace of an idle box instead).
+state_repo = ""            # e.g. "OWNER/your-private-state-repo"
+# idle_discards_workspace = false
+
+# --- Dev box / provider selection
+image = "node:22-bookworm"  # Debian/Ubuntu based image (setup scripts use apt). Pin it with @sha256:<digest> to stop a moved tag changing your box.
+min_uptime_7d = 0.95        # ignore providers with lower 7-day uptime
+max_leases_per_provider = 4
+
+# --- Claude Code on the dev box
+install_claude_code = true        # npm-installs @anthropic-ai/claude-code (pinned version below) on the dev box; false = not installed
+# claude_code_version = "2.1.292" # override the pinned version
+# Copy your Claude login (CLAUDE_CODE_OAUTH_TOKEN from secrets.env, and ~/.claude/.credentials.json if present) to the dev box.
+# OFF by default: the rented host can read everything on the box while the lease runs. If you turn it on, use a login you can revoke.
+push_claude_credentials = false
+
+# --- Idle detection, benchmark and sync knobs (all optional)
+# busy_regex = "my-long-running-tool|make test"   # extra ERE (matched against process command lines) that counts as "work in progress"
+# bench_cmd = "npm test"                          # `ddc bench cmd` times this command on every box
+# bench_dir = "my-project"                        # directory under /work to run it in (default: the first repo)
+# sync_excludes = ["dist", ".cache"]              # extra names `dist.sh sync` skips when copying to workers (node_modules always)
+
+# Optional: a command run when ddc raises an alert (budget, failing checkpoints, watchdog trouble). The message is its last argument,
+# e.g. a script that posts to a webhook. Desktop popups are used where available (Windows `msg`, Linux `notify-send`).
+# alert_command = "/home/me/bin/ddc-alert"
+
+# Optional: a command run ON the dev box by `ddc heal` after it re-provisions workers whose container restarted.
+# It gets DIST_HOSTS="w01 w02" (the healed workers only). Empty = do nothing.
+worker_prep_command = ""
+
+# max_usd_hr becomes the SDL price cap (uact/block), so no bid above it can win.
+[profiles.16]
+cpu = 16
+mem = "32Gi"
+disk = "100Gi"
+max_usd_hr = 0.50
+[profiles.32]
+cpu = 32
+mem = "64Gi"
+disk = "100Gi"
+max_usd_hr = 0.90
+[profiles.64]
+cpu = 64
+mem = "128Gi"
+disk = "150Gi"
+max_usd_hr = 1.70
+
+# Work restored onto the dev box. Seeded from this machine on first start, then from encrypted checkpoints.
+# push = true gives the box a write deploy key for that one GitHub repo (key file keys/deploy_<name>, override with
+# deploy_key = "..."); false = no GitHub access. Paths may start with ~ ; they must exist on the machine running ddc.
+# Names become directories under /work: letters, digits, . _ - only.
+# [[repos]]
+# name = "my-project"
+# path = "~/code/my-project"
+# github = "OWNER/my-project"
+# push = true
+
+# Plain folders (not git repos) to seed, with directory names to skip.
+# [[dirs]]
+# name = "notes"
+# path = "~/notes"
+# exclude = ["tmp"]

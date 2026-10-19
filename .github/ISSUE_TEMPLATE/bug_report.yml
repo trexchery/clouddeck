@@ -1,0 +1,40 @@
+name: Bug report
+description: Something in CloudDeck or the ddc controller does not work as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste secrets.** Remove API keys, `secrets.env` contents, SSH/deploy keys, backup passphrases, tokens, account addresses and
+        provider hostnames you do not want public. Security problems go to a private advisory (see SECURITY.md), not here.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Prefer `clouddeck -p demo` (the simulated provider) if the bug reproduces without a real lease.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version (`ddc --version`)
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: OS, Python version, terminal
+      placeholder: Windows 11 / Ubuntu 24.04, Python 3.12, Windows Terminal
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output / log excerpt (redacted)
+      render: text

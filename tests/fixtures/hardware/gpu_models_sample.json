@@ -1,0 +1,156 @@
+[
+ {
+  "name": "amd",
+  "displayName": "AMD",
+  "models": [
+   {
+    "name": "mi60",
+    "displayName": "MI60",
+    "memory": [
+     "32Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "mi100",
+    "displayName": "MI100",
+    "memory": [
+     "32Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   }
+  ]
+ },
+ {
+  "name": "nvidia",
+  "displayName": "NVIDIA",
+  "models": [
+   {
+    "name": "gtx960",
+    "displayName": "GTX 960",
+    "memory": [
+     "2Gi",
+     "4Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "gtx1660ti",
+    "displayName": "GTX 1660 Ti",
+    "memory": [
+     "6Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "gtx1660",
+    "displayName": "GTX 1660",
+    "memory": [
+     "6Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "gtx1650s",
+    "displayName": "GTX 1650 SUPER",
+    "memory": [
+     "4Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "rtx3090ti",
+    "displayName": "RTX 3090 Ti",
+    "memory": [
+     "24Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "rtx3090",
+    "displayName": "RTX 3090",
+    "memory": [
+     "24Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "rtx3080",
+    "displayName": "RTX 3080",
+    "memory": [
+     "10Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "rtxa6000",
+    "displayName": "RTX A6000",
+    "memory": [
+     "48Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "a5000",
+    "displayName": "A5000",
+    "memory": [
+     "24Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "a40",
+    "displayName": "A40",
+    "memory": [
+     "48Gi"
+    ],
+    "interface": [
+     "pcie"
+    ]
+   },
+   {
+    "name": "h100",
+    "displayName": "H100",
+    "memory": [
+     "80Gi"
+    ],
+    "interface": [
+     "sxm",
+     "pcie"
+    ]
+   },
+   {
+    "name": "h200",
+    "displayName": "H200",
+    "memory": [
+     "141Gi"
+    ],
+    "interface": [
+     "sxm"
+    ]
+   }
+  ]
+ }
+]

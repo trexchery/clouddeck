@@ -1,0 +1,4 @@
+#!/bin/sh
+# Linux/macOS launcher that works from a plain checkout: ./bin/clouddeck   (or: pip install -e . for a `clouddeck` command)
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" exec "${PYTHON:-python3}" -m clouddeck "$@"

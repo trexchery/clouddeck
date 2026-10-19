@@ -1,0 +1,5888 @@
+[
+ {
+  "owner": "akash1FIXTURE001",
+  "name": "provider001.example",
+  "hostUri": "https://provider001.example:8443",
+  "lastCheckDate": "2026-10-17T19:38:59.000Z",
+  "deploymentCount": 19,
+  "leaseCount": 26,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Texas",
+  "ipRegionCode": "TX",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 361800,
+    "available": 1525190,
+    "pending": 0,
+    "total": 1886990
+   },
+   "gpu": {
+    "active": 51,
+    "available": 26,
+    "pending": 0,
+    "total": 77
+   },
+   "memory": {
+    "active": 3245921533952,
+    "available": 6733680515072,
+    "pending": 0,
+    "total": 9979602049024
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 2652142305280,
+     "available": 1215316141316,
+     "pending": 0,
+     "total": 3867458446596
+    },
+    "persistent": {
+     "active": 3182570766336,
+     "available": 57230242086912,
+     "pending": 0,
+     "total": 60412812853248
+    },
+    "total": {
+     "active": 5834713071616,
+     "available": 58445558228228,
+     "pending": 0,
+     "total": 64280271299844
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "a100",
+    "ram": "80Gi",
+    "interface": "SXM4"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9951473765432098,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:38:59.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "cuda",
+    "value": "13",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "na-us-southwest",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org001",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "HOU",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc-6",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "datacenter",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "Overclock",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/a100",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/a100/ram/80Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/a100/ram/80Gi/interface/sxm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/a100/interface/sxm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu-interconnect",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu-interconnect/fabric/infiniband",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "BGP Blend",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "10000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "10000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "datacenter",
+    "value": "us-southwest-hou-1",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org001",
+  "locationRegion": "na-us-southwest",
+  "country": "US",
+  "city": "HOU",
+  "timezone": "utc-6",
+  "locationType": "datacenter",
+  "hostingProvider": "Overclock",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [
+   "Nvidia a100"
+  ],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr5ecc",
+  "networkProvider": "BGP Blend",
+  "networkSpeedDown": 10000,
+  "networkSpeedUp": 10000,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE002",
+  "name": "provider002.example",
+  "hostUri": "https://provider002.example:8443",
+  "lastCheckDate": "2026-10-17T19:49:00.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 1,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Geneva",
+  "ipRegionCode": "GE",
+  "ipCountry": "Switzerland",
+  "ipCountryCode": "CH",
+  "stats": {
+   "cpu": {
+    "active": 4000,
+    "available": 441100,
+    "pending": 0,
+    "total": 445100
+   },
+   "gpu": {
+    "active": 0,
+    "available": 12,
+    "pending": 0,
+    "total": 12
+   },
+   "memory": {
+    "active": 8000000000,
+    "available": 1541629829120,
+    "pending": 0,
+    "total": 1549629829120
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 21474836480,
+     "available": 3295131646016,
+     "pending": 0,
+     "total": 3316606482496
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 21474836480,
+     "available": 3295131646016,
+     "pending": 0,
+     "total": 3316606482496
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "p2000",
+    "ram": "5Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9883939043209876,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:49:00.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org002",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "eu-central",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "CH",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "ZRH",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc+1",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "server-room",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "dstm",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "sunrise",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "100",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "700",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cuda",
+    "value": "13.0",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p2000",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p2000/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p2000/ram/5Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p2000/ram/5Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org002",
+  "locationRegion": "eu-central",
+  "country": "CH",
+  "city": "ZRH",
+  "timezone": "utc+1",
+  "locationType": "server-room",
+  "hostingProvider": "dstm",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "ssd"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [
+   "ssd"
+  ],
+  "hardwareMemory": "ddr4ecc",
+  "networkProvider": "sunrise",
+  "networkSpeedDown": 700,
+  "networkSpeedUp": 100,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE003",
+  "name": "provider003.example",
+  "hostUri": "https://provider003.example:8443",
+  "lastCheckDate": "2026-10-17T19:43:09.000Z",
+  "deploymentCount": 3,
+  "leaseCount": 43,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4-df.5",
+  "ipRegion": "Set\u00fabal",
+  "ipRegionCode": "15",
+  "ipCountry": "Portugal",
+  "ipCountryCode": "PT",
+  "stats": {
+   "cpu": {
+    "active": 483100,
+    "available": 671345,
+    "pending": 0,
+    "total": 1154445
+   },
+   "gpu": {
+    "active": 9,
+    "available": 10,
+    "pending": 0,
+    "total": 19
+   },
+   "memory": {
+    "active": 5688525094912,
+    "available": 1377114200064,
+    "pending": 0,
+    "total": 7065639294976
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 856108557312,
+     "available": 23008603350203,
+     "pending": 0,
+     "total": 23864711907515
+    },
+    "persistent": {
+     "active": 391915765760,
+     "available": 4173959004160,
+     "pending": 0,
+     "total": 4565874769920
+    },
+    "total": {
+     "active": 1248024323072,
+     "available": 27182562354363,
+     "pending": 0,
+     "total": 28430586677435
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "rtx4000ada",
+    "ram": "20Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "v100",
+    "ram": "16Gi",
+    "interface": "SXM2"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "t4",
+    "ram": "16Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "v100",
+    "ram": "32Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "p40",
+    "ram": "24Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "p4",
+    "ram": "8Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "m4000",
+    "ram": "8Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "rtx3090ti",
+    "ram": "24Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9948476080246914,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:43:09.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "region",
+    "value": "eu-west",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "eu-southwest",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org003",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "PT",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "LIS",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "colo",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc+0",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "oni",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-cpu-arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-memory",
+    "value": "ddr4",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-disk",
+    "value": "nvme",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage-type",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4000ada",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4000ada/ram/20Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4000ada/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4000ada/interface/pcie/ram/20Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4000ada/ram/20Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/interface/pcie/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/ram/24Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p4",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p4/ram/8Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p4/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p4/interface/pcie/ram/8Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p4/ram/8Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p40",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p40/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p40/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p40/interface/pcie/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/p40/ram/24Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/m4000",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/m4000/ram/8Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/m4000/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/m4000/interface/pcie/ram/8Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/m4000/ram/8Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/ram/32Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/interface/pcie/ram/32Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/ram/32Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/ram/16Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/interface/sxm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/interface/sxm/ram/16Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/ram/16Gi/interface/sxm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/t4",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/t4/ram/16Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/t4/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/t4/interface/pcie/ram/16Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/t4/ram/16Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "cuda",
+    "value": "13.0",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "Oni Telecom",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "10000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "10000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "ip-lease",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org003",
+  "locationRegion": "eu-southwest",
+  "country": "PT",
+  "city": "LIS",
+  "timezone": "utc+0",
+  "locationType": "colo",
+  "hostingProvider": "oni",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [
+   "Nvidia t4",
+   "Nvidia v100",
+   "Nvidia tesla-p4",
+   "Nvidia tesla-p40"
+  ],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr4ecc",
+  "networkProvider": "Oni Telecom",
+  "networkSpeedDown": 10000,
+  "networkSpeedUp": 10000,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": true,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE004",
+  "name": "provider004.example",
+  "hostUri": "https://provider004.example:8443",
+  "lastCheckDate": "2026-10-17T19:38:39.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 0,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.5-rc3",
+  "ipRegion": "Texas",
+  "ipRegionCode": "TX",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 0,
+    "available": 121050,
+    "pending": 0,
+    "total": 121050
+   },
+   "gpu": {
+    "active": 0,
+    "available": 8,
+    "pending": 0,
+    "total": 8
+   },
+   "memory": {
+    "active": 0,
+    "available": 529239695360,
+    "pending": 0,
+    "total": 529239695360
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 0,
+     "available": 1698008429418,
+     "pending": 0,
+     "total": 1698008429418
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 0,
+     "available": 1698008429418,
+     "pending": 0,
+     "total": 1698008429418
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "pro6000se",
+    "ram": "96Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 1,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:38:39.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "tee/type",
+    "value": "cpu-gpu",
+    "auditedBy": []
+   },
+   {
+    "key": "tee/platform",
+    "value": "sev-snp",
+    "auditedBy": []
+   },
+   {
+    "key": "region",
+    "value": "us-central",
+    "auditedBy": []
+   },
+   {
+    "key": "location-region",
+    "value": "na-us-southwest",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "organization",
+    "value": "org004",
+    "auditedBy": []
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": []
+   },
+   {
+    "key": "city",
+    "value": "HOU",
+    "auditedBy": []
+   },
+   {
+    "key": "timezone",
+    "value": "utc-6",
+    "auditedBy": []
+   },
+   {
+    "key": "location-type",
+    "value": "datacenter",
+    "auditedBy": []
+   },
+   {
+    "key": "hosting-provider",
+    "value": "Overclock",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000se",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000se/ram/96Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000se/ram/96Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000se/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5ecc",
+    "auditedBy": []
+   },
+   {
+    "key": "network-provider",
+    "value": "AES Services",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-up",
+    "value": "1000",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "1000",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org004",
+  "locationRegion": "na-us-southwest",
+  "country": "US",
+  "city": "HOU",
+  "timezone": "utc-6",
+  "locationType": "datacenter",
+  "hostingProvider": "Overclock",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr5ecc",
+  "networkProvider": "AES Services",
+  "networkSpeedDown": 1000,
+  "networkSpeedUp": 1000,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE005",
+  "name": "provider005.example",
+  "hostUri": "https://provider005.example:8443",
+  "lastCheckDate": "2026-10-17T19:38:39.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 2,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Missouri",
+  "ipRegionCode": "MO",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 15700,
+    "available": 91725,
+    "pending": 0,
+    "total": 107425
+   },
+   "gpu": {
+    "active": 2,
+    "available": 3,
+    "pending": 0,
+    "total": 5
+   },
+   "memory": {
+    "active": 46707769344,
+    "available": 180309614592,
+    "pending": 0,
+    "total": 227017383936
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 189515431936,
+     "available": 724584148058,
+     "pending": 0,
+     "total": 914099579994
+    },
+    "persistent": {
+     "active": 10737418240,
+     "available": 0,
+     "pending": 0,
+     "total": 10737418240
+    },
+    "total": {
+     "active": 200252850176,
+     "available": 724584148058,
+     "pending": 0,
+     "total": 924836998234
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "rtx5090",
+    "ram": "32Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "rtx3090",
+    "ram": "24Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 1,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:38:39.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "location-region",
+    "value": "na-us-west",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org005",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "SFO",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "Contabo",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "home",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc-7",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "Contabo",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "500",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "500",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cuda",
+    "value": "13",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090/ram/32Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090/interface/pcie/ram/32Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090/ram/32Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090m",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090m/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090m/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090m/interface/pcie/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx5090m/ram/24Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090/interface/pcie/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090/ram/24Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/interface/pcie/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3090ti/ram/24Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org005",
+  "locationRegion": "na-us-west",
+  "country": "US",
+  "city": "SFO",
+  "timezone": "utc-7",
+  "locationType": "home",
+  "hostingProvider": "Contabo",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "ssd"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [
+   "ssd"
+  ],
+  "hardwareMemory": "ddr5",
+  "networkProvider": "Contabo",
+  "networkSpeedDown": 500,
+  "networkSpeedUp": 500,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE006",
+  "name": "provider006.example",
+  "hostUri": "https://provider006.example:8443",
+  "lastCheckDate": "2026-10-17T19:49:00.000Z",
+  "deploymentCount": 20,
+  "leaseCount": 32,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Kyiv City",
+  "ipRegionCode": "30",
+  "ipCountry": "Ukraine",
+  "ipCountryCode": "UA",
+  "stats": {
+   "cpu": {
+    "active": 213750,
+    "available": 113315,
+    "pending": 0,
+    "total": 327065
+   },
+   "gpu": {
+    "active": 3,
+    "available": 3,
+    "pending": 0,
+    "total": 6
+   },
+   "memory": {
+    "active": 221206401024,
+    "available": 244505612288,
+    "pending": 0,
+    "total": 465712013312
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 329993765888,
+     "available": 13248471321622,
+     "pending": 0,
+     "total": 13578465087510
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 329993765888,
+     "available": 13248471321622,
+     "pending": 0,
+     "total": 13578465087510
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "rtx3060ti",
+    "ram": "8Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.983954475308642,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:49:00.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "location-region",
+    "value": "eu-east",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org006",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "UA",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "KYI",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc+3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "mix",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "nic",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "UA-FREEUKRAINE-20230918",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "500",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "500",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/ip-lease",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cuda",
+    "value": "13.0",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3060ti",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3060ti/ram/8Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3060ti/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx3060ti/ram/8Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org006",
+  "locationRegion": "eu-east",
+  "country": "UA",
+  "city": "KYI",
+  "timezone": "utc+3",
+  "locationType": "mix",
+  "hostingProvider": "nic",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "ssd"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [
+   "ssd"
+  ],
+  "hardwareMemory": "ddr4",
+  "networkProvider": "UA-FREEUKRAINE-20230918",
+  "networkSpeedDown": 500,
+  "networkSpeedUp": 500,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE007",
+  "name": "provider007.example",
+  "hostUri": "https://provider007.example:8443",
+  "lastCheckDate": "2026-10-17T19:41:39.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 1,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Stockholm",
+  "ipRegionCode": "AB",
+  "ipCountry": "Sweden",
+  "ipCountryCode": "SE",
+  "stats": {
+   "cpu": {
+    "active": 1000,
+    "available": 3310,
+    "pending": 0,
+    "total": 4310
+   },
+   "gpu": {
+    "active": 0,
+    "available": 3,
+    "pending": 0,
+    "total": 3
+   },
+   "memory": {
+    "active": 2147483648,
+    "available": 31264332914,
+    "pending": 0,
+    "total": 33411816562
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 5368709120,
+     "available": 191186558003,
+     "pending": 0,
+     "total": 196555267123
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 5368709120,
+     "available": 191186558003,
+     "pending": 0,
+     "total": 196555267123
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "a10g",
+    "ram": "24Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 1,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:41:39.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "organization",
+    "value": "org007",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/a10g",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/a10g/ram/24Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/a10g/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "region",
+    "value": "eu-west",
+    "auditedBy": []
+   },
+   {
+    "key": "location-region",
+    "value": "eu-west-1",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch/x86-64",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "default",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "false",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org007",
+  "locationRegion": "eu-west-1",
+  "country": null,
+  "city": null,
+  "timezone": null,
+  "locationType": null,
+  "hostingProvider": null,
+  "hardwareCpu": null,
+  "hardwareCpuArch": null,
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "hdd"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [
+   "hdd"
+  ],
+  "hardwareMemory": null,
+  "networkProvider": null,
+  "networkSpeedDown": 0,
+  "networkSpeedUp": 0,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE008",
+  "name": "provider008.example",
+  "hostUri": "https://provider008.example:8443",
+  "lastCheckDate": "2026-10-17T19:49:01.000Z",
+  "deploymentCount": 2,
+  "leaseCount": 11,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Ho Chi Minh",
+  "ipRegionCode": "SG",
+  "ipCountry": "Vietnam",
+  "ipCountryCode": "VN",
+  "stats": {
+   "cpu": {
+    "active": 8350,
+    "available": 144740,
+    "pending": 0,
+    "total": 153090
+   },
+   "gpu": {
+    "active": 0,
+    "available": 2,
+    "pending": 0,
+    "total": 2
+   },
+   "memory": {
+    "active": 12736004096,
+    "available": 213226188800,
+    "pending": 0,
+    "total": 225962192896
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 29211230208,
+     "available": 1859491381201,
+     "pending": 0,
+     "total": 1888702611409
+    },
+    "persistent": {
+     "active": 35433480192,
+     "available": 1121044791296,
+     "pending": 0,
+     "total": 1156478271488
+    },
+    "total": {
+     "active": 64644710400,
+     "available": 2980536172497,
+     "pending": 0,
+     "total": 3045180882897
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "gtx1050",
+    "ram": "2Gi",
+    "interface": "PCIe"
+   },
+   {
+    "vendor": "nvidia",
+    "model": "gtx1070ti",
+    "ram": "8Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9737627314814815,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:49:01.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "organization",
+    "value": "org008",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "location-region",
+    "value": "south-eastern-asia",
+    "auditedBy": []
+   },
+   {
+    "key": "country",
+    "value": "VN",
+    "auditedBy": []
+   },
+   {
+    "key": "city",
+    "value": "HPH",
+    "auditedBy": []
+   },
+   {
+    "key": "timezone",
+    "value": "utc+7",
+    "auditedBy": []
+   },
+   {
+    "key": "location-type",
+    "value": "home",
+    "auditedBy": []
+   },
+   {
+    "key": "hosting-provider",
+    "value": "self",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4ecc,ddr3ecc",
+    "auditedBy": []
+   },
+   {
+    "key": "network-provider",
+    "value": "VNPT",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-up",
+    "value": "400",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "400",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-persistent-storage-type",
+    "value": "beta3",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": []
+   },
+   {
+    "key": "cuda",
+    "value": "13",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1070ti",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1070ti/ram/8Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1070ti/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1070ti/ram/8Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1070ti/interface/pcie/ram/8Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1050",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1050/ram/2Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1050/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1050/ram/2Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/gtx1050/interface/pcie/ram/2Gi",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org008",
+  "locationRegion": "south-eastern-asia",
+  "country": "VN",
+  "city": "HPH",
+  "timezone": "utc+7",
+  "locationType": "home",
+  "hostingProvider": "self",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr4ecc,ddr3ecc",
+  "networkProvider": "VNPT",
+  "networkSpeedDown": 400,
+  "networkSpeedUp": 400,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE009",
+  "name": "provider009.example",
+  "hostUri": "https://provider009.example:8443",
+  "lastCheckDate": "2026-10-17T19:48:59.000Z",
+  "deploymentCount": 29,
+  "leaseCount": 53,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Florida",
+  "ipRegionCode": "FL",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 92700,
+    "available": 182100,
+    "pending": 5800,
+    "total": 280600
+   },
+   "gpu": {
+    "active": 0,
+    "available": 1,
+    "pending": 0,
+    "total": 1
+   },
+   "memory": {
+    "active": 196307472384,
+    "available": 202877743104,
+    "pending": 11207180288,
+    "total": 410392395776
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 841626308608,
+     "available": 5535718812348,
+     "pending": 6576668672,
+     "total": 6383921789628
+    },
+    "persistent": {
+     "active": 762356695040,
+     "available": 1716774502400,
+     "pending": 10737418240,
+     "total": 2489868615680
+    },
+    "total": {
+     "active": 1603983003648,
+     "available": 7252493314748,
+     "pending": 17314086912,
+     "total": 8873790405308
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "rtx4090",
+    "ram": "24Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9998804012345679,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:48:59.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "region",
+    "value": "us-east",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org009",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cpu",
+    "value": "amd",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "ip-lease",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "default",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/3/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/3/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cuda",
+    "value": "12.9",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/4090",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/4090/ram/24Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/4090/ram/24Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/4090/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "na-us-southeast",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc-4",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "2000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "2000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "FLL",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "mix",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "None",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "ATT",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org009",
+  "locationRegion": "na-us-southeast",
+  "country": "US",
+  "city": "FLL",
+  "timezone": "utc-4",
+  "locationType": "mix",
+  "hostingProvider": "None",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [
+   "Nvidia rtx-4090"
+  ],
+  "hardwareDisk": [
+   "hdd",
+   "ssd",
+   "nvme"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd",
+   "nvme"
+  ],
+  "hardwareMemory": "ddr5",
+  "networkProvider": "ATT",
+  "networkSpeedDown": 2000,
+  "networkSpeedUp": 2000,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": true,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE010",
+  "name": "provider010.example",
+  "hostUri": "https://provider010.example:8443",
+  "lastCheckDate": "2026-10-17T19:44:10.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 0,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Aargau",
+  "ipRegionCode": "AG",
+  "ipCountry": "Switzerland",
+  "ipCountryCode": "CH",
+  "stats": {
+   "cpu": {
+    "active": 0,
+    "available": 506980,
+    "pending": 0,
+    "total": 506980
+   },
+   "gpu": {
+    "active": 0,
+    "available": 1,
+    "pending": 0,
+    "total": 1
+   },
+   "memory": {
+    "active": 0,
+    "available": 258429251584,
+    "pending": 0,
+    "total": 258429251584
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 0,
+     "available": 1793592897154,
+     "pending": 0,
+     "total": 1793592897154
+    },
+    "persistent": {
+     "active": 0,
+     "available": 3800668307456,
+     "pending": 0,
+     "total": 3800668307456
+    },
+    "total": {
+     "active": 0,
+     "available": 5594261204610,
+     "pending": 0,
+     "total": 5594261204610
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "pro6000we",
+    "ram": "96Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 0.9991782407407407,
+  "uptime7d": 0.9905638227513227,
+  "uptime30d": 0.9815532407407408,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:44:10.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org010",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "eu-central",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "CH",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "ZRH",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc+1",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "server-room",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "dstm",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "sunrise",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "100",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "2000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cuda",
+    "value": "13.3",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000we",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000we/interface/pcie",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000we/ram/96Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/pro6000we/ram/96Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org010",
+  "locationRegion": "eu-central",
+  "country": "CH",
+  "city": "ZRH",
+  "timezone": "utc+1",
+  "locationType": "server-room",
+  "hostingProvider": "dstm",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr5ecc",
+  "networkProvider": "sunrise",
+  "networkSpeedDown": 2000,
+  "networkSpeedUp": 100,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE011",
+  "name": "provider011.example",
+  "hostUri": "https://provider011.example:8443",
+  "lastCheckDate": "2026-10-17T19:49:00.000Z",
+  "deploymentCount": 4,
+  "leaseCount": 4,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.2",
+  "ipRegion": "Kamphaeng Phet",
+  "ipRegionCode": "62",
+  "ipCountry": "Thailand",
+  "ipCountryCode": "TH",
+  "stats": {
+   "cpu": {
+    "active": 34000,
+    "available": 86910,
+    "pending": 0,
+    "total": 120910
+   },
+   "gpu": {
+    "active": 4,
+    "available": 1,
+    "pending": 0,
+    "total": 5
+   },
+   "memory": {
+    "active": 515396075520,
+    "available": 1639336534016,
+    "pending": 0,
+    "total": 2154732609536
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 858993459200,
+     "available": 12856404405681,
+     "pending": 0,
+     "total": 13715397864881
+    },
+    "persistent": {
+     "active": 322122547200,
+     "available": 381183000576,
+     "pending": 0,
+     "total": 703305547776
+    },
+    "total": {
+     "active": 1181116006400,
+     "available": 13237587406257,
+     "pending": 0,
+     "total": 14418703412657
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "h100",
+    "ram": "80Gi",
+    "interface": "SXM5"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 1,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:49:00.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "region",
+    "value": "asia-southeast",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "ap-southeast",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "TH",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "BKK",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc+7",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "datacenter",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "OneAsia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org011",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cpu-arch",
+    "value": "amd64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-cpu-arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cuda-version",
+    "value": "13.2",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "cuda",
+    "value": "13.2",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-gpu",
+    "value": "NVIDIA",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-gpu-model",
+    "value": "h100",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "JasTel Network",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "2315",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "2341",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100/ram/80Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100/interface/sxm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100/interface/sxm/ram/80Gi",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/datacenter",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/hbm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org011",
+  "locationRegion": "ap-southeast",
+  "country": "TH",
+  "city": "BKK",
+  "timezone": "utc+7",
+  "locationType": "datacenter",
+  "hostingProvider": "OneAsia",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [
+   "Nvidia h100"
+  ],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr5ecc",
+  "networkProvider": "JasTel Network",
+  "networkSpeedDown": 2341,
+  "networkSpeedUp": 2315,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE012",
+  "name": "provider012.example",
+  "hostUri": "https://provider012.example:8443",
+  "lastCheckDate": "2026-10-17T19:49:00.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 0,
+  "cosmosSdkVersion": "0.53.5",
+  "akashVersion": "0.12.0",
+  "ipRegion": "Moscow",
+  "ipRegionCode": "MOW",
+  "ipCountry": "Russia",
+  "ipCountryCode": "RU",
+  "stats": {
+   "cpu": {
+    "active": 0,
+    "available": 86150,
+    "pending": 0,
+    "total": 86150
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 0,
+    "available": 132308697088,
+    "pending": 0,
+    "total": 132308697088
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 0,
+     "available": 3739976867365,
+     "pending": 0,
+     "total": 3739976867365
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 0,
+     "available": 3739976867365,
+     "pending": 0,
+     "total": 3739976867365
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "gtx1050ti",
+    "ram": "4Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.999613425925926,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:49:00.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "region",
+    "value": "eu-east",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/GTX-1050Ti",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": null,
+  "locationRegion": null,
+  "country": null,
+  "city": null,
+  "timezone": null,
+  "locationType": null,
+  "hostingProvider": null,
+  "hardwareCpu": null,
+  "hardwareCpuArch": null,
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [],
+  "hardwareMemory": null,
+  "networkProvider": null,
+  "networkSpeedDown": 0,
+  "networkSpeedUp": 0,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu"
+ },
+ {
+  "owner": "akash1FIXTURE013",
+  "name": "provider013.example",
+  "hostUri": "https://provider013.example:8443",
+  "lastCheckDate": "2026-10-17T19:40:49.000Z",
+  "deploymentCount": 50,
+  "leaseCount": 93,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Flanders",
+  "ipRegionCode": "VLG",
+  "ipCountry": "Belgium",
+  "ipCountryCode": "BE",
+  "stats": {
+   "cpu": {
+    "active": 149550,
+    "available": 190050,
+    "pending": 0,
+    "total": 339600
+   },
+   "gpu": {
+    "active": 0,
+    "available": 8,
+    "pending": 0,
+    "total": 8
+   },
+   "memory": {
+    "active": 436476051456,
+    "available": 875927752704,
+    "pending": 0,
+    "total": 1312403804160
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 294742130688,
+     "available": 5724447484818,
+     "pending": 0,
+     "total": 6019189615506
+    },
+    "persistent": {
+     "active": 2680193810432,
+     "available": 28727020879872,
+     "pending": 0,
+     "total": 31407214690304
+    },
+    "total": {
+     "active": 2974935941120,
+     "available": 34451468364690,
+     "pending": 0,
+     "total": 37426404305810
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "v100",
+    "ram": "32Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 0.9775925925925926,
+  "uptime30d": 0.9845891203703704,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:40:49.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "organization",
+    "value": "org013",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "eu-west",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "BE",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "NYL",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc+2",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "datacenter",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "ZenCloud",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-cpu",
+    "value": "intel",
+    "auditedBy": []
+   },
+   {
+    "key": "hardware-cpu-arch",
+    "value": "x86-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-memory",
+    "value": "ddr4",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-disk",
+    "value": "nvme",
+    "auditedBy": []
+   },
+   {
+    "key": "network-provider",
+    "value": "Proximus",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "1500",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "8500",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "storage-class",
+    "value": "beta3",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/3/class",
+    "value": "beta3",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/3/persistent",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/3/type",
+    "value": "ceph-nvme-cache",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/3/hardware",
+    "value": "nvme",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/hardware",
+    "value": "nvme",
+    "auditedBy": []
+   },
+   {
+    "key": "hardware-gpu",
+    "value": "NVIDIA",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/datacenter",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "cuda-version",
+    "value": "13",
+    "auditedBy": []
+   },
+   {
+    "key": "cuda",
+    "value": "13",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/ram/32Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100/ram/32Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100-32gb",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100-32gb/ram/32Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100-32gb/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/v100-32gb/ram/32Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org013",
+  "locationRegion": "eu-west",
+  "country": "BE",
+  "city": "NYL",
+  "timezone": "utc+2",
+  "locationType": "datacenter",
+  "hostingProvider": "ZenCloud",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [
+   "Nvidia v100"
+  ],
+  "hardwareDisk": [
+   "ssd",
+   "nvme"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "ssd",
+   "nvme"
+  ],
+  "hardwareMemory": "ddr4",
+  "networkProvider": "Proximus",
+  "networkSpeedDown": 8500,
+  "networkSpeedUp": 1500,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpu-v100-variants"
+ },
+ {
+  "owner": "akash1FIXTURE014",
+  "name": "provider014.example",
+  "hostUri": "https://provider014.example:8443",
+  "lastCheckDate": "2026-10-17T19:43:29.000Z",
+  "deploymentCount": 2,
+  "leaseCount": 2,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.2",
+  "ipRegion": "\u00cele-de-France",
+  "ipRegionCode": "IDF",
+  "ipCountry": "France",
+  "ipCountryCode": "FR",
+  "stats": {
+   "cpu": {
+    "active": 8500,
+    "available": 57125,
+    "pending": 0,
+    "total": 65625
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 17716740096,
+    "available": 298726606848,
+    "pending": 0,
+    "total": 316443346944
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 108447924224,
+     "available": 5153447796205,
+     "pending": 0,
+     "total": 5261895720429
+    },
+    "persistent": {
+     "active": 10737418240,
+     "available": 0,
+     "pending": 0,
+     "total": 10737418240
+    },
+    "total": {
+     "active": 119185342464,
+     "available": 5153447796205,
+     "pending": 0,
+     "total": 5272633138669
+    }
+   }
+  },
+  "gpuModels": [],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.5838202160493827,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:43:29.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "organization",
+    "value": "org014",
+    "auditedBy": []
+   },
+   {
+    "key": "location-region",
+    "value": "eu-west",
+    "auditedBy": []
+   },
+   {
+    "key": "country",
+    "value": "FR",
+    "auditedBy": []
+   },
+   {
+    "key": "location-type",
+    "value": "home",
+    "auditedBy": []
+   },
+   {
+    "key": "timezone",
+    "value": "utc+2",
+    "auditedBy": []
+   },
+   {
+    "key": "hosting-provider",
+    "value": "majac.uk",
+    "auditedBy": []
+   },
+   {
+    "key": "network-provider",
+    "value": "free",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-up",
+    "value": "1000",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "1000",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr3",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/ip-lease",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org014",
+  "locationRegion": "eu-west",
+  "country": "FR",
+  "city": null,
+  "timezone": "utc+2",
+  "locationType": "home",
+  "hostingProvider": "majac.uk",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "ssd"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [
+   "ssd"
+  ],
+  "hardwareMemory": "ddr3",
+  "networkProvider": "free",
+  "networkSpeedDown": 1000,
+  "networkSpeedUp": 1000,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "cpu-intel"
+ },
+ {
+  "owner": "akash1FIXTURE015",
+  "name": "provider015.example",
+  "hostUri": "https://provider015.example:8443",
+  "lastCheckDate": "2026-10-17T19:45:29.000Z",
+  "deploymentCount": 22,
+  "leaseCount": 48,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Michigan",
+  "ipRegionCode": "MI",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 206000,
+    "available": 210090,
+    "pending": 1000,
+    "total": 417090
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 347633266688,
+    "available": 334645993472,
+    "pending": 2147483648,
+    "total": 684426743808
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 460416244736,
+     "available": 4845237331570,
+     "pending": 21474836480,
+     "total": 5327128412786
+    },
+    "persistent": {
+     "active": 1100585369600,
+     "available": 386312699904,
+     "pending": 0,
+     "total": 1486898069504
+    },
+    "total": {
+     "active": 1561001614336,
+     "available": 5231550031474,
+     "pending": 21474836480,
+     "total": 6814026482290
+    }
+   }
+  },
+  "gpuModels": [],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9776793981481482,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:45:29.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org015",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "northern-america",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "mbs",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "self",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc-5",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "office",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "spectrum",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "500",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "1000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-memory",
+    "value": "ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hardware-disk",
+    "value": "nvme",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage-type",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org015",
+  "locationRegion": "northern-america",
+  "country": "US",
+  "city": "mbs",
+  "timezone": "utc-5",
+  "locationType": "office",
+  "hostingProvider": "self",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr4ecc",
+  "networkProvider": "spectrum",
+  "networkSpeedDown": 1000,
+  "networkSpeedUp": 500,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "cpu-amd"
+ },
+ {
+  "owner": "akash1FIXTURE016",
+  "name": "provider016.example",
+  "hostUri": "https://provider016.example:8443",
+  "lastCheckDate": "2026-10-17T19:43:09.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 0,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.2",
+  "ipRegion": "Missouri",
+  "ipRegionCode": "MO",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    }
+   }
+  },
+  "gpuModels": [],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 1,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:43:09.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "region",
+    "value": "us-west",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "organization",
+    "value": "org016",
+    "auditedBy": []
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": []
+   },
+   {
+    "key": "city",
+    "value": "San Francisco",
+    "auditedBy": []
+   },
+   {
+    "key": "location-type",
+    "value": "datacenter",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "arm",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "arm-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-up",
+    "value": "1000",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "1000",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtxa2000",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtxa2000/ram/6Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtxa2000/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtxa2000/interface/pcie/ram/6Gi",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org016",
+  "locationRegion": null,
+  "country": "US",
+  "city": "San Francisco",
+  "timezone": null,
+  "locationType": "datacenter",
+  "hostingProvider": null,
+  "hardwareCpu": "arm",
+  "hardwareCpuArch": "arm-64",
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [],
+  "hardwareMemory": "ddr5",
+  "networkProvider": null,
+  "networkSpeedDown": 1000,
+  "networkSpeedUp": 1000,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "cpu-arm"
+ },
+ {
+  "owner": "akash1FIXTURE017",
+  "name": "provider017.example",
+  "hostUri": "https://provider017.example:8443",
+  "lastCheckDate": "2026-10-17T19:51:49.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 0,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.1",
+  "ipRegion": "North Holland",
+  "ipRegionCode": "NH",
+  "ipCountry": "The Netherlands",
+  "ipCountryCode": "NL",
+  "stats": {
+   "cpu": {
+    "active": 0,
+    "available": 119372,
+    "pending": 0,
+    "total": 119372
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 0,
+    "available": 16656801792,
+    "pending": 0,
+    "total": 16656801792
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 0,
+     "available": 238654210744,
+     "pending": 0,
+     "total": 238654210744
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 0,
+     "available": 238654210744,
+     "pending": 0,
+     "total": 238654210744
+    }
+   }
+  },
+  "gpuModels": [],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9084922839506173,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:51:49.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "region",
+    "value": "eu-west",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash-compute",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "organization",
+    "value": "org017",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "false",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash-compute",
+  "organization": "org017",
+  "locationRegion": null,
+  "country": null,
+  "city": null,
+  "timezone": null,
+  "locationType": null,
+  "hostingProvider": null,
+  "hardwareCpu": null,
+  "hardwareCpuArch": null,
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [],
+  "hardwareMemory": null,
+  "networkProvider": null,
+  "networkSpeedDown": 0,
+  "networkSpeedUp": 0,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "cpu-only-sparse-attrs"
+ },
+ {
+  "owner": "akash1FIXTURE018",
+  "name": "provider018.example",
+  "hostUri": "https://provider018.example:8443",
+  "lastCheckDate": "2026-10-17T19:43:49.000Z",
+  "deploymentCount": 6,
+  "leaseCount": 33,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Missouri",
+  "ipRegionCode": "MO",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 38300,
+    "available": 168720,
+    "pending": 0,
+    "total": 207020
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 73335308288,
+    "available": 430393348096,
+    "pending": 0,
+    "total": 503728656384
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 180254408704,
+     "available": 3785055263934,
+     "pending": 0,
+     "total": 3965309672638
+    },
+    "persistent": {
+     "active": 86973087744,
+     "available": 0,
+     "pending": 0,
+     "total": 86973087744
+    },
+    "total": {
+     "active": 267227496448,
+     "available": 3785055263934,
+     "pending": 0,
+     "total": 4052282760382
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "p40",
+    "ram": "24Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.9999768518518518,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:43:49.000Z",
+  "isAudited": true,
+  "attributes": [
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org018",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "na-us-southwest",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "city",
+    "value": "DAL",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "timezone",
+    "value": "utc-6",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-type",
+    "value": "home",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "hosting-provider",
+    "value": "AES Services",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4ecc",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta2",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-provider",
+    "value": "Pavlov Media",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-up",
+    "value": "1000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "network-speed-down",
+    "value": "1000",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "true",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org018",
+  "locationRegion": "na-us-southwest",
+  "country": "US",
+  "city": "DAL",
+  "timezone": "utc-6",
+  "locationType": "home",
+  "hostingProvider": "AES Services",
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": true,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr4ecc",
+  "networkProvider": "Pavlov Media",
+  "networkSpeedDown": 1000,
+  "networkSpeedUp": 1000,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "gpuModels-but-stats-gpu-0"
+ },
+ {
+  "owner": "akash1FIXTURE019",
+  "name": "provider019.example",
+  "hostUri": "https://provider019.example:8443",
+  "lastCheckDate": "2026-10-17T19:43:29.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 0,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.2",
+  "ipRegion": "Moscow",
+  "ipRegionCode": "MOW",
+  "ipCountry": "Russia",
+  "ipCountryCode": "RU",
+  "stats": {
+   "cpu": {
+    "active": 0,
+    "available": 12050,
+    "pending": 0,
+    "total": 12050
+   },
+   "gpu": {
+    "active": 0,
+    "available": 1,
+    "pending": 0,
+    "total": 1
+   },
+   "memory": {
+    "active": 0,
+    "available": 27922276352,
+    "pending": 0,
+    "total": 27922276352
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 0,
+     "available": 1022580326400,
+     "pending": 0,
+     "total": 1022580326400
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 0,
+     "available": 1022580326400,
+     "pending": 0,
+     "total": 1022580326400
+    }
+   }
+  },
+  "gpuModels": [],
+  "uptime1d": 1,
+  "uptime7d": 1,
+  "uptime30d": 0.6863240740740741,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:43:29.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "location-region",
+    "value": "eu-east",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "organization",
+    "value": "org019",
+    "auditedBy": []
+   },
+   {
+    "key": "country",
+    "value": "RU",
+    "auditedBy": []
+   },
+   {
+    "key": "city",
+    "value": "MOS",
+    "auditedBy": []
+   },
+   {
+    "key": "timezone",
+    "value": "utc+3",
+    "auditedBy": []
+   },
+   {
+    "key": "location-type",
+    "value": "office",
+    "auditedBy": []
+   },
+   {
+    "key": "hosting-provider",
+    "value": "Complat",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5",
+    "auditedBy": []
+   },
+   {
+    "key": "network-provider",
+    "value": "Complat",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-up",
+    "value": "300",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "300",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/ip-lease",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-ip",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-endpoint-custom-domain",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-persistent-storage",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "feat-shm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/rtx5070ti",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/model/rtx5070ti",
+    "value": "true",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org019",
+  "locationRegion": "eu-east",
+  "country": "RU",
+  "city": "MOS",
+  "timezone": "utc+3",
+  "locationType": "office",
+  "hostingProvider": "Complat",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "ssd"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [
+   "ssd"
+  ],
+  "hardwareMemory": "ddr5",
+  "networkProvider": "Complat",
+  "networkSpeedDown": 300,
+  "networkSpeedUp": 300,
+  "tier": "community",
+  "featEndpointCustomDomain": true,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "stats-gpu-without-gpuModels"
+ },
+ {
+  "owner": "akash1FIXTURE020",
+  "name": "provider020.example",
+  "hostUri": "https://provider020.example:8443",
+  "lastCheckDate": "2026-10-17T19:47:59.000Z",
+  "deploymentCount": 19,
+  "leaseCount": 26,
+  "cosmosSdkVersion": "0.53.6",
+  "akashVersion": "0.16.4",
+  "ipRegion": "Texas",
+  "ipRegionCode": "TX",
+  "ipCountry": "United States",
+  "ipCountryCode": "US",
+  "stats": {
+   "cpu": {
+    "active": 361800,
+    "available": 1525190,
+    "pending": 0,
+    "total": 1886990
+   },
+   "gpu": {
+    "active": 51,
+    "available": 26,
+    "pending": 0,
+    "total": 77
+   },
+   "memory": {
+    "active": 3245921533952,
+    "available": 6733680515072,
+    "pending": 0,
+    "total": 9979602049024
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 2652142305280,
+     "available": 1215316141316,
+     "pending": 0,
+     "total": 3867458446596
+    },
+    "persistent": {
+     "active": 3182570766336,
+     "available": 57230242086912,
+     "pending": 0,
+     "total": 60412812853248
+    },
+    "total": {
+     "active": 5834713071616,
+     "available": 58445558228228,
+     "pending": 0,
+     "total": 64280271299844
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "a100",
+    "ram": "80Gi",
+    "interface": "SXM4"
+   }
+  ],
+  "uptime1d": 0.6219444444444444,
+  "uptime7d": 0.5953290343915344,
+  "uptime30d": 0.5843981481481482,
+  "isValidVersion": true,
+  "isOnline": true,
+  "lastOnlineDate": "2026-10-17T19:47:59.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "cuda",
+    "value": "12.8",
+    "auditedBy": []
+   },
+   {
+    "key": "region",
+    "value": "us-central",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": []
+   },
+   {
+    "key": "organization",
+    "value": "org020",
+    "auditedBy": []
+   },
+   {
+    "key": "country",
+    "value": "US",
+    "auditedBy": []
+   },
+   {
+    "key": "city",
+    "value": "HOU",
+    "auditedBy": []
+   },
+   {
+    "key": "location-type",
+    "value": "datacenter",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "intel",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100/ram/80Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100/ram/80Gi/interface/sxm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/h100/interface/sxm",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr5ecc",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-up",
+    "value": "10000",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "10000",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/class",
+    "value": "beta3",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/1/persistent",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/class",
+    "value": "ram",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/2/persistent",
+    "value": "false",
+    "auditedBy": []
+   },
+   {
+    "key": "datacenter",
+    "value": "us-southwest-hou-1",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": "org020",
+  "locationRegion": null,
+  "country": "US",
+  "city": "HOU",
+  "timezone": null,
+  "locationType": "datacenter",
+  "hostingProvider": null,
+  "hardwareCpu": "intel",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [
+   "Nvidia h100"
+  ],
+  "hardwareDisk": [
+   "hdd",
+   "ssd"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [
+   "hdd",
+   "ssd"
+  ],
+  "hardwareMemory": "ddr5ecc",
+  "networkProvider": null,
+  "networkSpeedDown": 10000,
+  "networkSpeedUp": 10000,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "low-uptime"
+ },
+ {
+  "owner": "akash1FIXTURE021",
+  "name": "provider021.example",
+  "hostUri": "https://provider021.example:8443",
+  "lastCheckDate": "2026-10-17T17:09:09.000Z",
+  "deploymentCount": 0,
+  "leaseCount": 45,
+  "cosmosSdkVersion": null,
+  "akashVersion": null,
+  "ipRegion": "Bern",
+  "ipRegionCode": "BE",
+  "ipCountry": "Switzerland",
+  "ipCountryCode": "CH",
+  "stats": {
+   "cpu": {
+    "active": 60450,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 111154125824,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 206537178112,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 206537178112,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    }
+   }
+  },
+  "gpuModels": [
+   {
+    "vendor": "nvidia",
+    "model": "rtx4060ti",
+    "ram": "16Gi",
+    "interface": "PCIe"
+   }
+  ],
+  "uptime1d": 1,
+  "uptime7d": 0.14281084656084653,
+  "uptime30d": 0.03323804012345677,
+  "isValidVersion": false,
+  "isOnline": false,
+  "lastOnlineDate": "2026-01-31T14:59:50.000Z",
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "organization",
+    "value": "org021",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   },
+   {
+    "key": "location-region",
+    "value": "eu-central",
+    "auditedBy": []
+   },
+   {
+    "key": "country",
+    "value": "CH",
+    "auditedBy": []
+   },
+   {
+    "key": "city",
+    "value": "ZRH",
+    "auditedBy": []
+   },
+   {
+    "key": "timezone",
+    "value": "utc+1",
+    "auditedBy": []
+   },
+   {
+    "key": "location-type",
+    "value": "home",
+    "auditedBy": []
+   },
+   {
+    "key": "hosting-provider",
+    "value": "owned",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu",
+    "value": "amd",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/cpu/arch",
+    "value": "x86-64",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/memory",
+    "value": "ddr4",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu",
+    "value": "nvidia",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4060ti",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4060ti/ram/16Gi",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4060ti/ram/16Gi/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/gpu/vendor/nvidia/model/rtx4060ti/interface/pcie",
+    "value": "true",
+    "auditedBy": []
+   },
+   {
+    "key": "network-provider",
+    "value": "iway.ch",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-up",
+    "value": "100",
+    "auditedBy": []
+   },
+   {
+    "key": "network-speed-down",
+    "value": "400",
+    "auditedBy": []
+   },
+   {
+    "key": "capabilities/storage/3/class",
+    "value": "beta3",
+    "auditedBy": []
+   },
+   {
+    "key": "tier",
+    "value": "community",
+    "auditedBy": [
+     "akash1AUDITOR"
+    ]
+   }
+  ],
+  "host": "akash",
+  "organization": "org021",
+  "locationRegion": "eu-central",
+  "country": "CH",
+  "city": "ZRH",
+  "timezone": "utc+1",
+  "locationType": "home",
+  "hostingProvider": "owned",
+  "hardwareCpu": "amd",
+  "hardwareCpuArch": "x86-64",
+  "hardwareGpuVendor": "nvidia",
+  "hardwareGpuModels": [],
+  "hardwareDisk": [
+   "nvme"
+  ],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [],
+  "hardwareMemory": "ddr4",
+  "networkProvider": "iway.ch",
+  "networkSpeedDown": 400,
+  "networkSpeedUp": 100,
+  "tier": "community",
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "offline-with-gpuModels"
+ },
+ {
+  "owner": "akash1FIXTURE022",
+  "name": "provider022.example",
+  "hostUri": "https://provider022.example:8443",
+  "lastCheckDate": "2026-10-17T18:54:28.000Z",
+  "cosmosSdkVersion": null,
+  "akashVersion": null,
+  "ipRegion": null,
+  "ipRegionCode": null,
+  "ipCountry": null,
+  "ipCountryCode": null,
+  "stats": {
+   "cpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "gpu": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "memory": {
+    "active": 0,
+    "available": 0,
+    "pending": 0,
+    "total": 0
+   },
+   "storage": {
+    "ephemeral": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "persistent": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    },
+    "total": {
+     "active": 0,
+     "available": 0,
+     "pending": 0,
+     "total": 0
+    }
+   }
+  },
+  "gpuModels": [],
+  "uptime1d": 1,
+  "uptime7d": 0.1426951058201058,
+  "uptime30d": 0.03316898148148151,
+  "isValidVersion": false,
+  "isOnline": false,
+  "lastOnlineDate": null,
+  "isAudited": false,
+  "attributes": [
+   {
+    "key": "datacenter",
+    "value": "equinix-metal-ams1",
+    "auditedBy": []
+   },
+   {
+    "key": "host",
+    "value": "akash",
+    "auditedBy": []
+   },
+   {
+    "key": "generation",
+    "value": "mn2-0",
+    "auditedBy": []
+   }
+  ],
+  "host": "akash",
+  "organization": null,
+  "locationRegion": null,
+  "country": null,
+  "city": null,
+  "timezone": null,
+  "locationType": null,
+  "hostingProvider": null,
+  "hardwareCpu": null,
+  "hardwareCpuArch": null,
+  "hardwareGpuVendor": null,
+  "hardwareGpuModels": [],
+  "hardwareDisk": [],
+  "featPersistentStorage": false,
+  "featPersistentStorageType": [],
+  "hardwareMemory": null,
+  "networkProvider": null,
+  "networkSpeedDown": 0,
+  "networkSpeedUp": 0,
+  "tier": null,
+  "featEndpointCustomDomain": false,
+  "workloadSupportChia": false,
+  "workloadSupportChiaCapabilities": [],
+  "featEndpointIp": false,
+  "_fixture_note": "offline-empty"
+ }
+]
