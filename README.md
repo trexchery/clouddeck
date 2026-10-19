@@ -20,7 +20,7 @@ rent gpus and cpu dev boxes on [akash network](https://akash.network). compare p
 requires [python 3.11+](https://www.python.org/), [pipx](https://pipx.pypa.io/), git, and openssh for real deployments. windows 11, linux, and wsl2 are supported; macos is experimental.
 
 ~~~bash
-pipx install "git+https://github.com/trexchery/clouddeck.git"
+pipx install clouddeck
 clouddeck -p demo
 ~~~
 
@@ -54,6 +54,8 @@ paid workloads require a funded [akash console](https://console.akash.network) a
 - **untrusted providers:** rented machines can read the code, data, and credentials sent to them. use a dedicated, minimally funded akash account and scoped tokens. never paste api keys into claude chat.
 - **dev-box workspaces:** checkpoint-backed sessions require gpg and a separate private github state repository; closing an uncheckpointed box can lose its contents.
 - **early alpha:** real leases have been exercised on windows 11 and wsl2. macos is untested and has no watchdog installer. no independent security audit has been performed.
+
+sample workloads in `examples/` are shipped in the source distribution and github repository, not the pip wheel. copy an example before running it with an installed package.
 
 ## docs
 

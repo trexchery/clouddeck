@@ -47,12 +47,12 @@ For checkpoint-backed dev boxes, sign in with `gh auth login` before `ddc instal
 
 ## 2. Install CloudDeck
 
-Install CloudDeck directly from GitHub. It is not published on PyPI. No GitHub login is needed when the repository is public.
+Install CloudDeck from PyPI (version 0.1.1 or newer). You don't need a GitHub login to install the package.
 
 With [pipx](https://pipx.pypa.io) (its own virtual environment, commands on your PATH):
 
 ```bash
-pipx install "git+https://github.com/trexchery/clouddeck.git"
+pipx install clouddeck
 ddc --version
 clouddeck --help
 ```
@@ -60,7 +60,7 @@ clouddeck --help
 Or with pip (ideally in a virtual environment):
 
 ```bash
-python -m pip install --user "git+https://github.com/trexchery/clouddeck.git"
+python -m pip install --user clouddeck
 ```
 
 This installs three commands: `clouddeck` (the terminal UI), `ddc` (the command-line controller) and `claude-cloud` (attach to the box;

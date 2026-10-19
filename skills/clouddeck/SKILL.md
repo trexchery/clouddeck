@@ -47,8 +47,8 @@ ddc setup --json
 If `ddc` is missing, install it directly from GitHub:
 
 ```bash
-pipx install "git+https://github.com/trexchery/clouddeck.git"
-# no pipx: python -m pip install --user "git+https://github.com/trexchery/clouddeck.git"
+pipx install clouddeck
+# no pipx: python -m pip install --user clouddeck
 ```
 
 On Windows, if `ddc` is not on PATH after a `pip --user` install, use `python -m clouddeck.controller` in place

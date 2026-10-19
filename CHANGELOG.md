@@ -5,6 +5,22 @@ and the project uses [Semantic Versioning](https://semver.org/); while the versi
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-19
+
+Small update to the first alpha release.
+
+### Added
+* A Claude Code skill in `skills/clouddeck/SKILL.md` for GPU/CPU selection, cost estimates, approved workload execution, result retrieval and confirmed lease closure. Install the skill separately with `npx skills add trexchery/clouddeck -g -a claude-code`.
+* Noninteractive, machine-readable JSON responses for agent-controlled GPU/CPU jobs, hardware discovery and setup. A jobs-only setup command (`ddc setup --api-key-stdin --watchdog`) avoids requiring a GitHub state repository for batch workloads.
+
+### Changed
+* Every paid `ddc job run`, `ddc start` and scale-up operation requires an explicit, operation-specific `--approve-usd` limit; preflight can show the worst-case quote without purchasing a lease.
+* Hardened spend authorization, state checking and error handling so agents do not bypass cost guards or silently reattempt paid operations.
+* Shorter README and corrected main-branch installation, pricing approval and security instructions.
+
+### Verification
+* Expanded local tests for cost approval, setup, JSON output and failure handling. Release workflow checks strict history hygiene, package metadata, wheel/sdist contents and SHA256 sums before publishing.
+
 ## [0.1.0] - 2026-10-18
 
 First public release (alpha).
@@ -86,5 +102,6 @@ the platform runtime limit was observed working once (not a guarantee), the watc
 not per-lease, checkpoint verification is not a content digest, macOS is unsupported (no watchdog installer), and a native Linux host has not been used against real
 leases (WSL2 has). What was checked against real leases: README, "Verified and not verified".
 
-[Unreleased]: https://github.com/trexchery/clouddeck/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/trexchery/clouddeck/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/trexchery/clouddeck/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/trexchery/clouddeck/releases/tag/v0.1.0

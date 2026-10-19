@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "clouddeck"
-version = "0.1.0"
-description = "CloudDeck: terminal UI and `ddc` controller (Disposable Dev Cloud) for on-demand Akash dev boxes and test workers"
+version = "0.1.1"
+description = "GPU and CPU compute management for Akash with pricing, jobs, spend controls, and a TUI/CLI"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
