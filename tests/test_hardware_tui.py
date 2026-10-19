@@ -379,7 +379,7 @@ def test_a_provider_row_opens_the_picker_pinned_to_it():
     async def t(app, pilot, p):
         await pilot.press("p")
         t_ = app.query_one("#prov", FilterTable)
-        await wait_for(lambda: t_.table.row_count == 6, pilot, "the providers")
+        await wait_for(lambda: t_.table.row_count == 6 and app.focused is t_.table, pilot, "the provider table, focused")      # the rows can arrive before the focus moves to the new sub-tab
         await pilot.press("enter")
         await wait_for(lambda: isinstance(app.screen, HardwareScreen) and app.screen.cat is not None, pilot, "the picker")
         assert app.screen.pin and app.screen.base.providers == (app.screen.pin[0],)
