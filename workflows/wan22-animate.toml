@@ -1,7 +1,7 @@
 # Wan 2.2 ANIMATE: character swap. The person in a DRIVING VIDEO is replaced by the character of a REFERENCE IMAGE ("replace": the character appears in the
 # driving video's own scene, background and camera kept) or the reference character performs the driving motion in the reference image's own scene ("move").
 # This is not ordinary text-to-video: it needs a reference image and a driving video. The prompt only describes the new character and the scene.
-#   put the media in workflows/inputs/ (reference.png, driving.mp4) ; ddc job check workflows/wan22-animate.toml ; ddc job run workflows/wan22-animate.toml --approve-usd <limit>
+#   put the media in inputs/ (reference.png, driving.mp4) ; ddc job check wan22-animate.toml ; ddc job run wan22-animate.toml --approve-usd <limit>
 # Pipeline (the one verified on A100/H100 boxes): DWPose body and hands + real face crops of the driver (not the template's face dots, which freeze expressions), SAM3 text
 # tracking of the person (no click points), lightx2v 6-step distill + relight LoRAs, bf16 14B model. Long clips run in windows of 77 frames (72 new each), chained.
 # 80 GB-class GPUs only (bf16 model, kept resident); the model downloads are about 44 GiB. Time and cost are ESTIMATED: earlier A100/H100 runs took about two minutes per window.
@@ -30,7 +30,7 @@ min_vram_gi = 80
 
 [image]
 stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
-# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see workflows/README.md ("Prebuilt image")
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see README.md ("Prebuilt image")
 prebuilt_timeout_s = 300
 apt = ["git", "libgl1", "libglib2.0-0"]     # installed at start only if the image lacks them
 

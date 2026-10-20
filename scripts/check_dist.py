@@ -20,8 +20,10 @@ JOBREMOTE = sorted(p.name for p in (ROOT / "jobremote").iterdir() if p.is_file()
 JOBPKG = sorted(p.name for p in (ROOT / "clouddeck" / "job").glob("*.py"))
 EXAMPLES = sorted(p.name for p in (ROOT / "examples").glob("*.toml"))  # in the sdist and the repository, NOT in the wheel (the docs say so)
 WORKFLOWS = sorted(
-    [p.name for p in (ROOT / "workflows").glob("*.toml")] + ["README.md", "templates/custom-comfyui.toml"] + [f"comfyui/{p.name}" for p in (ROOT / "workflows" / "comfyui").iterdir() if p.is_file()]
-)  # same: sdist and repository only
+    [p.name for p in (ROOT / "workflows").glob("*.toml") if not p.name.startswith("my-")]
+    + ["README.md", "templates/custom-comfyui.toml"]
+    + [f"comfyui/{p.name}" for p in (ROOT / "workflows" / "comfyui").iterdir() if p.is_file()]
+)  # sdist, repository and (under clouddeck/data/) the wheel
 WHEEL_NEED = [
     "clouddeck/controller.py",
     "clouddeck/cli.py",
@@ -29,6 +31,8 @@ WHEEL_NEED = [
     *(f"clouddeck/data/{n}" for n in DATA),
     *(f"clouddeck/data/lease/{n}" for n in LEASE),
     *(f"clouddeck/data/jobremote/{n}" for n in JOBREMOTE),
+    *(f"clouddeck/data/workflows/{n}" for n in WORKFLOWS),  # `ddc job workflows --copy DIR`
+    "clouddeck/data/workflows/inputs/README.md",
     *(f"clouddeck/job/{n}" for n in JOBPKG),
 ]
 SDIST_NEED = [
@@ -44,7 +48,7 @@ SDIST_NEED = [
     "docker/Dockerfile",
     "docs/JOBS.md",
 ]
-# never in an artifact: repo-root dev shim, tests, CI config, secrets-looking files
+# never in an artifact: repo-root dev shim, tests, CI config, secrets-looking files (a wheel's workflows live under clouddeck/data/ and carry no user media)
 WHEEL_BAN = ("ddc.py", "conftest.py", "test_ddc.py", "tests/", "examples/", "workflows/", ".github/", ".env", "secrets.env", "keys/", "state.json")
 
 
@@ -62,6 +66,8 @@ def check(path: Path) -> list[str]:
     if path.suffix == ".whl":
         problems += [f"missing {n}" for n in WHEEL_NEED if n not in have]
         problems += [f"unexpected {n}" for n in sorted(have) if n.startswith(WHEEL_BAN)]
+        problems += [f"user media in the wheel: {n}" for n in sorted(have) if n.startswith("clouddeck/data/workflows/inputs/") and not n.endswith("README.md")]
+        problems += [f"workflow outputs/private spec in the wheel: {n}" for n in sorted(have) if n.startswith("clouddeck/data/workflows/") and ("/outputs/" in n or "/my-" in n)]
         if not any(n.endswith(".dist-info/entry_points.txt") for n in have):
             problems.append("missing entry_points.txt")
         if not any(n.endswith(".dist-info/licenses/LICENSE") for n in have):

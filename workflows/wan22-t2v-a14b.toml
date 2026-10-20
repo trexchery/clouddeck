@@ -1,6 +1,6 @@
 # Wan 2.2 A14B text-to-video: ordinary generation with the two-expert 14B model (high-noise expert, then low-noise expert), fp8 weights.
 # This is NOT the character-swap workflow: for replacing or animating a person from a driving video see wan22-animate.toml and scail2.toml.
-#   ddc job check workflows/wan22-t2v-a14b.toml     then    ddc job run workflows/wan22-t2v-a14b.toml --approve-usd <limit>
+#   ddc job check wan22-t2v-a14b.toml     then    ddc job run wan22-t2v-a14b.toml --approve-usd <limit>
 # 832x480, 81 frames, 16 fps (5 s), 20 steps. WAN_FAST = "1" switches to the lightx2v 4-step LoRAs (4 steps, cfg 1): about 5x faster, a little less detail.
 # 24 GB of VRAM is enough (ComfyUI keeps one expert resident). Everything below is ESTIMATED: nothing here was run on a rented box.
 name = "wan22-t2v-a14b"
@@ -11,7 +11,7 @@ setup_estimate_s = 600         # ESTIMATED: model downloads + the install step o
 cold_boot_s = 300
 idle_abort_s = 900
 artifacts_dir = "outputs"
-inputs = ["comfyui/install.sh", "comfyui/comfy_run.py"]    # optional: "inputs/prompt.txt" (see workflows/README.md)
+inputs = ["comfyui/install.sh", "comfyui/comfy_run.py"]    # optional: "inputs/prompt.txt" (see README.md)
 inputs_dest = "in"
 
 [hardware]
@@ -28,7 +28,7 @@ min_vram_gi = 24
 
 [image]
 stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
-# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see workflows/README.md ("Prebuilt image")
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see README.md ("Prebuilt image")
 prebuilt_timeout_s = 300
 apt = ["git", "libgl1", "libglib2.0-0"]     # installed at start only if the image lacks them
 

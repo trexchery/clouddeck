@@ -1,7 +1,7 @@
 # SCAIL-2 (fp16): character animation by in-context conditioning, on native ComfyUI nodes. A REFERENCE IMAGE's character is animated with the motion of a
 # DRIVING VIDEO ("animation"), or put in the driving video's place ("replacement", with the relight LoRA). SAM3 finds the people in both: no masks or skeletons to prepare.
 # This is not ordinary text-to-video and not Wan Animate (see wan22-animate.toml): the prompt should be long and detailed, describing the character and the scene.
-#   put the media in workflows/inputs/ (reference.png, driving.mp4) ; ddc job check workflows/scail2.toml ; ddc job run workflows/scail2.toml --approve-usd <limit>
+#   put the media in inputs/ (reference.png, driving.mp4) ; ddc job check scail2.toml ; ddc job run scail2.toml --approve-usd <limit>
 # Turbo (default): 6 steps, cfg 1 with the lightx2v LoRA. Long clips run in segments of 81 frames (76 new each), colour-matched and chained.
 # 80 GB-class GPUs: fp16 weights, the configuration verified on A100/H100 boxes. Time and cost are ESTIMATED.
 name = "scail2"
@@ -29,7 +29,7 @@ min_vram_gi = 40
 
 [image]
 stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
-# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see workflows/README.md ("Prebuilt image")
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see README.md ("Prebuilt image")
 prebuilt_timeout_s = 300
 apt = ["git", "libgl1", "libglib2.0-0"]     # installed at start only if the image lacks them
 

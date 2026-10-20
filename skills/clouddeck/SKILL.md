@@ -44,7 +44,7 @@ ddc --version || python -m clouddeck.controller --version
 ddc setup --json
 ```
 
-If `ddc` is missing, install it directly from GitHub:
+If `ddc` is missing, install it from PyPI:
 
 ```bash
 pipx install clouddeck
@@ -86,19 +86,19 @@ Pick 2 to 5 acceptable models (any-of) so a bid arrives fast; cheap, modern choi
 
 ## 2. Write the job spec
 
-For AI video there is nothing to write: the repository (`github.com/trexchery/clouddeck`) ships complete specs in `workflows/`, which a pip install does not include.
+For AI video there is nothing to write: the package ships complete specs: `ddc job workflows` lists them and `ddc job workflows --copy ./clouddeck-workflows` (new or empty directory, no config needed) copies them, with their `comfyui/` scripts, README and an empty `inputs/`, to a place you can edit. Work in that copy (the repository's `workflows/` is the same content).
 Keep the two families apart. **Ordinary generation** (text or image to video): `wan22-ti2v-5b.toml`, `wan22-t2v-a14b.toml`, `wan22-i2v-a14b.toml`.
 **Character swap** (a reference image plus a driving video): `wan22-animate.toml` (replace the person in the video, or move the character into the image's scene) and
-`scail2.toml` / `scail2-fp8.toml` (animate the character with the video's motion, or replace the person). Copy the spec with its `comfyui/` directory, put the user's media
+`scail2.toml` / `scail2-fp8.toml` (animate the character with the video's motion, or replace the person). Run from the copy, put the user's media
 in `inputs/` (or change the `inputs` list), put a long natural-language prompt in `inputs/prompt.txt` or in the spec's `[env]`, then `ddc job check` and, after the
 approval, `ddc job run`. Settings are the commented `[env]` variables of each spec. Read `workflows/README.md` for prompting advice, GPU choice and the optional prebuilt image.
 
-**The user's own ComfyUI workflow** (a graph or models the ready-made specs do not cover): `workflows/templates/custom-comfyui.toml` is the template, and `comfy_run.py custom` runs
-the user's graph. Steps: (1) the user exports the graph from ComfyUI with "Save (API Format)" to `workflows/inputs/graph.json` and puts the media it loads beside it; (2) copy the template to
-`workflows/my-<name>.toml` (it must sit in `workflows/`), set `name`, add one `[[cache.item]]` per model file the graph loads (`dest = "comfy/models/<folder>/<file>"`, the file name the graph
+**The user's own ComfyUI workflow** (a graph or models the ready-made specs do not cover): `templates/custom-comfyui.toml` (in your copy of the workflows) is the template, and `comfy_run.py custom` runs
+the user's graph. Steps: (1) the user exports the graph from ComfyUI with "Save (API Format)" to `inputs/graph.json` and puts the media it loads beside it; (2) copy the template to
+`my-<name>.toml` (it must sit beside the other specs), set `name`, add one `[[cache.item]]` per model file the graph loads (`dest = "comfy/models/<folder>/<file>"`, the file name the graph
 uses, a URL pinned to a commit, the sha256 from the model page; never invent a hash: with none, use `allow_unverified = true` and say so) and its `cache-<name>` to the `generate` step's `needs`;
 (3) `ddc job check`, then the approval and `ddc job run` as usual. Only ComfyUI's own nodes exist on the box; a graph that needs a custom node fails fast with its class name. Saved specs
-are plain files, so "saving a workflow" is just keeping `workflows/my-<name>.toml` (and its `graph.json`) in version control.
+are plain files, so "saving a workflow" is just keeping `my-<name>.toml` (and its `graph.json`) in version control.
 
 Make a directory per job (e.g. `./clouddeck-jobs/<name>/`) and write `job.toml` there. Paths in the spec
 (inputs, artifacts_dir) are relative to that directory. Minimal GPU job:

@@ -3,14 +3,22 @@
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and the project uses [Semantic Versioning](https://semver.org/); while the version is `0.x`, minor releases may change behaviour and say so here.
 
-## [Unreleased]
+## [0.1.2] - 2026-10-20
 
 ### Added
+* `ddc job workflows` lists the ready-made workflows and `ddc job workflows --copy DIR` copies them (specs, scripts, README, an empty `inputs/`) out of the pip install into a directory you own, so no clone of the repository is needed. It needs no config. The workflows ship inside the wheel under `clouddeck/data/workflows/`; your own media and `my-*.toml` specs never do.
 * Ready-made `ddc job` workflows in `workflows/` for AI video, each with GPU selection, a pinned ComfyUI install, sha256-verified model downloads pinned to immutable Hugging Face commits, inference and video retrieval: Wan 2.2 text-to-video and image-to-video (`wan22-ti2v-5b`, `wan22-t2v-a14b`, `wan22-i2v-a14b`) and, kept apart as character-swap workflows that need a reference image and a driving video, Wan 2.2 Animate (`wan22-animate`) and SCAIL-2 (`scail2`, `scail2-fp8`). Long clips are chained in one prompt (Animate windows of 77 frames, SCAIL-2 segments of 81), prompts can be a `prompt.txt` input, and an optional prebuilt image (`workflows/comfyui/Dockerfile`) removes the install step. See `workflows/README.md` for what was verified on a real GPU and what was not.
 * `workflows/templates/custom-comfyui.toml` and `comfy_run.py custom` run your own ComfyUI graph (exported with "Save (API Format)") as a `ddc job`; `workflows/README.md` and the `clouddeck` skill walk through making and keeping one.
 
 ### Fixed
+* The workflows' README, specs and template now give every path relative to their own directory (they said `workflows/...`, which only worked from a repository root), so the commands work in a copy made by `ddc job workflows --copy`.
+* `ddc init`, and the `ssh_key` preflight failure, point to `ddc setup` (jobs) as well as `ddc install` (dev boxes with checkpoints); `ddc job check` no longer tells a jobs-only user to run the GitHub-dependent installer. `ddc setup --help` describes the Linux/WSL watchdog.
+* `tests/test_workflows.py` ran `bash -n` with the WSL launcher on Windows (`System32ash.exe`) and failed on machines without a WSL distro. It now uses Git Bash there; Linux and Windows CI both still check the install script's syntax.
 * `inputs` / `inputs_dest` in `examples/gpu-batch.toml` sat inside the `[prep]` table, where `ddc job` silently ignores them; they are top-level keys and now come before the first table. A new test fails for any shipped spec with `inputs` inside a table.
+
+### Verification
+* Windows 11 native: full suite 1138 passed, 64 skipped (Linux-only). A clean-venv install from the built wheel was exercised offline: entry points, first run without a config, `ddc setup --json`, live public `ddc job hardware`, demo mode including a ConPTY TUI session, `ddc job workflows` and `--copy`, `ddc job check --offline` on every copied spec, spend authorization (no `--approve-usd` and too-low `--approve-usd` both refuse and create nothing), and `npx skills add`. Lease closure, watchdog reaping and budget stops are covered by the fake-Akash tests.
+* Not verified: nothing was run on a rented Akash box for this release; the new Wan 2.2 / SCAIL-2 specs were run on a local GPU container, not at full size (80 GB bf16 weights, 720p, long chained clips) on Akash. Real watchdog registration (schtasks, systemd timer, cron) was not exercised by the clean-install pass because it would change the host scheduler; it is covered by tests and was exercised in 0.1.0 on Windows.
 
 ## [0.1.1] - 2026-10-19
 

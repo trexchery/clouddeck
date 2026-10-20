@@ -1,10 +1,10 @@
 # Your own ComfyUI workflow as a `ddc job`: you bring the graph and the model list, the rest (GPU choice, ComfyUI install, verified downloads, run, retrieval, shutdown) is the same as the ready-made specs.
-# 1. In ComfyUI: build and test your workflow, then "Save (API Format)" (settings > enable dev mode options). Put that file at workflows/inputs/graph.json.
-#    Media it loads (LoadImage / LoadVideo) go in workflows/inputs/ too and are named in the graph by file name.
-# 2. Copy this file to workflows/my-<your-name>.toml (it must sit in workflows/: the paths below are relative to the spec), set `name`, and add one [[cache.item]] per model file the graph loads.
+# 1. In ComfyUI: build and test your workflow, then "Save (API Format)" (settings > enable dev mode options). Put that file at inputs/graph.json.
+#    Media it loads (LoadImage / LoadVideo) go in inputs/ too and are named in the graph by file name.
+# 2. Copy this file to my-<your-name>.toml (it must sit beside the other specs: the paths below are relative to the spec), set `name`, and add one [[cache.item]] per model file the graph loads.
 #    The `dest` is comfy/models/<folder>/<file> with the file name the graph uses; take url and sha256 from the model page (pin a commit, not `main`).
-# 3. ddc job check workflows/my-<your-name>.toml     then     ddc job run workflows/my-<your-name>.toml --approve-usd <limit>
-# Only ComfyUI's own nodes exist on the box (custom nodes are not installed). Results: workflows/outputs/. Claude with the clouddeck skill can do steps 1-2 for you.
+# 3. ddc job check my-<your-name>.toml     then     ddc job run my-<your-name>.toml --approve-usd <limit>
+# Only ComfyUI's own nodes exist on the box (custom nodes are not installed). Results: outputs/. Claude with the clouddeck skill can do steps 1-2 for you.
 name = "my-workflow"
 runtime_hours = 2
 max_cost_usd = 3.0               # worst case = runtime_hours x max_usd_hr below must stay <= this
@@ -30,7 +30,7 @@ min_vram_gi = 24
 
 [image]
 stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
-# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, see workflows/README.md
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, see README.md
 prebuilt_timeout_s = 300
 apt = ["git", "libgl1", "libglib2.0-0"]
 

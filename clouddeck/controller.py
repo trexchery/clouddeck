@@ -3050,7 +3050,7 @@ def cmd_init(a: argparse.Namespace) -> None:
         die(f"{target} already exists; not overwriting it (edit it, or delete it to start over)")
     sf = init_files(target)
     log(f"wrote {target} and {sf}")
-    print(f"\nNext: put your AKASH_API_KEY into {sf}, edit [[repos]] in {target}, then run: ddc install")
+    print(f"\nNext: put your AKASH_API_KEY into {sf}, edit [[repos]] in {target}, then run: ddc setup (GPU/CPU jobs only) or ddc install (dev boxes with checkpoints)")
 
 
 def ensure_state_repo_is_ours(repo: str) -> None:
@@ -3519,7 +3519,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--dry-run", action="store_true", help="only list the GitHub actions install would take")
     s = sub.add_parser("setup", help="jobs-only setup in one command: config, secrets, ssh access key, optional watchdog; exit 0 when ready for `ddc job run`")
     s.add_argument("--api-key-stdin", action="store_true", help="read the Akash Console API key from stdin and store it in secrets.env")
-    s.add_argument("--watchdog", action="store_true", help="also register the watchdog (Windows: the scheduled task only)")
+    s.add_argument("--watchdog", action="store_true", help="also register the watchdog (Windows: scheduled task; Linux/WSL: systemd user timer or cron)")
     s.add_argument("--json", action="store_true", help="machine-readable report")
     sub.add_parser("uninstall", help="remove the watchdog registration (keys, config and state are kept)")
     s = sub.add_parser("start")
@@ -3570,7 +3570,7 @@ def main(argv: list[str] | None = None) -> int:
         toks = toks[1:] if "=" in toks[0] else toks[2:]
     a = argparse.Namespace(cmd="job", job_args=toks[1:]) if toks[:1] == ["job"] else p.parse_args(argv)
     try:
-        if CONFIG_ERROR and a.cmd not in ("init", "setup") and not (a.cmd == "job" and a.job_args[:1] == ["hardware"]):   # the public price table needs no config
+        if CONFIG_ERROR and a.cmd not in ("init", "setup") and not (a.cmd == "job" and a.job_args[:1] in (["hardware"], ["workflows"])):   # the public price table and the workflow list/copy need no config
             if a.cmd == "watchdog":  # a scheduled run has nobody watching its exit code: idle/budget enforcement is off until this is fixed
                 alert_once("wd-config", f"watchdog NOT running: {CONFIG_ERROR}")
             die(CONFIG_ERROR)

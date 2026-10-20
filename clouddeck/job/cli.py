@@ -4,6 +4,7 @@
   check SPEC    preflight only (add --offline to skip the network checks)
   sdl SPEC      print the SDL that would be deployed
   hardware      public GPU price/availability table (read-only)
+  workflows     list the ready-made workflows (Wan 2.2, SCAIL-2, your own ComfyUI graph); --copy DIR makes an editable copy to run them from
   report [JOB]  print the latest telemetry summary
   close JOB     verified close of a job's lease (e.g. after --keep or a killed run)
 
@@ -17,6 +18,7 @@ import contextlib
 import copy
 import json
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -72,6 +74,35 @@ def _latest_telemetry(job: str | None) -> Path | None:
     d = ddc.STATE_DIR / "telemetry"
     files = sorted(d.glob(f"{name}-*.json"), key=lambda p: p.stat().st_mtime) if d.exists() else []
     return files[-1] if files else None
+
+
+def _skip_workflow_files(directory: str, names: list[str]) -> list[str]:
+    """Same rule as setup.py: a copy of a checkout's workflows/ must not carry that checkout's media, results or my-*.toml specs."""
+    return [n for n in names if n in ("__pycache__", "outputs") or n.endswith(".pyc") or (n.startswith("my-") and n.endswith(".toml")) or (Path(directory).name == "inputs" and n != "README.md")]
+
+
+def cmd_workflows(a: argparse.Namespace) -> tuple[int, dict]:
+    src = ddc.data_file("workflows")
+    if not src.is_dir():
+        raise JobError("this install has no workflows directory")
+    specs = []
+    for f in sorted(src.glob("*.toml")):
+        first = next((ln.lstrip("# ").strip() for ln in f.read_text(encoding="utf-8").splitlines() if ln.startswith("#")), "")
+        specs.append({"spec": f.name, "about": first})
+    out: dict = {"ok": True, "workflows": specs}
+    if a.copy:
+        dest = Path(a.copy).resolve()
+        if dest.exists() and any(dest.iterdir()):
+            raise JobError(f"{dest} is not empty; pick a new directory (nothing was copied)")
+        shutil.copytree(src, dest, ignore=_skip_workflow_files, dirs_exist_ok=True)
+        (dest / "inputs").mkdir(exist_ok=True)
+        out["copied_to"] = str(dest)
+        print(f"copied {len(specs)} workflows to {dest}\nput your media in {dest / 'inputs'}, then:  ddc job check {dest / specs[0]['spec']}   (read the README.md there first)")
+    else:
+        for w in specs:
+            print(f"  {w['spec']:<24} {w['about']}")
+        print("\nddc job workflows --copy DIR   copy them (and their scripts and README) to DIR; run `ddc job check DIR/<spec>` from there")
+    return 0, out
 
 
 def cmd_close(a: argparse.Namespace) -> tuple[int, dict]:
@@ -152,6 +183,9 @@ def main(argv: list[str] | None = None, prog: str = "ddc job") -> int:
     p.add_argument("--min-vram", type=int, default=0, metavar="GI", help="only models with at least this much VRAM")
     p.add_argument("--available", action="store_true", help="only models with free units")
     p.add_argument("--json", action="store_true", help="log lines to stderr, one JSON object on stdout")
+    p = sp.add_parser("workflows")
+    p.add_argument("--copy", metavar="DIR", help="copy the workflows (specs, scripts, README, an empty inputs/) into a new or empty directory")
+    p.add_argument("--json", action="store_true", help="log lines to stderr, one JSON object on stdout")
     p = sp.add_parser("report")
     p.add_argument("job", nargs="?")
     p.add_argument("--json", action="store_true", help="log lines to stderr, one JSON object on stdout")
@@ -181,10 +215,12 @@ def main(argv: list[str] | None = None, prog: str = "ddc job") -> int:
 
 
 def _dispatch(a: argparse.Namespace) -> tuple[int, dict]:
-    if ddc.CONFIG_ERROR and a.cmd != "hardware":   # same rule as the `ddc` command: no config (or a broken one) means no run on built-in defaults; the public price table needs none
+    if ddc.CONFIG_ERROR and a.cmd not in ("hardware", "workflows"):   # same rule as the `ddc` command: no config (or a broken one) means no run on built-in defaults; the public price table needs none
         ddc.die(ddc.CONFIG_ERROR)
     if a.cmd == "hardware":
         return cmd_hardware(a)
+    if a.cmd == "workflows":
+        return cmd_workflows(a)
     if a.cmd == "close":
         return cmd_close(a)
     if a.cmd == "report":

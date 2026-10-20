@@ -74,7 +74,7 @@ def run(s: dict[str, Any], offline: bool = False, clock=None) -> list[Check]:
 
     # SDL validation (with a placeholder key if the real one is not generated yet)
     key_ok = (ddc.KEYS / "access.pub").exists()
-    add("ssh_key", "ok" if key_ok else "fail", str(ddc.KEYS / "access.pub") if key_ok else f"missing {ddc.KEYS / 'access.pub'} (run `ddc install`, or ssh-keygen -t ed25519 -N '' -f {ddc.KEYS / 'access'})")
+    add("ssh_key", "ok" if key_ok else "fail", str(ddc.KEYS / "access.pub") if key_ok else f"missing {ddc.KEYS / 'access.pub'} (run `ddc setup`, or ssh-keygen -t ed25519 -N '' -f {ddc.KEYS / 'access'})")
     try:
         pub = ddc.pubkey("access") if key_ok else "ssh-ed25519 AAAAPREFLIGHT"
         for kind, image in image_kinds(s):

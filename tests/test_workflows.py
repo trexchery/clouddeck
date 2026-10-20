@@ -32,6 +32,14 @@ RUNNER_FOR = {"wan22-ti2v-5b": "wan22-ti2v-5b", "wan22-t2v-a14b": "wan22-t2v-a14
               "scail2": "scail2", "scail2-fp8": "scail2"}
 
 
+def _find_bash():
+    """A bash that can run a script: on Windows `bash` on PATH is often System32\bash.exe (the WSL launcher, unusable without a distro), so use Git Bash."""
+    b = shutil.which("bash")
+    if os.name == "nt" and (not b or "system32" in b.lower()):
+        b = next((p for p in ("C:/Program Files/Git/bin/bash.exe", "C:/Program Files (x86)/Git/bin/bash.exe") if Path(p).exists()), None)
+    return b
+
+
 def raw(name):
     return tomllib.loads((WF / f"{name}.toml").read_text(encoding="utf-8"))
 
@@ -141,8 +149,10 @@ def test_spec_images_dockerfile_and_install_script_agree():
     assert "\r" not in script and re.search(r"^COMFY_SHA=[0-9a-f]{40}$", script, re.M) and re.search(r"^COMFY_TAG=v\d+\.\d+\.\d+$", script, re.M)
     for sha in re.findall(r"\b([0-9a-f]{40})\b", script):
         assert not re.fullmatch(r"(.)\1+", sha)
-    if shutil.which("bash"):
-        assert subprocess.run(["bash", "-n", "install.sh"], cwd=WF / "comfyui", capture_output=True).returncode == 0
+    bash = _find_bash()
+    if bash:   # no usable bash (e.g. only the WSL launcher, no Git for Windows) -> skipped; Linux CI and Windows CI (Git Bash) both run it
+        r = subprocess.run([bash, "-n", "install.sh"], cwd=WF / "comfyui", capture_output=True, text=True)
+        assert r.returncode == 0, r.stderr
 
 
 def test_dwpose_weights_in_the_installer_are_verified_downloads():

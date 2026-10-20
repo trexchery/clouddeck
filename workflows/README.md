@@ -22,14 +22,16 @@ Two different kinds of work, kept apart on purpose:
 
 ## Run one
 
+With a pip install there is no repository to clone: `ddc job workflows --copy my-workflows` (no config needed) copies everything in this directory to `my-workflows/`; `cd` there. All paths in this file and in the specs are relative to that directory (in a clone of the repository, `cd workflows`).
+
 ```bash
-cp my-character.png workflows/inputs/reference.png      # character-swap workflows; a start.png for wan22-i2v-a14b; nothing for the text-only ones
-cp my-motion.mp4    workflows/inputs/driving.mp4
-ddc job check workflows/scail2.toml                      # read-only: prices, availability, the budget math, your inputs
-ddc job run   workflows/scail2.toml --approve-usd 10     # rents the cheapest matching GPU, runs, retrieves, verifies the close
+cp my-character.png inputs/reference.png      # character-swap workflows; a start.png for wan22-i2v-a14b; nothing for the text-only ones
+cp my-motion.mp4    inputs/driving.mp4
+ddc job check scail2.toml                      # read-only: prices, availability, the budget math, your inputs
+ddc job run   scail2.toml --approve-usd 10     # rents the cheapest matching GPU, runs, retrieves, verifies the close
 ```
 
-The video and a small `.json` (every setting, the seed and the exact graph, so a result can be reproduced) land in `workflows/outputs/`. The specs ask for up to $3.20/h
+The video and a small `.json` (every setting, the seed and the exact graph, so a result can be reproduced) land in `outputs/`. The specs ask for up to $3.20/h
 for the 80 GB class; the default ceiling in `config.toml` is $2/h (`max_price_usd_hr`), and `ddc job check` says when a spec is lowered to it. Read
 [docs/COSTS-AND-SAFETY.md](../docs/COSTS-AND-SAFETY.md#jobs-ddc-job) first: a job lease is real money.
 
@@ -40,10 +42,10 @@ Animate) or 32 (the 5B model, SCAIL-2) and frame counts `4k+1`; a wrong value fa
 
 Your own ComfyUI graph runs the same way, without writing any code:
 
-1. In ComfyUI, build and test the workflow, then **Save (API Format)** (settings > enable dev mode options) to `workflows/inputs/graph.json`; put the images and videos it loads in `workflows/inputs/` too.
+1. In ComfyUI, build and test the workflow, then **Save (API Format)** (settings > enable dev mode options) to `inputs/graph.json`; put the images and videos it loads in `inputs/` too.
 2. Copy `templates/custom-comfyui.toml` to `my-<name>.toml` in this directory, set `name`, and add one `[[cache.item]]` per model file the graph loads (the template shows the shape; use a URL pinned to a
    commit and the sha256 from the model page). List the media under `inputs` and add each `cache-<name>` to the `generate` step's `needs`.
-3. `ddc job check workflows/my-<name>.toml`, then `ddc job run ... --approve-usd N`. Images, GIFs and videos the graph saves come back in `outputs/`.
+3. `ddc job check my-<name>.toml`, then `ddc job run ... --approve-usd N`. Images, GIFs and videos the graph saves come back in `outputs/`.
 
 Only ComfyUI's own nodes are installed (`COMFY_NODES` loads node folders you added to the prebuilt image). The spec and graph are plain files: commit them to keep the workflow. With the `clouddeck`
 skill, Claude can do steps 1 and 2 for you. The custom mode was run on a real GPU with the graph of the 5B workflow.
@@ -80,7 +82,7 @@ Setup is the part you pay for without getting a video, so there are two ways to 
    DWPose weights, sshd and the system packages) on the same PyTorch base the stock path uses, pinned by digest. `install.sh` is the one script for both: on the prebuilt image it
    finds everything and returns in seconds (18 s measured in a local container, including a `pip` consistency check), on the stock image it installs while the models download.
    ```bash
-   docker build -f workflows/comfyui/Dockerfile -t ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1 workflows/comfyui
+   docker build -f comfyui/Dockerfile -t ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1 comfyui
    docker push ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1        # make the package public: providers pull anonymously (docs/prebuilt-image.md)
    ```
    then uncomment `prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"` in the specs (better: `...@sha256:<digest>`). If it cannot be pulled, `ddc job` falls back to the stock image

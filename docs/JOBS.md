@@ -37,7 +37,7 @@ pytest's monkeypatch); it adds the checkout to `sys.path` itself, so no `PYTHONP
 
 `workflows/` holds complete, ready-to-run specs (not placeholders) for AI video: Wan 2.2 text/image-to-video, and the two character-swap pipelines Wan 2.2 Animate and
 SCAIL-2, each with GPU selection, a pinned ComfyUI install, sha256-verified model downloads, inference and video retrieval; see [workflows/README.md](../workflows/README.md).
-Like `examples/`, they are in the repository and the sdist, not in the wheel.
+They are in the wheel too: `ddc job workflows` lists them and `ddc job workflows --copy DIR` makes an editable copy to run from (no clone, no config needed for that step).
 
 Prerequisites are the same as for the rest of `ddc`: `AKASH_API_KEY` in `secrets.env` and the SSH key pair in the secrets dir (`ddc install`
 creates both), plus a config file. Job leases are named `ddc-job-<name>-<MMDDHHMM>-<hex>`, are recorded in the controller's state and ledger,

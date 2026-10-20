@@ -47,7 +47,7 @@ For checkpoint-backed dev boxes, sign in with `gh auth login` before `ddc instal
 
 ## 2. Install CloudDeck
 
-Install CloudDeck from PyPI (version 0.1.1 or newer). You don't need a GitHub login to install the package.
+Install CloudDeck from PyPI (version 0.1.2 or newer). You don't need a GitHub login to install the package.
 
 With [pipx](https://pipx.pypa.io) (its own virtual environment, commands on your PATH):
 

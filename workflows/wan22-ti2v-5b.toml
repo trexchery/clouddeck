@@ -1,7 +1,7 @@
 # Wan 2.2 TI2V 5B: ordinary text-to-video (or image-to-video) generation. ComfyUI is installed, the models downloaded, the video generated and pulled back.
 # This is NOT the character-swap workflow: for replacing or animating a person from a driving video see wan22-animate.toml and scail2.toml.
-#   ddc job check workflows/wan22-ti2v-5b.toml     (preflight, read-only)    then    ddc job run workflows/wan22-ti2v-5b.toml --approve-usd <limit>
-# Prompt: edit WAN_PROMPT below, or put your prompt in a file and list it under `inputs` (see workflows/README.md). 1280x704, 121 frames, 24 fps (5 s).
+#   ddc job check wan22-ti2v-5b.toml     (preflight, read-only)    then    ddc job run wan22-ti2v-5b.toml --approve-usd <limit>
+# Prompt: edit WAN_PROMPT below, or put your prompt in a file and list it under `inputs` (see README.md). 1280x704, 121 frames, 24 fps (5 s).
 # 24 GB of VRAM is enough (single 5B model + fp8 text encoder, ComfyUI offloads what does not fit). Everything below is ESTIMATED: nothing here was run on a rented box.
 name = "wan22-ti2v-5b"
 runtime_hours = 2
@@ -11,7 +11,7 @@ setup_estimate_s = 480         # ESTIMATED: model downloads + the install step o
 cold_boot_s = 300
 idle_abort_s = 900
 artifacts_dir = "outputs"
-inputs = ["comfyui/install.sh", "comfyui/comfy_run.py"]    # add "inputs/start.png" and/or "inputs/prompt.txt" (below this directory, see workflows/inputs/)
+inputs = ["comfyui/install.sh", "comfyui/comfy_run.py"]    # add "inputs/start.png" and/or "inputs/prompt.txt" (below this directory, see inputs/)
 inputs_dest = "in"
 
 [hardware]
@@ -28,7 +28,7 @@ min_vram_gi = 24
 
 [image]
 stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
-# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see workflows/README.md ("Prebuilt image")
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see README.md ("Prebuilt image")
 prebuilt_timeout_s = 300
 apt = ["git", "libgl1", "libglib2.0-0"]     # installed at start only if the image lacks them
 

@@ -31,6 +31,9 @@ def test_built_wheel_ships_data_and_runs_from_a_clean_venv():
         assert "clouddeck/controller.py" in names and "ddc.py" not in names
         assert {"clouddeck/data/sdl.yaml.tmpl", "clouddeck/data/config.example.toml", "clouddeck/data/lease/setup.sh"} <= set(names)
         assert {"clouddeck/data/jobremote/boot.sh", "clouddeck/data/jobremote/step.sh", "clouddeck/data/jobremote/fetch.sh", "clouddeck/job/runner.py", "clouddeck/job/cli.py"} <= set(names)
+        assert {"clouddeck/data/workflows/scail2.toml", "clouddeck/data/workflows/wan22-ti2v-5b.toml", "clouddeck/data/workflows/comfyui/comfy_run.py", "clouddeck/data/workflows/comfyui/install.sh",
+                "clouddeck/data/workflows/templates/custom-comfyui.toml", "clouddeck/data/workflows/README.md"} <= set(names)
+        assert not any(n.startswith("clouddeck/data/workflows/inputs/") and not n.endswith("README.md") for n in names)   # a checkout's own media never ships
         assert not any(n.startswith(("ddcjob/", "examples/", "docker/")) for n in names)       # the job package lives inside clouddeck/; no stray top-level package
         run(sys.executable, str(ROOT / "scripts" / "check_dist.py"), whl, cwd=td)               # every file the repo ships is in the wheel
         venv = td / "venv"
@@ -48,3 +51,10 @@ def test_built_wheel_ships_data_and_runs_from_a_clean_venv():
         out = run(bindir / "python", "-I", "-c", "import clouddeck.controller as c; print(c.data_file('lease').is_dir(), c.CHECKOUT, c.data_file('jobremote').is_dir())", cwd=home, env=env)
         assert out.split()[0] == "True" and out.split()[1] == "None" and out.split()[2] == "True"
         assert "close JOB" in run(bindir / "python", "-I", "-m", "clouddeck.job", "--help", cwd=home, env=env)   # `python -m clouddeck.job` works from the wheel
+        # the ready-made workflows: listed, copied out of the wheel, and the copy is a valid job spec
+        assert "scail2.toml" in run(bindir / f"ddc{exe}", "job", "workflows", cwd=home, env=env)
+        mine = home / "wf"
+        run(bindir / f"ddc{exe}", "job", "workflows", "--copy", mine, cwd=home, env=env)
+        assert (mine / "scail2.toml").is_file() and (mine / "comfyui" / "comfy_run.py").is_file() and (mine / "inputs").is_dir() and [f.name for f in (mine / "inputs").iterdir()] == ["README.md"]
+        spec = run(bindir / "python", "-I", "-c", "import sys; from clouddeck.job.spec import load_spec; s = load_spec(sys.argv[1]); print(s['name'], len(s['cache']['items']))", mine / "scail2.toml", cwd=home, env=env)
+        assert spec.split()[0] == "scail2" and int(spec.split()[1]) > 0   # the copy parses as a job spec: its inputs/scripts resolve relative to the copy

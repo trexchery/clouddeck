@@ -1,7 +1,7 @@
 # Prebuilt ComfyUI environment for the ready-made workflows (Wan 2.2, Wan 2.2 Animate, SCAIL-2): what install.sh would otherwise install at the start of
 # every job -- ComfyUI at a pinned commit, its requirements, the two Animate custom nodes and the DWPose weights -- plus what jobremote/boot.sh would apt-get.
 # Model weights are NOT in it (tens of GB: the spec's [cache] items fetch and verify them in parallel while the box boots).
-# Build and publish: docs/prebuilt-image.md ;  docker build -f workflows/comfyui/Dockerfile -t ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1 workflows/comfyui
+# Build and publish: docs/prebuilt-image.md ;  docker build -f comfyui/Dockerfile -t ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1 comfyui
 #
 # The same base the stock fallback uses (a GPU box that works with it was verified on A100 and H100); keep it pinned by digest.
 ARG BASE=pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385
