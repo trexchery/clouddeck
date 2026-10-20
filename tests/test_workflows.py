@@ -18,7 +18,7 @@ from clouddeck.job import spec as specmod
 ROOT = Path(__file__).resolve().parent.parent
 WF = ROOT / "workflows"
 PUB = "ssh-ed25519 AAAA k"
-SPECS = sorted(p.stem for p in WF.glob("*.toml"))
+SPECS = sorted(p.stem for p in WF.glob("*.toml") if not p.stem.startswith("my-"))   # my-*.toml: specs people make from templates/
 CHARACTER_SWAP = ("wan22-animate", "scail2", "scail2-fp8")
 
 _loaded = importlib.util.spec_from_file_location("comfy_run", WF / "comfyui" / "comfy_run.py")
@@ -372,3 +372,56 @@ def test_server_args_keep_custom_nodes_in_the_install_and_load_only_what_a_workf
 def test_the_installer_is_documented_to_fail_without_a_gpu_only_on_a_job_box():
     script = (WF / "comfyui" / "install.sh").read_text(encoding="utf-8")
     assert 'if [ -n "${DDC_JOB:-}" ]' in script and "no usable NVIDIA GPU" in script
+
+
+# ------------------------------------------------------------------ bring your own graph
+CUSTOM = WF / "templates" / "custom-comfyui.toml"
+API_GRAPH = {"1": {"class_type": "EmptyLatentImage", "inputs": {"width": 512, "height": 512, "batch_size": 1}}}
+
+
+def test_custom_template_is_a_valid_spec_that_runs_the_custom_runner(jw):
+    r = tomllib.loads(CUSTOM.read_text(encoding="utf-8"))
+    s = specmod.normalize(r, WF)      # the template is meant to be copied into workflows/
+    assert [t for t, v in r.items() if isinstance(v, dict) and ({"inputs", "inputs_dest"} & set(v))] == []
+    install, generate = s["steps"]
+    assert generate["run"] == "python in/comfy_run.py custom" and "out/*.png" in generate["artifacts"]
+    assert {Path(p).name for p in s["inputs"]} == {"install.sh", "comfy_run.py", "graph.json"}
+    assert (WF / s["inputs"][0]).is_file() and (WF / s["inputs"][1]).is_file(), "the template's paths reach the real scripts once it sits in workflows/"
+    s = specmod.normalize(r, jw.tmp)
+    for p in s["inputs"]:
+        (jw.tmp / p).parent.mkdir(parents=True, exist_ok=True)
+        (jw.tmp / p).write_bytes(b"x")
+    ddc.CFG["max_price_usd_hr"] = 5.0
+    cs = preflight.run(s, offline=True)
+    assert not preflight.failed(cs), [(c.name, c.detail) for c in cs if c.status == "fail"]
+
+
+def test_custom_graph_is_loaded_and_its_media_staged(box):
+    (box / "in" / "graph.json").write_text(__import__("json").dumps(API_GRAPH), encoding="utf-8")
+    put(box, "face.png", "clip.mp4", "notes.txt")
+    stage = []
+    g, params = cr.WORKFLOWS["custom"](stage)
+    assert g.nodes == API_GRAPH and stage == ["clip.mp4", "face.png"] and params["media"] == stage
+
+
+@pytest.mark.parametrize("content, message", [
+    (None, "no graph.json"),
+    ("{nope", "not valid JSON"),
+    ('{"nodes": [], "links": []}', "Save (API Format)"),
+    ('{"1": {"class_type": "X"}}', "not an API-format graph"),
+    ("{}", "not an API-format graph"),
+])
+def test_custom_graph_errors_name_the_fix(box, content, message):
+    if content is not None:
+        (box / "in" / "graph.json").write_text(content, encoding="utf-8")
+    with pytest.raises(cr.RunError, match=re.escape(message)):
+        cr.WORKFLOWS["custom"]([])
+
+
+def test_custom_runner_loads_only_the_nodes_the_user_names(monkeypatch):
+    info = {"gib": 24}
+    assert "--whitelist-custom-nodes" not in cr.server_args(info, "custom")
+    monkeypatch.setenv("COMFY_NODES", "ComfyUI-KJNodes")
+    args = cr.server_args(info, "custom")
+    assert args[args.index("--whitelist-custom-nodes") + 1] == "ComfyUI-KJNodes"
+    assert "ComfyUI-KJNodes" not in cr.server_args(info, "scail2"), "COMFY_NODES applies to the custom workflow only"

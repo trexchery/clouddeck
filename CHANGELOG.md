@@ -7,6 +7,7 @@ and the project uses [Semantic Versioning](https://semver.org/); while the versi
 
 ### Added
 * Ready-made `ddc job` workflows in `workflows/` for AI video, each with GPU selection, a pinned ComfyUI install, sha256-verified model downloads pinned to immutable Hugging Face commits, inference and video retrieval: Wan 2.2 text-to-video and image-to-video (`wan22-ti2v-5b`, `wan22-t2v-a14b`, `wan22-i2v-a14b`) and, kept apart as character-swap workflows that need a reference image and a driving video, Wan 2.2 Animate (`wan22-animate`) and SCAIL-2 (`scail2`, `scail2-fp8`). Long clips are chained in one prompt (Animate windows of 77 frames, SCAIL-2 segments of 81), prompts can be a `prompt.txt` input, and an optional prebuilt image (`workflows/comfyui/Dockerfile`) removes the install step. See `workflows/README.md` for what was verified on a real GPU and what was not.
+* `workflows/templates/custom-comfyui.toml` and `comfy_run.py custom` run your own ComfyUI graph (exported with "Save (API Format)") as a `ddc job`; `workflows/README.md` and the `clouddeck` skill walk through making and keeping one.
 
 ### Fixed
 * `inputs` / `inputs_dest` in `examples/gpu-batch.toml` sat inside the `[prep]` table, where `ddc job` silently ignores them; they are top-level keys and now come before the first table. A new test fails for any shipped spec with `inputs` inside a table.

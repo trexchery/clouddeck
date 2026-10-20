@@ -93,6 +93,13 @@ Keep the two families apart. **Ordinary generation** (text or image to video): `
 in `inputs/` (or change the `inputs` list), put a long natural-language prompt in `inputs/prompt.txt` or in the spec's `[env]`, then `ddc job check` and, after the
 approval, `ddc job run`. Settings are the commented `[env]` variables of each spec. Read `workflows/README.md` for prompting advice, GPU choice and the optional prebuilt image.
 
+**The user's own ComfyUI workflow** (a graph or models the ready-made specs do not cover): `workflows/templates/custom-comfyui.toml` is the template, and `comfy_run.py custom` runs
+the user's graph. Steps: (1) the user exports the graph from ComfyUI with "Save (API Format)" to `workflows/inputs/graph.json` and puts the media it loads beside it; (2) copy the template to
+`workflows/my-<name>.toml` (it must sit in `workflows/`), set `name`, add one `[[cache.item]]` per model file the graph loads (`dest = "comfy/models/<folder>/<file>"`, the file name the graph
+uses, a URL pinned to a commit, the sha256 from the model page; never invent a hash: with none, use `allow_unverified = true` and say so) and its `cache-<name>` to the `generate` step's `needs`;
+(3) `ddc job check`, then the approval and `ddc job run` as usual. Only ComfyUI's own nodes exist on the box; a graph that needs a custom node fails fast with its class name. Saved specs
+are plain files, so "saving a workflow" is just keeping `workflows/my-<name>.toml` (and its `graph.json`) in version control.
+
 Make a directory per job (e.g. `./clouddeck-jobs/<name>/`) and write `job.toml` there. Paths in the spec
 (inputs, artifacts_dir) are relative to that directory. Minimal GPU job:
 

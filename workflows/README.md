@@ -36,6 +36,18 @@ for the 80 GB class; the default ceiling in `config.toml` is $2/h (`max_price_us
 Settings are environment variables in each spec's `[env]` table (commented out with their defaults; each spec lists its own). Sizes must be multiples of 16 (Wan 2.2 A14B,
 Animate) or 32 (the 5B model, SCAIL-2) and frame counts `4k+1`; a wrong value fails in the first second, before any download is used.
 
+## Make your own
+
+Your own ComfyUI graph runs the same way, without writing any code:
+
+1. In ComfyUI, build and test the workflow, then **Save (API Format)** (settings > enable dev mode options) to `workflows/inputs/graph.json`; put the images and videos it loads in `workflows/inputs/` too.
+2. Copy `templates/custom-comfyui.toml` to `my-<name>.toml` in this directory, set `name`, and add one `[[cache.item]]` per model file the graph loads (the template shows the shape; use a URL pinned to a
+   commit and the sha256 from the model page). List the media under `inputs` and add each `cache-<name>` to the `generate` step's `needs`.
+3. `ddc job check workflows/my-<name>.toml`, then `ddc job run ... --approve-usd N`. Images, GIFs and videos the graph saves come back in `outputs/`.
+
+Only ComfyUI's own nodes are installed (`COMFY_NODES` loads node folders you added to the prebuilt image). The spec and graph are plain files: commit them to keep the workflow. With the `clouddeck`
+skill, Claude can do steps 1 and 2 for you. The custom mode was run on a real GPU with the graph of the 5B workflow.
+
 ## Prompting
 
 Write the prompt as plain sentences, in `[env]` (`WAN_PROMPT`, `ANIMATE_PROMPT`, `SCAIL_PROMPT`) or, for anything longer than a line, as `prompt.txt` listed under `inputs`

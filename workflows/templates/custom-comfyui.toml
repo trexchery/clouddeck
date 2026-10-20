@@ -1,0 +1,60 @@
+# Your own ComfyUI workflow as a `ddc job`: you bring the graph and the model list, the rest (GPU choice, ComfyUI install, verified downloads, run, retrieval, shutdown) is the same as the ready-made specs.
+# 1. In ComfyUI: build and test your workflow, then "Save (API Format)" (settings > enable dev mode options). Put that file at workflows/inputs/graph.json.
+#    Media it loads (LoadImage / LoadVideo) go in workflows/inputs/ too and are named in the graph by file name.
+# 2. Copy this file to workflows/my-<your-name>.toml (it must sit in workflows/: the paths below are relative to the spec), set `name`, and add one [[cache.item]] per model file the graph loads.
+#    The `dest` is comfy/models/<folder>/<file> with the file name the graph uses; take url and sha256 from the model page (pin a commit, not `main`).
+# 3. ddc job check workflows/my-<your-name>.toml     then     ddc job run workflows/my-<your-name>.toml --approve-usd <limit>
+# Only ComfyUI's own nodes exist on the box (custom nodes are not installed). Results: workflows/outputs/. Claude with the clouddeck skill can do steps 1-2 for you.
+name = "my-workflow"
+runtime_hours = 2
+max_cost_usd = 3.0               # worst case = runtime_hours x max_usd_hr below must stay <= this
+estimated_runtime_min = 20       # your estimate: used to rank bids and time the lease
+setup_estimate_s = 480           # downloads + install on the stock image
+cold_boot_s = 300
+idle_abort_s = 900
+artifacts_dir = "outputs"
+inputs = ["comfyui/install.sh", "comfyui/comfy_run.py", "inputs/graph.json"]    # add the images / videos your graph loads, e.g. "inputs/start.png"
+inputs_dest = "in"
+
+[hardware]
+cpu = 8
+memory = "48Gi"
+disk = "70Gi"                    # models + ComfyUI + outputs
+max_usd_hr = 1.50
+min_uptime = 0.95
+[hardware.gpu]
+units = 1
+vendor = "nvidia"
+models = ["rtx3090:24Gi", "a10g:24Gi", "rtx4090:24Gi", "rtx5090:32Gi", "a100:80Gi", "h100:80Gi", "pro6000we:96Gi", "pro6000se:96Gi"]   # the cheapest bid that has one wins (ids from `ddc job hardware`)
+min_vram_gi = 24
+
+[image]
+stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, see workflows/README.md
+prebuilt_timeout_s = 300
+apt = ["git", "libgl1", "libglib2.0-0"]
+
+[env]
+# COMFY_NODES = ""               # node folders already in ComfyUI's custom_nodes to load (none by default)
+
+[cache]
+# One item per model file; they download in parallel as soon as the box is up. Example (the Wan 2.2 text encoder), replace with yours:
+# [[cache.item]]
+# name = "umt5"                  # also the step name: the generate step below must list "cache-umt5" in `needs`
+# dest = "comfy/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+# url = "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/123acf1cc74bccbb9bfff8ac1ee72edc08c2341d/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+# sha256 = "c3355d30191f1f066b26d93fba017ae9809dce6c627dda5f6a66eaa651204f68"
+# size_gb = 6.736
+# path = "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+
+[[step]]
+name = "install"
+needs = ["inputs"]
+productive = false
+run = "bash in/install.sh"
+
+[[step]]
+name = "generate"
+needs = ["install", "inputs"]    # + "cache-<name>" for every [[cache.item]] above
+run = "python in/comfy_run.py custom"
+artifacts = ["out/*.mp4", "out/*.webm", "out/*.gif", "out/*.png", "out/*.jpg", "out/*.webp", "out/*.json"]

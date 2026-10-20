@@ -5,6 +5,7 @@
 
     ordinary generation (text / image to video):   wan22-ti2v-5b | wan22-t2v-a14b | wan22-i2v-a14b
     character swap / animation (driving video + reference image):   wan22-animate | scail2
+    your own graph (ComfyUI "Save (API Format)" as inputs/graph.json; see workflows/templates/):   custom
 
 The job specs in workflows/ upload this file to /work/in/, download the models into /work/comfy/models/ and install ComfyUI (install.sh).
 Settings come from environment variables (the [env] table of the spec); every one has a default.  The prompt may also be a file: put
@@ -39,6 +40,7 @@ PORT = int(os.environ.get("COMFY_PORT", "8188"))
 URL = f"http://127.0.0.1:{PORT}"
 TIMEOUT_S = float(os.environ.get("COMFY_TIMEOUT_S", "10800"))   # the whole prompt; the lease's own runtime limit is the hard stop
 IMAGES, VIDEOS = (".png", ".jpg", ".jpeg", ".webp"), (".mp4", ".mov", ".mkv", ".webm")
+OUTPUT_SUFFIXES = (".mp4", ".webm", ".mkv", ".gif", *IMAGES)   # what a workflow may save; the ready-made ones save video only, a custom graph may save images too
 MAX_FRAMES = 300                 # default cap on the length of a character-swap video (about 10 s at 30 fps)
 
 T5 = "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
@@ -496,12 +498,33 @@ def build_scail2(stage: list[str]) -> tuple[Graph, dict[str, Any]]:
     return g, p
 
 
+def build_custom(stage: list[str]) -> tuple[Graph, dict[str, Any]]:
+    """Bring your own graph: `graph.json` from the spec's inputs, exported with ComfyUI's "Save (API Format)".  Images and videos uploaded beside it are copied
+    to ComfyUI's input directory, so a LoadImage / LoadVideo node can name them.  Models come from the spec's [cache] items; extra custom nodes are not installed."""
+    path = INBOX / "graph.json"
+    if not path.is_file():
+        raise RunError("no graph.json in /work/in: list your exported graph under `inputs` in the spec")
+    try:
+        nodes = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError as e:
+        raise RunError(f"graph.json is not valid JSON: {e}") from None
+    if isinstance(nodes, dict) and isinstance(nodes.get("nodes"), list):
+        raise RunError('graph.json is a workflow saved from the ComfyUI editor; export it with "Save (API Format)" (enable dev mode options in the settings) instead')
+    if not isinstance(nodes, dict) or not nodes or not all(isinstance(n, dict) and "class_type" in n and isinstance(n.get("inputs"), dict) for n in nodes.values()):
+        raise RunError('graph.json is not an API-format graph ({"1": {"class_type": ..., "inputs": {...}}, ...})')
+    g = Graph()
+    g.nodes = nodes
+    stage += sorted(f.name for f in INBOX.iterdir() if f.suffix.lower() in IMAGES + VIDEOS)
+    return g, {"graph": "graph.json", "media": list(stage)}
+
+
 WORKFLOWS = {
     "wan22-ti2v-5b": lambda stage: build_wan_5b(stage),
     "wan22-t2v-a14b": lambda stage: build_wan_a14b("t2v", stage),
     "wan22-i2v-a14b": lambda stage: build_wan_a14b("i2v", stage),
     "wan22-animate": lambda stage: build_animate(stage),
     "scail2": lambda stage: build_scail2(stage),
+    "custom": lambda stage: build_custom(stage),
 }
 CUSTOM_NODES = {"wan22-animate": ["comfyui_controlnet_aux", "ComfyUI-KJNodes"]}   # every other workflow runs on ComfyUI's own nodes
 
@@ -545,7 +568,7 @@ def server_args(info: dict[str, Any], workflow: str) -> list[str]:
             "--temp-directory", str(BASE / "temp"), "--user-directory", str(BASE / "user"), "--output-directory", str(OUT)]
     if info["gib"] >= 60:
         args.append("--highvram")
-    wanted = CUSTOM_NODES.get(workflow, [])
+    wanted = shlex.split(os.environ.get("COMFY_NODES", "")) if workflow == "custom" else CUSTOM_NODES.get(workflow, [])   # custom: node folders already in COMFY_HOME/custom_nodes
     args += ["--disable-all-custom-nodes"] + (["--whitelist-custom-nodes", *wanted] if wanted else [])
     return args + shlex.split(os.environ.get("COMFY_EXTRA_ARGS", ""))
 
@@ -628,7 +651,7 @@ def collect_outputs(hist: dict[str, Any]) -> list[Path]:
         for item in node.get("images", []) + node.get("videos", []):
             if item.get("type") == "output":
                 path = (OUT / item.get("subfolder", "") / item["filename"]).resolve()
-                if OUT.resolve() in path.parents and path.suffix.lower() in (".mp4", ".webm", ".mkv") and path.is_file():
+                if OUT.resolve() in path.parents and path.suffix.lower() in OUTPUT_SUFFIXES and path.is_file():
                     files.append(path)
     return files
 
@@ -654,7 +677,7 @@ def main(argv: list[str]) -> int:
         stop_server(proc)
     videos = collect_outputs(hist)
     if not videos:
-        raise RunError("the workflow finished but saved no video")
+        raise RunError("the workflow finished but saved no video, image or gif to ComfyUI's output directory")
     (OUT / f"{videos[0].stem}.json").write_text(json.dumps({"workflow": name, "params": params, "gpu": info, "prompt": graph.nodes}, indent=1, ensure_ascii=False), encoding="utf-8")
     for v in videos:
         log(f"saved {v} ({v.stat().st_size / 2**20:.1f} MiB)")

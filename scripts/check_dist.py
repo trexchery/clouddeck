@@ -20,7 +20,7 @@ JOBREMOTE = sorted(p.name for p in (ROOT / "jobremote").iterdir() if p.is_file()
 JOBPKG = sorted(p.name for p in (ROOT / "clouddeck" / "job").glob("*.py"))
 EXAMPLES = sorted(p.name for p in (ROOT / "examples").glob("*.toml"))  # in the sdist and the repository, NOT in the wheel (the docs say so)
 WORKFLOWS = sorted(
-    [p.name for p in (ROOT / "workflows").glob("*.toml")] + ["README.md"] + [f"comfyui/{p.name}" for p in (ROOT / "workflows" / "comfyui").iterdir() if p.is_file()]
+    [p.name for p in (ROOT / "workflows").glob("*.toml")] + ["README.md", "templates/custom-comfyui.toml"] + [f"comfyui/{p.name}" for p in (ROOT / "workflows" / "comfyui").iterdir() if p.is_file()]
 )  # same: sdist and repository only
 WHEEL_NEED = [
     "clouddeck/controller.py",
