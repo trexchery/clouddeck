@@ -86,6 +86,13 @@ Pick 2 to 5 acceptable models (any-of) so a bid arrives fast; cheap, modern choi
 
 ## 2. Write the job spec
 
+For AI video there is nothing to write: the repository (`github.com/trexchery/clouddeck`) ships complete specs in `workflows/`, which a pip install does not include.
+Keep the two families apart. **Ordinary generation** (text or image to video): `wan22-ti2v-5b.toml`, `wan22-t2v-a14b.toml`, `wan22-i2v-a14b.toml`.
+**Character swap** (a reference image plus a driving video): `wan22-animate.toml` (replace the person in the video, or move the character into the image's scene) and
+`scail2.toml` / `scail2-fp8.toml` (animate the character with the video's motion, or replace the person). Copy the spec with its `comfyui/` directory, put the user's media
+in `inputs/` (or change the `inputs` list), put a long natural-language prompt in `inputs/prompt.txt` or in the spec's `[env]`, then `ddc job check` and, after the
+approval, `ddc job run`. Settings are the commented `[env]` variables of each spec. Read `workflows/README.md` for prompting advice, GPU choice and the optional prebuilt image.
+
 Make a directory per job (e.g. `./clouddeck-jobs/<name>/`) and write `job.toml` there. Paths in the spec
 (inputs, artifacts_dir) are relative to that directory. Minimal GPU job:
 

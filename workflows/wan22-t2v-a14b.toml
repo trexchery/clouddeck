@@ -1,0 +1,107 @@
+# Wan 2.2 A14B text-to-video: ordinary generation with the two-expert 14B model (high-noise expert, then low-noise expert), fp8 weights.
+# This is NOT the character-swap workflow: for replacing or animating a person from a driving video see wan22-animate.toml and scail2.toml.
+#   ddc job check workflows/wan22-t2v-a14b.toml     then    ddc job run workflows/wan22-t2v-a14b.toml --approve-usd <limit>
+# 832x480, 81 frames, 16 fps (5 s), 20 steps. WAN_FAST = "1" switches to the lightx2v 4-step LoRAs (4 steps, cfg 1): about 5x faster, a little less detail.
+# 24 GB of VRAM is enough (ComfyUI keeps one expert resident). Everything below is ESTIMATED: nothing here was run on a rented box.
+name = "wan22-t2v-a14b"
+runtime_hours = 3
+max_cost_usd = 6.0               # worst case = 3 h x $2.00 cap = $6.00 <= $6.00
+estimated_runtime_min = 25     # ESTIMATED, not measured: used to rank bids and time the lease
+setup_estimate_s = 600         # ESTIMATED: model downloads + the install step on the stock image (a prebuilt image makes it shorter)
+cold_boot_s = 300
+idle_abort_s = 900
+artifacts_dir = "outputs"
+inputs = ["comfyui/install.sh", "comfyui/comfy_run.py"]    # optional: "inputs/prompt.txt" (see workflows/README.md)
+inputs_dest = "in"
+
+[hardware]
+cpu = 8
+memory = "64Gi"
+disk = "90Gi"
+max_usd_hr = 2.00             # above the default $2/h per-lease ceiling this needs `max_price_usd_hr = 2.0` (or more) in config.toml, otherwise it is lowered to the ceiling
+min_uptime = 0.95
+[hardware.gpu]
+units = 1
+vendor = "nvidia"
+models = ["rtx3090:24Gi", "a10g:24Gi", "rtx4090:24Gi", "rtx5090:32Gi", "a100:80Gi", "h100:80Gi", "pro6000we:96Gi", "pro6000se:96Gi"]   # any of these: the cheapest bid that has one wins (ids as shown by `ddc job hardware`)
+min_vram_gi = 24
+
+[image]
+stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see workflows/README.md ("Prebuilt image")
+prebuilt_timeout_s = 300
+apt = ["git", "libgl1", "libglib2.0-0"]     # installed at start only if the image lacks them
+
+[env]
+# WAN_PROMPT = "A red fox runs through fresh snow at sunrise, cinematic, natural light, detailed fur."   # default; a prompt.txt in `inputs` also works
+# WAN_FAST = "1"               # 4-step LoRAs
+# WAN_WIDTH = 832              # multiples of 16
+# WAN_HEIGHT = 480
+# WAN_FRAMES = 81              # 4k+1
+# WAN_FPS = 16
+# WAN_STEPS = 20               # 4 with WAN_FAST
+# WAN_SEED = 1                 # default: random (printed and saved in out/*.json)
+
+[cache]
+# Models download in parallel the moment the box is up, resumable and sha256-verified, pinned to an immutable Hugging Face commit (35 GiB in total here).
+# To serve them from your own store instead (faster and independent of Hugging Face), upload each file under its `path` and list the store:
+# mirrors = ["https://models.example.com/mirror"]
+[[cache.item]]
+name = "umt5"
+dest = "comfy/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/123acf1cc74bccbb9bfff8ac1ee72edc08c2341d/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+sha256 = "c3355d30191f1f066b26d93fba017ae9809dce6c627dda5f6a66eaa651204f68"
+size_gb = 6.736
+path = "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+
+[[cache.item]]
+name = "vae"
+dest = "comfy/models/vae/wan_2.1_vae.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/ee6f4a40737a995bf5818954cfce6d59443b0f04/split_files/vae/wan_2.1_vae.safetensors"
+sha256 = "2fc39d31359a4b0a64f55876d8ff7fa8d780956ae2cb13463b0223e15148976b"
+size_gb = 0.254
+path = "wan_2.1_vae.safetensors"
+
+[[cache.item]]
+name = "t2v-high"
+dest = "comfy/models/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/ee6f4a40737a995bf5818954cfce6d59443b0f04/split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors"
+sha256 = "cad711ae211c8b23455ec68cd6a190a33a3d874234a77eb57266d73f8f0e6c9f"
+size_gb = 14.294
+path = "wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors"
+
+[[cache.item]]
+name = "t2v-low"
+dest = "comfy/models/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/ee6f4a40737a995bf5818954cfce6d59443b0f04/split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors"
+sha256 = "e71b96d7c82e638694c5e7fb98fac4bfb0e4ddc5fbbb4b1df40da8f0f1278a97"
+size_gb = 14.294
+path = "wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors"
+
+[[cache.item]]
+name = "t2v-fast-high"
+dest = "comfy/models/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/ee6f4a40737a995bf5818954cfce6d59443b0f04/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors"
+sha256 = "698321cb86bd30c4af06c9b84e656a1048c8cb54e06d50694536fb5de37fde41"
+size_gb = 1.227
+path = "wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors"
+
+[[cache.item]]
+name = "t2v-fast-low"
+dest = "comfy/models/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/ee6f4a40737a995bf5818954cfce6d59443b0f04/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors"
+sha256 = "ec95216e614b3c132c11bfb387b11feedf62163150ccc9068bca8a189771e75a"
+size_gb = 1.227
+path = "wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors"
+
+[[step]]
+name = "install"
+needs = ["inputs"]            # install.sh is one of the uploaded inputs; it then runs while the models download
+productive = false
+run = "bash in/install.sh"
+
+[[step]]
+name = "generate"
+needs = ["install", "inputs", "cache-umt5", "cache-vae", "cache-t2v-high", "cache-t2v-low", "cache-t2v-fast-high", "cache-t2v-fast-low"]
+run = "python in/comfy_run.py wan22-t2v-a14b"
+artifacts = ["out/*.mp4", "out/*.json"]

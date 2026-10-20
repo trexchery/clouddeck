@@ -55,7 +55,7 @@ paid workloads require a funded [akash console](https://console.akash.network) a
 - **dev-box workspaces:** checkpoint-backed sessions require gpg and a separate private github state repository; closing an uncheckpointed box can lose its contents.
 - **early alpha:** real leases have been exercised on windows 11 and wsl2. macos is untested and has no watchdog installer. no independent security audit has been performed.
 
-sample workloads in `examples/` are shipped in the source distribution and github repository, not the pip wheel. copy an example before running it with an installed package.
+sample workloads in `examples/` and ready-made video workflows in `workflows/` (wan 2.2 text/image-to-video, wan 2.2 animate and scail-2 character swap: gpu selection, comfyui install, pinned model downloads, inference, video retrieval) are shipped in the source distribution and github repository, not the pip wheel. copy a spec before running it with an installed package. see [workflows/README.md](workflows/README.md).
 
 ## docs
 

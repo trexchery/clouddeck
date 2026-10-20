@@ -22,6 +22,9 @@ docker build -f docker/Dockerfile --build-arg BASE=YOUR-GPU-BASE-IMAGE:TAG \
   --build-arg EXTRA_APT="libgl1" -t ghcr.io/OWNER/ddc-base:gpu-1 .
 ```
 
+A complete GPU example is `workflows/comfyui/Dockerfile` (ComfyUI at a pinned commit, its custom nodes and small weights on a PyTorch base pinned by digest; the model weights stay in the spec's `[cache]`):
+see [workflows/README.md](../workflows/README.md#less-setup-prebuilt-environment-cached-weights).
+
 Everything listed in a spec's `[image].apt` (plus `openssh-server rsync curl ca-certificates aria2 tmux`) should be in the image; anything
 missing is simply installed at start. Bake in tools and system libraries. Do **not** bake secrets, API keys, tokens, deploy keys or SSH host
 keys: the Dockerfile deletes the host keys and `boot.sh` generates fresh ones per container, and the Dockerfile contains no credentials or

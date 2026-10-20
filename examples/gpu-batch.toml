@@ -9,6 +9,8 @@ setup_estimate_s = 200        # downloads after boot; the lease is timed so setu
 cold_boot_s = 240             # expected lease->sshd on a provider that has not run this image before
 idle_abort_s = 600            # abort (and close) if nothing runs or transfers for 10 minutes
 artifacts_dir = "outputs"
+inputs = ["inputs/clip.bin", "work/ref.bin"]   # below this directory only; uploaded as soon as they exist (resumable, sha256 verified) to /work/in/ (top-level keys: they must come before the first [table])
+inputs_dest = "in"
 
 [hardware]
 cpu = 8
@@ -36,9 +38,6 @@ secrets = ["EXAMPLE_API_TOKEN"]   # NAMES only: values come from your environmen
 cmd = "python prepare.py"
 estimate_s = 300              # slightly OVER-estimate: too low costs paid idle, too high only delays the start
 produces = ["work/ref.bin"]
-
-inputs = ["inputs/clip.bin", "work/ref.bin"]   # below this directory only; uploaded as soon as they exist (resumable, sha256 verified) to /work/in/
-inputs_dest = "in"
 
 [cache]
 mirrors = ["https://models.example.com/mirror"]   # optional: tried before the origin URLs, any HTTP(S) store

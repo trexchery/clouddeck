@@ -19,6 +19,9 @@ LEASE = sorted(p.name for p in (ROOT / "lease").iterdir() if p.is_file())
 JOBREMOTE = sorted(p.name for p in (ROOT / "jobremote").iterdir() if p.is_file())  # scripts `ddc job` uploads to / inlines for a job's box
 JOBPKG = sorted(p.name for p in (ROOT / "clouddeck" / "job").glob("*.py"))
 EXAMPLES = sorted(p.name for p in (ROOT / "examples").glob("*.toml"))  # in the sdist and the repository, NOT in the wheel (the docs say so)
+WORKFLOWS = sorted(
+    [p.name for p in (ROOT / "workflows").glob("*.toml")] + ["README.md"] + [f"comfyui/{p.name}" for p in (ROOT / "workflows" / "comfyui").iterdir() if p.is_file()]
+)  # same: sdist and repository only
 WHEEL_NEED = [
     "clouddeck/controller.py",
     "clouddeck/cli.py",
@@ -37,11 +40,12 @@ SDIST_NEED = [
     *(f"jobremote/{n}" for n in JOBREMOTE),
     *(f"clouddeck/job/{n}" for n in JOBPKG),
     *(f"examples/{n}" for n in EXAMPLES),
+    *(f"workflows/{n}" for n in WORKFLOWS),
     "docker/Dockerfile",
     "docs/JOBS.md",
 ]
 # never in an artifact: repo-root dev shim, tests, CI config, secrets-looking files
-WHEEL_BAN = ("ddc.py", "conftest.py", "test_ddc.py", "tests/", "examples/", ".github/", ".env", "secrets.env", "keys/", "state.json")
+WHEEL_BAN = ("ddc.py", "conftest.py", "test_ddc.py", "tests/", "examples/", "workflows/", ".github/", ".env", "secrets.env", "keys/", "state.json")
 
 
 def names(path: Path) -> list[str]:

@@ -5,6 +5,8 @@ recursive-include lease *
 recursive-include jobremote *
 recursive-include docker *
 recursive-include examples *
+recursive-include workflows *.toml *.sh *.py *.md Dockerfile
+prune workflows/outputs
 recursive-include tests *
 recursive-include scripts *
 recursive-include windows *

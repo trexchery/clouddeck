@@ -1,0 +1,83 @@
+# Wan 2.2 TI2V 5B: ordinary text-to-video (or image-to-video) generation. ComfyUI is installed, the models downloaded, the video generated and pulled back.
+# This is NOT the character-swap workflow: for replacing or animating a person from a driving video see wan22-animate.toml and scail2.toml.
+#   ddc job check workflows/wan22-ti2v-5b.toml     (preflight, read-only)    then    ddc job run workflows/wan22-ti2v-5b.toml --approve-usd <limit>
+# Prompt: edit WAN_PROMPT below, or put your prompt in a file and list it under `inputs` (see workflows/README.md). 1280x704, 121 frames, 24 fps (5 s).
+# 24 GB of VRAM is enough (single 5B model + fp8 text encoder, ComfyUI offloads what does not fit). Everything below is ESTIMATED: nothing here was run on a rented box.
+name = "wan22-ti2v-5b"
+runtime_hours = 2
+max_cost_usd = 3.0               # worst case = 2 h x $1.50 cap = $3.00 <= $3.00
+estimated_runtime_min = 20     # ESTIMATED, not measured: used to rank bids and time the lease
+setup_estimate_s = 480         # ESTIMATED: model downloads + the install step on the stock image (a prebuilt image makes it shorter)
+cold_boot_s = 300
+idle_abort_s = 900
+artifacts_dir = "outputs"
+inputs = ["comfyui/install.sh", "comfyui/comfy_run.py"]    # add "inputs/start.png" and/or "inputs/prompt.txt" (below this directory, see workflows/inputs/)
+inputs_dest = "in"
+
+[hardware]
+cpu = 8
+memory = "48Gi"
+disk = "70Gi"
+max_usd_hr = 1.50             # above the default $2/h per-lease ceiling this needs `max_price_usd_hr = 1.5` (or more) in config.toml, otherwise it is lowered to the ceiling
+min_uptime = 0.95
+[hardware.gpu]
+units = 1
+vendor = "nvidia"
+models = ["rtx3090:24Gi", "a10g:24Gi", "rtx4090:24Gi", "rtx5090:32Gi", "a100:80Gi", "h100:80Gi", "pro6000we:96Gi", "pro6000se:96Gi"]   # any of these: the cheapest bid that has one wins (ids as shown by `ddc job hardware`)
+min_vram_gi = 24
+
+[image]
+stock = "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-runtime@sha256:417bd75df6365104c283ea4c1651fb3530d9eb5a4c2fafa51943cff2a94e6385"
+# prebuilt = "ghcr.io/OWNER/clouddeck-comfyui:0.42.1-1"   # optional, saves the install step at every start: see workflows/README.md ("Prebuilt image")
+prebuilt_timeout_s = 300
+apt = ["git", "libgl1", "libglib2.0-0"]     # installed at start only if the image lacks them
+
+[env]
+# WAN_PROMPT = "A red fox runs through fresh snow at sunrise, cinematic, natural light, detailed fur."   # default; a prompt.txt in `inputs` also works
+# WAN_IMAGE = "start.png"      # image-to-video: list the image under `inputs` too (the only image there is used automatically)
+# WAN_WIDTH = 1280             # multiples of 32
+# WAN_HEIGHT = 704
+# WAN_FRAMES = 121             # 4k+1
+# WAN_FPS = 24
+# WAN_STEPS = 20
+# WAN_SEED = 1                 # default: random (printed and saved in out/*.json)
+
+[cache]
+# Models download in parallel the moment the box is up, resumable and sha256-verified, pinned to an immutable Hugging Face commit (17 GiB in total here).
+# To serve them from your own store instead (faster and independent of Hugging Face), upload each file under its `path` and list the store:
+# mirrors = ["https://models.example.com/mirror"]
+[[cache.item]]
+name = "umt5"
+dest = "comfy/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/123acf1cc74bccbb9bfff8ac1ee72edc08c2341d/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+sha256 = "c3355d30191f1f066b26d93fba017ae9809dce6c627dda5f6a66eaa651204f68"
+size_gb = 6.736
+path = "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+
+[[cache.item]]
+name = "wan22-ti2v-5b"
+dest = "comfy/models/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/ee6f4a40737a995bf5818954cfce6d59443b0f04/split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors"
+sha256 = "456f901338bd9eadbded3828b819109a9b68e8a525ca5cf8d0049a69fcfeca1e"
+size_gb = 10.000
+path = "wan2.2_ti2v_5B_fp16.safetensors"
+
+[[cache.item]]
+name = "vae"
+dest = "comfy/models/vae/wan2.2_vae.safetensors"
+url = "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/ee6f4a40737a995bf5818954cfce6d59443b0f04/split_files/vae/wan2.2_vae.safetensors"
+sha256 = "e40321bd36b9709991dae2530eb4ac303dd168276980d3e9bc4b6e2b75fed156"
+size_gb = 1.409
+path = "wan2.2_vae.safetensors"
+
+[[step]]
+name = "install"
+needs = ["inputs"]            # install.sh is one of the uploaded inputs; it then runs while the models download
+productive = false
+run = "bash in/install.sh"
+
+[[step]]
+name = "generate"
+needs = ["install", "inputs", "cache-umt5", "cache-wan22-ti2v-5b", "cache-vae"]
+run = "python in/comfy_run.py wan22-ti2v-5b"
+artifacts = ["out/*.mp4", "out/*.json"]

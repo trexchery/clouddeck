@@ -71,5 +71,10 @@ desktop.ini
 # `ddc job` results of the shipped examples (artifacts_dir next to the spec)
 examples/outputs/
 
+# Ready-made workflows: your own media and the results of their jobs
+workflows/outputs/
+workflows/inputs/*
+!workflows/inputs/README.md
+
 # Private words for scripts/release_check.py (see its docstring); local only
 scripts/release_denylist.local.txt
