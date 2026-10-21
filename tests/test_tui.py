@@ -425,6 +425,8 @@ def test_narrow_and_short_terminals_stay_usable():
         await pilot.press("d")
         await screen_is(pilot, app, DeployScreen)                        # dialogs still fit
         await pilot.press("escape")
+        await wait_for(lambda: not isinstance(app.screen, DeployScreen), pilot, "the dialog to close")   # the app must not shut down with the dialog mid-dismissal
+        await quiet(pilot, app)
     drive(t, size=(80, 24))
 
 
