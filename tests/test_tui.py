@@ -796,7 +796,7 @@ def test_a_refusal_after_the_dialog_asks_for_the_words_discard_workspace_and_can
         s.query_one("#word", Input).value = "stop dev"
         await ok(pilot, app)
         await wait_for(lambda: isinstance(app.screen, ConfirmScreen) and app.screen.word == "discard workspace", pilot, "the second, typed dialog")
-        second = app.screen
+        second = await confirm_open(pilot, app)                                   # its widgets are mounted
         assert "CHECKPOINTS ARE OFF" in txt(second.body) and "Nothing closed" in txt(second.body) and "still running" in txt(second.body)
         assert second.query_one("#ok").disabled and not calls(p, "discard") and app.dev is not None
         await pilot.press("escape")                                               # cancel
@@ -816,7 +816,7 @@ def test_a_refusal_after_the_dialog_can_be_overruled_only_by_typing_discard_work
         s.query_one("#word", Input).value = "stop dev"
         await ok(pilot, app)
         await wait_for(lambda: isinstance(app.screen, ConfirmScreen) and app.screen.word == "discard workspace", pilot, "the second, typed dialog")
-        second = app.screen
+        second = await confirm_open(pilot, app)
         second.query_one("#word", Input).value = "stop dev"                        # the first phrase is not enough
         await pilot.pause()
         assert second.query_one("#ok").disabled

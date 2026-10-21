@@ -13,6 +13,7 @@ and the project uses [Semantic Versioning](https://semver.org/); while the versi
 ### Fixed
 * The workflows' README, specs and template now give every path relative to their own directory (they said `workflows/...`, which only worked from a repository root), so the commands work in a copy made by `ddc job workflows --copy`.
 * `ddc init`, and the `ssh_key` preflight failure, point to `ddc setup` (jobs) as well as `ddc install` (dev boxes with checkpoints); `ddc job check` no longer tells a jobs-only user to run the GitHub-dependent installer. `ddc setup --help` describes the Linux/WSL watchdog.
+* A confirmation dialog pushed straight after another one could crash the TUI on a slow machine (`NoMatches: #word` in its `on_mount`); it now focuses its field only if present, and the tests wait for the dialog's widgets.
 * `tests/test_workflows.py` ran `bash -n` with the WSL launcher on Windows (`System32ash.exe`) and failed on machines without a WSL distro. It now uses Git Bash there; Linux and Windows CI both still check the install script's syntax.
 * `inputs` / `inputs_dest` in `examples/gpu-batch.toml` sat inside the `[prep]` table, where `ddc job` silently ignores them; they are top-level keys and now come before the first table. A new test fails for any shipped spec with `inputs` inside a table.
 

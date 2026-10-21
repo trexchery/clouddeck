@@ -215,7 +215,8 @@ class ConfirmScreen(ModalScreen[bool]):
                 yield Button("Cancel", id="cancel")
 
     def on_mount(self) -> None:
-        (self.query_one("#word") if self.word else self.query_one("#cancel" if self.danger else "#ok")).focus()
+        # query(), not query_one(): on a slow runner a dialog pushed straight after another one could run on_mount before its widgets exist (NoMatches crashed the app)
+        self.query("#word" if self.word else "#cancel" if self.danger else "#ok").focus()
 
     @on(Input.Changed, "#word")
     def _typed(self, e: Input.Changed) -> None:
