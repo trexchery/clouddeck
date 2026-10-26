@@ -99,6 +99,9 @@ done | paste -sd, -)
 names=()
 for d in "$W"/*/; do
   n=$(basename "$d"); [ "$n" = results ] && continue
+  # runs/ is scratch space for throwaway per-run copies (recreated on demand); packing it can push a checkpoint
+  # past GitHub's 2 GB push limit
+  [ "$n" = runs ] && continue
   find "$d" -name '*.lock' -path '*/.git/*' -delete 2>/dev/null || true
   pack "ws-$n" "$W" "$n"; names+=("ws-$n")
 done
@@ -129,7 +132,7 @@ old = json.load(open(sys.argv[1]))["archives"]
 new = json.load(open(sys.argv[2]))["archives"]
 out = []
 for n, a in sorted(old.items()):
-    if not (n.startswith("ws-") or n in ("claude", "config")):   # results is scratch space and may shrink legitimately
+    if n == "ws-runs" or not (n.startswith("ws-") or n in ("claude", "config")):   # results and runs are scratch space
         continue
     if n not in new:
         if n.startswith("ws-"):   # claude/config are optional (not installed / no dotfiles): only a big shrink counts
