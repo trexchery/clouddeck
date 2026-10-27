@@ -28,6 +28,20 @@ last_active=$(date +%s); last_dist=$last_active; last_ckpt=$last_active
 
 log() { echo "$(date -u +%FT%TZ) $*"; }
 
+write_state() {
+  printf '{"now":%s,"started":%s,"uptime_min":%s,"idle_min":%s,"active_reason":"%s","dist_idle_min":%s,"last_checkpoint":"%s","checkpoint_failed":%s,"shutdown_requested":"%s"}\n' \
+    "$now" "$start" "$up" "$idle" "$why" "${dist_idle:-0}" "${ck:-}" "$([ -f "$S/checkpoint_failed" ] && echo true || echo false)" "$(cat "$S/shutdown_requested" 2>/dev/null)" > "$S/state.json.tmp"
+  mv "$S/state.json.tmp" "$S/state.json"
+}
+
+# A checkpoint can take minutes; keep "now" moving meanwhile, or the PC watchdog (stale after 3 min) reports a busy agent as dead.
+ckpt() {
+  ( while sleep 30; do now=$(date +%s); write_state; done ) & local hb=$!
+  "$D/checkpoint.sh" "$@"; local rc=$?
+  kill "$hb" 2>/dev/null; wait "$hb" 2>/dev/null
+  return $rc
+}
+
 busy_re=$DDC_BUSY_DEFAULT
 if [ -n "${DDC_BUSY_REGEX:-}" ]; then
   [[ x =~ $DDC_BUSY_REGEX ]]; rc=$?   # 2 = not a valid ERE
@@ -65,7 +79,7 @@ while :; do
 
   idle=$(( (now - last_active) / 60 )); up=$(( (now - start) / 60 ))
   if ! ddc_ckpt_disabled && [ $(( (now - last_ckpt) / 60 )) -ge "$CKPT_MIN" ]; then
-    if out=$("$D/checkpoint.sh" periodic 2>&1); then last_ckpt=$now; log "$out" | tail -1; else log "checkpoint FAILED: $(echo "$out" | tail -3)"; echo "$now" > "$S/checkpoint_failed"; fi
+    if out=$(ckpt periodic 2>&1); then last_ckpt=$now; log "$out" | tail -1; else log "checkpoint FAILED: $(echo "$out" | tail -3)"; echo "$now" > "$S/checkpoint_failed"; fi
   fi
 
   req=""
@@ -73,16 +87,14 @@ while :; do
   [ "$up" -ge "$MAX_MIN" ] && req=max_runtime
   if [ -n "$req" ] && [ ! -f "$S/shutdown_requested" ]; then
     log "shutdown requested ($req): final checkpoint"
-    if "$D/checkpoint.sh" "final-$req" >> "$W/results/agent.log" 2>&1; then echo "$req" > "$S/shutdown_requested"; last_ckpt=$now; fi
+    if ckpt "final-$req" >>"$W/results/agent.log" 2>&1; then echo "$req" > "$S/shutdown_requested"; last_ckpt=$now; fi
   elif [ -z "$req" ] && [ -n "$why" ] && [ -f "$S/shutdown_requested" ] && [ "$(cat "$S/shutdown_requested")" = idle ]; then
     rm -f "$S/shutdown_requested"; log "activity resumed ($why): idle shutdown request withdrawn"
   fi
 
   dist_idle=$(( (now - last_dist) / 60 ))
   ck=$(cut -d' ' -f1 "$S/last_checkpoint" 2>/dev/null)
-  printf '{"now":%s,"started":%s,"uptime_min":%s,"idle_min":%s,"active_reason":"%s","dist_idle_min":%s,"last_checkpoint":"%s","checkpoint_failed":%s,"shutdown_requested":"%s"}\n' \
-    "$now" "$start" "$up" "$idle" "$why" "$dist_idle" "$ck" "$([ -f "$S/checkpoint_failed" ] && echo true || echo false)" "$(cat "$S/shutdown_requested" 2>/dev/null)" > "$S/state.json.tmp"
-  mv "$S/state.json.tmp" "$S/state.json"
+  write_state
   nw=$(grep -c '^Host w' "$HOME/.ssh/config.d/workers" 2>/dev/null); nw=${nw:-0}
   printf 'idle %sm/%s | up %sh%02dm | ckpt %s | workers %s%s' "$idle" "$IDLE_MIN" $((up/60)) $((up%60)) "${ck:11:5}" "$nw" \
     "$([ -f "$S/shutdown_requested" ] && echo ' | STOPPING')" > "$S/status-line"

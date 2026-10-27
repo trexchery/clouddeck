@@ -1375,6 +1375,8 @@ def create_box(role: str, profile: str, idx: int = 0, counts: dict[str, int] | N
             die("lease never exposed ssh port")
         if not valid_host(host) or not valid_port(port):
             die(f"the provider returned an unusable ssh endpoint {host!r}:{port!r}")
+        # a brand-new container: forget a key left by an earlier lease on the same reused host:port, or accept-new refuses it as CHANGED
+        subprocess.run([SSH_KEYGEN, "-f", str(STATE_DIR / "known_hosts"), "-R", f"[{host}]:{int(port)}"], capture_output=True, creationflags=NOWIN)
         update_dep(dseq, host=host, port=int(port), **({"owner": owner} if owner else {}))
         d = load_state()["deps"][dseq]
         for _ in range(60):
