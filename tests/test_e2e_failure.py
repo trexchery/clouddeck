@@ -251,6 +251,16 @@ def test_a_start_that_fails_after_the_lease_closes_only_what_it_created(e2e, cap
     assert json.dumps(ddc.load_state()).count(other_machine) == 0
 
 
+def test_a_provider_that_fails_the_lease_post_is_skipped_by_the_retry(e2e, capsys):
+    e2e.fail_next("POST /v1/leases", "reject", times=1)               # the cheapest provider fails the lease once
+    rc, out = run_ddc(capsys, "start")
+    assert rc == 0, out
+    leases = [json.loads(line) for line in ddc.LEDGER.read_text(encoding="utf-8").splitlines() if '"leased"' in line]
+    bad = [p for p, v in ddc.read_json(ddc.PERF, {}).items() if v.get("bad_until")]
+    assert len(bad) == 1, "the provider whose lease POST failed is marked bad for a day"
+    assert leases and leases[-1]["provider"] != bad[0], "the retry leased from another provider"
+
+
 def test_when_closing_the_failed_lease_also_fails_the_error_says_it_may_still_be_billing(e2e, capsys):
     e2e.unreachable.update(e2e.providers.values())                  # ssh never comes up ...
     e2e.fail_next("DELETE /v1/deployments", "reject", times=40)       # ... and the API refuses to close the lease

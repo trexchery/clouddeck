@@ -1323,6 +1323,7 @@ def create_box(role: str, profile: str, idx: int = 0, counts: dict[str, int] | N
     created = launch_lease(name, sdl, role=role, limit_h=limit_h, cap_usd_hr=pr["max_usd_hr"], label=profile_label(profile), profile=profile, idx=idx)
     dseq = str(created["dseq"])
     log(f"{name}: created dseq={dseq}, waiting for bids")
+    chosen: dict[str, Any] | None = None
     try:
         ranked: list[dict[str, Any]] = []
         pins, audited = sdlgen.pins(pr), pr.get("audited_only") is True   # the user's provider choice: bid filters only (validated with the profile)
@@ -1395,7 +1396,8 @@ def create_box(role: str, profile: str, idx: int = 0, counts: dict[str, int] | N
         log(f"{name}: provisioning failed ({e}); closing our dseq {dseq}")
         try:
             perf = read_json(PERF, {})
-            prov = load_state()["deps"][dseq].get("provider")
+            # the chosen bid counts too: a lease POST the provider fails never records a provider in state, and that provider was the cheapest again
+            prov = load_state()["deps"][dseq].get("provider") or (chosen or {}).get("provider")
             if prov:
                 perf.setdefault(prov, {})["bad_until"] = now() + 24 * 3600
                 write_json(PERF, perf)
