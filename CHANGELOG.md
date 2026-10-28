@@ -7,7 +7,7 @@ and the project uses [Semantic Versioning](https://semver.org/); while the versi
 
 ### Added
 * `ddc runner up OWNER/REPO... [--slots N] [--watch]` / `ddc runner down`: ephemeral GitHub Actions runners (JIT configs from the local `gh`, labels `self-hosted, Linux, X64, proj-ephemeral, ddc`) for private repos on an already running dev box. It never starts a lease. The JIT config travels only on ssh stdin and reaches the runner through its environment, never a command line. Runner 2.338.2 is installed sha256-verified and root-owned in `/opt/actions-runner`, outside the checkpointed `/work`. See `docs/RUNNERS.md`.
-* `setup.sh` creates the user `ci` on dev boxes (home `/ci`, no sudo, no ssh login) and closes dev's data to it: `/home/dev` 700, `/work` 750, `/var/tmp/ddc-state` 700.
+* `setup.sh` creates the user `ci` on dev boxes (home `/ci`, no sudo, no ssh login) and closes dev's data to it: `/home/dev` 700, `/work` 750, `/var/tmp/ddc-state` 700 (kept 700 when `restore.sh` / `checkpoint.sh` recreate it); dev's ssh control sockets moved from `/tmp` to `~/.ssh`.
 * Idle detection counts a running CI job (`Runner.Worker` of user `ci`, `active_reason` `ci_job`) as busy; an idle runner does not keep the box alive.
 
 ## [0.1.2] - 2026-10-20

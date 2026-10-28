@@ -36,6 +36,7 @@ heads=$(ddc_state_heads) || exit 1
 ddc_state_identity "$heads" || exit 1
 # keep an unpushed checkpoint of a failed upload (checkpoint.sh keeps it as ck-new) instead of deleting it
 if [ -d "$SR/.git" ] && git -C "$SR" rev-parse -q --verify refs/heads/ck-new >/dev/null; then mv "$SR" "$SR.unpushed-$(date +%s)"; else rm -rf "$SR"; fi
+mkdir -m 700 "$SR"   # private before git writes into it (the clone holds the encrypted archives and their manifest; ci must not list it)
 if [ -z "$heads" ]; then
   git init -q -b main "$SR"; finish; echo "restored= missing=all"; exit 0
 fi

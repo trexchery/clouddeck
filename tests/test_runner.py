@@ -101,3 +101,35 @@ def test_down_removes_only_our_idle_runners(world):
     assert [a[4] for a, _ in world.calls if a[0] == "gh" and a[3] == "DELETE"] == ["repos/me/app/actions/runners/1"]
     assert [c for c, _, _ in ssh_cmds(world)] == ["bash /opt/ddc/runner.sh stop"]
     assert ddc.read_json(ddc.STATE_DIR / "runners.json", {}) == {}
+
+
+LAB = [{"name": n} for n in ("self-hosted", "ddc")]
+
+
+def deletes(w):
+    return [a[4] for a, _ in w.calls if a[0] == "gh" and a[3] == "DELETE"]
+
+
+def test_watch_drops_this_boxs_idle_registrations_when_the_box_is_gone(world, monkeypatch):
+    world.runners = [{"id": 1, "name": "ddc-4242-1", "busy": False, "labels": LAB},
+                     {"id": 2, "name": "ddc-4242-2", "busy": True, "labels": LAB},    # mid-job: left alone
+                     {"id": 3, "name": "ddc-9999-1", "busy": False, "labels": LAB},   # another box's
+                     {"id": 4, "name": "laptop", "busy": False, "labels": [{"name": "self-hosted"}]}]
+    monkeypatch.setattr(runner.time, "sleep", lambda s: setattr(world, "box", None))
+    runner.cmd_up(["me/app"], 1, True)
+    assert deletes(world) == ["repos/me/app/actions/runners/1"]
+
+
+def test_watch_rechecks_private_on_every_pass(world, monkeypatch):
+    world.runners = [{"id": 1, "name": "ddc-4242-1", "busy": False, "labels": LAB}]
+    naps = []
+
+    def sleep(s):
+        naps.append(s)
+        assert len(naps) == 1, "the loop kept running after the repo went public"
+        world.private = False
+    monkeypatch.setattr(runner.time, "sleep", sleep)
+    with pytest.raises(ddc.DdcError, match="public"):
+        runner.cmd_up(["me/app"], 1, True)
+    assert len(gh_calls(world, "generate-jitconfig")) == 1, "no runner after the repo went public"
+    assert deletes(world) == ["repos/me/app/actions/runners/1"]

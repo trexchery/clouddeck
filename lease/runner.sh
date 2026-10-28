@@ -38,16 +38,18 @@ start)
   # Hard links: the runner's files stay root-owned (ci cannot change the shared install); ci owns only the directories,
   # where the runner writes its JIT settings (.runner/.credentials), _diag and _work. The whole dir goes when the job ends.
   cp -al "$R" "$d"; find "$d" -type d -exec chown "$U:$U" {} +
-  # The runner reads ACTIONS_RUNNER_INPUT_JITCONFIG from its environment: inherited, so it never appears in a command line.
-  export ACTIONS_RUNNER_INPUT_JITCONFIG=$jit
-  setsid bash "$0" _run "$slot" >/dev/null 2>&1 </dev/null &
-  unset ACTIONS_RUNNER_INPUT_JITCONFIG jit
+  # The config goes on down a pipe (printf is a builtin: no command line), so no root process keeps it in its environment.
+  printf '%s\n' "$jit" | setsid bash "$0" _run "$slot" >/dev/null 2>&1 &
+  unset jit
   echo "started $slot" ;;
 _run)   # session leader for one runner: run it as ci, then remove its directory (ephemeral: it exits after one job)
   slot_ok "${2:-}"; slot=$2; d=$H/runners/$slot
   echo $$ > "$ST/$slot.pid"
   trap : TERM   # `stop` signals the whole session: the runner exits, this shell survives to clean up (a handler, not an ignore, so children keep the default)
-  (cd "$d" && runuser -u "$U" -- ./run.sh) >>"$ST/$slot.log" 2>&1 </dev/null || true
+  # stdin (the pipe from `start`) reaches only the ci shell, which execs run.sh with ACTIONS_RUNNER_INPUT_JITCONFIG set: only the
+  # runner's own ci processes (run.sh, run-helper.sh, Runner.Listener) have it in their environment, and the listener clears it
+  # before it starts the job's Runner.Worker. They are user ci, like the job, which can read the slot's .runner/.credentials anyway.
+  (cd "$d" && runuser -u "$U" -- bash -c 'IFS= read -r j; ACTIONS_RUNNER_INPUT_JITCONFIG=$j exec ./run.sh </dev/null') >>"$ST/$slot.log" 2>&1 || true
   rm -rf "$d" "$ST/$slot.pid" ;;
 list)
   for f in "$ST"/*.pid; do [ -e "$f" ] || continue; s=$(basename "$f" .pid); if alive "$s"; then echo "$s"; else rm -f "$f"; fi; done ;;
