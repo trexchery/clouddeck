@@ -11,6 +11,7 @@ rent gpus and cpu dev boxes on [akash network](https://akash.network). compare p
 - **terminal ui:** browse the gpu market, compare providers, monitor spending, and manage instances and projects from a keyboard-driven dashboard.
 - **dev boxes:** spin up an interactive linux environment with ssh, tmux, and optional claude code. reconnect with `claude-cloud`.
 - **workers:** add and remove compute for parallel tests and builds.
+- **ci runners:** `ddc runner up owner/repo` runs ephemeral github actions runners for private repos on a running dev box, as an unprivileged `ci` user; it never starts a lease.
 - **spend controls:** per-command approval for paid cli operations, hourly price caps, budget and reserve limits, runtime limits, and a local watchdog.
 - **encrypted checkpoints:** save and verify dev-box work in a private github state repository before closing, then restore it on another lease.
 - **demo mode:** try the full terminal interface on simulated machines without paying for a lease.
@@ -59,6 +60,6 @@ ready-made video workflows (wan 2.2 text/image-to-video, wan 2.2 animate and sca
 
 ## docs
 
-[quickstart](docs/QUICKSTART.md) · [batch jobs](docs/JOBS.md) · [hardware](docs/HARDWARE.md) · [costs and limits](docs/COSTS-AND-SAFETY.md) · [checkpoints](docs/CHECKPOINTS.md) · [platforms](docs/PLATFORMS.md) · [security](SECURITY.md) · [changelog](CHANGELOG.md).
+[quickstart](docs/QUICKSTART.md) · [batch jobs](docs/JOBS.md) · [hardware](docs/HARDWARE.md) · [costs and limits](docs/COSTS-AND-SAFETY.md) · [checkpoints](docs/CHECKPOINTS.md) · [ci runners](docs/RUNNERS.md) · [platforms](docs/PLATFORMS.md) · [security](SECURITY.md) · [changelog](CHANGELOG.md).
 
 [mit license](LICENSE). independent project; not affiliated with akash network or anthropic.

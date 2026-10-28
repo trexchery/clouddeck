@@ -11,6 +11,7 @@ bash, git, gpg, tar, python3, flock, tmux, node/npm (pigz and GNU parallel are u
 | `checkpoint.sh`, `restore.sh` | encrypted checkpoint to / from the private state repo |
 | `ddc-lib.sh` | helpers sourced by the three scripts above (paths, state-repo identity checks, busy-process scan) |
 | `bench.sh` | `ddc bench`: cpu score plus an optional `DDC_BENCH_CMD` of your own |
+| `runner.sh` | `ddc runner` (root): pinned, sha256-verified GitHub Actions runner in `/opt/actions-runner`, ephemeral JIT runners as user `ci` ([docs/RUNNERS.md](../docs/RUNNERS.md)) |
 | `dist.sh`, `workers.sh` | fan jobs out to worker leases, live worker view (tmux `workers` window) |
 | `tmux.conf` | tmux keys that survive Windows Terminal -> ssh -> tmux |
 
@@ -54,5 +55,7 @@ archives `ws-<repo>`, `results`, `claude`, `config` as `archives/<name>.tar.gz.g
 * Checkpoint refuses a workspace that is missing or lost over half its entries (`--allow-shrink` overrides),
   refuses a state repo that is not ours, and publishes main + prev in one atomic, lease-checked push. If the
   upload fails nothing remote changes and the new checkpoint stays in `/var/tmp/ddc-state` (branch `ck-new`).
+* A running GitHub Actions job (a `Runner.Worker` of user `ci`) counts as busy; an idle runner does not.
+* User `ci` (home `/ci`) cannot read `/home/dev`, `~/.config/ddc`, `/work` (750) or `/var/tmp/ddc-state` (700).
 * Idle detection ignores the controller's own `ssh ... bash -c` probes, and treats any detection error as
   "busy": it can delay an idle shutdown, never cause one. `runtimeLimitHours` remains the hard stop.

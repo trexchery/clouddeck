@@ -583,6 +583,101 @@ def test_bench_runs_configured_command(boxes):
     assert (b.work / "results" / "bench-cmd.log").read_text().strip() == "hi"
 
 
+# ---------------------------------------------------------------- `ddc runner`: ci idle rule, runner.sh, setup.sh's ci user
+
+def _ci_ps(box: Box, ci_comms: list[str] | None) -> None:
+    """`ps` stub: dev's scan sees only a probe; `ps -e -o uid=,comm=` lists `ci_comms` under the current uid (DDC_CI_USER in the test), None = fails."""
+    ci = "exit 1" if ci_comms is None else "cat <<EOF\n" + "\n".join(f"$(id -u) {c}" for c in ci_comms) + "\nEOF"
+    p = box.bin / "ps"
+    p.write_text(f'#!/bin/bash\ncase "$*" in\n*uid=*)\n{ci}\n;;\n*) echo "{PROBE}" ;;\nesac\n', newline="\n")
+    p.chmod(0o755)
+
+
+@needs_sandbox
+@pytest.mark.parametrize("comms,reason_ok", [
+    (["Runner.Listener", "Runner.Worker", "node"], lambda r: r == "ci_job"),     # a job is running: busy
+    (["Runner.Listener", "run-helper.sh"], lambda r: not r.startswith("ci")),     # an idle runner never keeps the box alive
+    (None, lambda r: r == "ci_detect_error"),                                     # a failed look counts as busy
+])
+def test_agent_counts_a_ci_job_but_not_an_idle_runner(boxes, comms, reason_ok):
+    b = boxes()
+    _ci_ps(b, comms)
+    (b.work / "results").mkdir()
+    user = subprocess.run([BASH, "-c", "id -un"], capture_output=True, text=True).stdout.strip()
+    cp = subprocess.run([BASH, px(LEASE / "agent.sh")], capture_output=True, text=True, timeout=60,
+                        env=b.env({"DDC_AGENT_ONCE": "1", "DDC_CI_USER": user}))
+    assert cp.returncode == 0, cp.stderr
+    assert reason_ok(json.loads((b.run_dir / "state.json").read_text())["active_reason"])
+
+
+@needs_sandbox
+def test_agent_without_a_ci_user_is_not_busy(boxes):
+    b = boxes()
+    _ci_ps(b, ["Runner.Worker"])
+    (b.work / "results").mkdir()
+    cp = subprocess.run([BASH, px(LEASE / "agent.sh")], capture_output=True, text=True, timeout=60,
+                        env=b.env({"DDC_AGENT_ONCE": "1", "DDC_CI_USER": "no-such-user-ddc"}))
+    assert cp.returncode == 0 and not json.loads((b.run_dir / "state.json").read_text())["active_reason"].startswith("ci")
+
+
+@needs_sandbox
+@pytest.mark.skipif(not Path("/proc/self/cmdline").exists() or not shutil.which("setsid"), reason="needs Linux /proc and setsid")
+def test_runner_start_keeps_the_jit_config_out_of_every_command_line(tmp_path):
+    jit = "SyntheticJit" + "Q" * 60
+    root, home, st, out, stub = (tmp_path / n for n in ("opt", "ci", "state", "out", "bin"))
+    for d in (root / "bin", out, stub):
+        d.mkdir(parents=True)
+    (root / ".ddc-2.338.2").touch()
+    (root / "run.sh").write_text("#!/bin/sh\n", newline="\n")
+    # runuser stub records what the runner would get, then stays up like a listener; install stub drops -o/-g (the test is not root)
+    (stub / "runuser").write_text(f'#!/bin/bash\nprintf "%s\n" "$@" > {out}/args; pwd > {out}/cwd\n'
+                                  f'printf "%s" "$ACTIONS_RUNNER_INPUT_JITCONFIG" > {out}/env; exec sleep 30\n', newline="\n")
+    (stub / "install").write_text('#!/bin/bash\na=(); while [ $# -gt 0 ]; do case $1 in -o|-g) shift 2;; *) a+=("$1"); shift;; esac; done\n'
+                                  'exec /usr/bin/install "${a[@]}"\n', newline="\n")
+    for f in stub.iterdir():
+        f.chmod(0o755)
+    user = subprocess.run(["id", "-un"], capture_output=True, text=True).stdout.strip()
+    env = {**os.environ, "PATH": f"{stub}:{os.environ['PATH']}", "DDC_RUNNER_ROOT": str(root), "DDC_CI_HOME": str(home),
+           "DDC_RUNNER_STATE": str(st), "DDC_CI_USER": user}
+    run = lambda *a, inp="": subprocess.run([BASH, str(LEASE / "runner.sh"), *a], input=inp, capture_output=True, text=True, env=env, timeout=30)  # noqa: E731
+
+    assert run("start", "me.app.1", inp="not a jit config\n").returncode != 0
+    assert run("start", "../escape", inp=jit + "\n").returncode != 0
+    cp = run("start", "me.app.1", inp=jit + "\n")
+    assert cp.returncode == 0, cp.stderr
+    for _ in range(100):
+        if (out / "env").exists() and (out / "env").read_text():
+            break
+        time.sleep(0.05)
+    assert (out / "env").read_text() == jit, "the runner gets the config through its environment"
+    assert (out / "args").read_text().split() == ["-u", user, "--", "./run.sh"]
+    assert (out / "cwd").read_text().strip() == str(home / "runners" / "me.app.1")
+    for c in Path("/proc").glob("[0-9]*/cmdline"):
+        try:
+            assert jit.encode() not in c.read_bytes(), c
+        except OSError:
+            pass
+    assert jit not in "".join(p.read_text(errors="replace") for p in tmp_path.rglob("*") if p.is_file() and p.parent != out)
+    assert run("list").stdout.split() == ["me.app.1"]
+    assert run("start", "me.app.1", inp=jit + "\n").returncode != 0, "a live slot is not started twice"
+    assert "stopped me.app.1" in run("stop").stdout
+    for _ in range(100):
+        if not (home / "runners" / "me.app.1").exists():
+            break
+        time.sleep(0.05)
+    assert not (home / "runners" / "me.app.1").exists() and run("list").stdout == ""
+
+
+def test_setup_creates_an_unprivileged_ci_user_that_cannot_read_dev():
+    s = (LEASE / "setup.sh").read_text()
+    assert "useradd -m -d /ci -U -s /bin/bash ci" in s and "gpasswd -d ci" in s
+    assert "chmod 700 $D $C /ci" in s and "chmod 750 /work" in s and "-m 700 /var/tmp/ddc-state" in s
+    assert not re.search(r"usermod[^\n]*\bci\b|NOPASSWD", s)
+    r = (LEASE / "runner.sh").read_text()
+    assert "SHA=baebf204307bac6193480852732f0aba2ae97b6c5597c244f4d5558390147c40" in r and "sha256sum -c" in r
+    assert "--jitconfig" not in r, "the JIT config is never passed as an argument"
+
+
 # ---------------------------------------------------------------- static policy (run everywhere bash exists)
 
 SCRIPTS = sorted(LEASE.glob("*.sh"))
@@ -590,7 +685,7 @@ SCRIPTS = sorted(LEASE.glob("*.sh"))
 
 def test_lease_dir_holds_only_generic_tooling():
     assert {p.name for p in LEASE.iterdir()} == {"agent.sh", "bench.sh", "checkpoint.sh", "ddc-lib.sh", "dist.sh", "README.md",
-                                                 "restore.sh", "setup.sh", "tmux.conf", "workers.sh"}
+                                                 "restore.sh", "runner.sh", "setup.sh", "tmux.conf", "workers.sh"}
 
 
 @pytest.mark.parametrize("p", sorted(LEASE.iterdir()), ids=lambda p: p.name)
