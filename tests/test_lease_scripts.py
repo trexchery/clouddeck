@@ -628,10 +628,12 @@ def test_runner_start_keeps_the_jit_config_out_of_every_command_line(tmp_path):
     for d in (root / "bin", out, stub):
         d.mkdir(parents=True)
     (root / ".ddc-2.338.2").touch()
-    (root / "run.sh").write_text("#!/bin/sh\n", newline="\n")
-    # runuser stub records what the runner would get, then stays up like a listener; install stub drops -o/-g (the test is not root)
-    (stub / "runuser").write_text(f'#!/bin/bash\nprintf "%s\n" "$@" > {out}/args; pwd > {out}/cwd\n'
-                                  f'printf "%s" "$ACTIONS_RUNNER_INPUT_JITCONFIG" > {out}/env; exec sleep 30\n', newline="\n")
+    # run.sh stub records what the runner gets, then stays up like a listener; runuser stub records its args and runs the command
+    # (the test is not root); install stub drops -o/-g
+    (root / "run.sh").write_text(f'#!/bin/bash\npwd > {out}/cwd; echo $$ > {out}/pid\n'
+                                 f'printf "%s" "$ACTIONS_RUNNER_INPUT_JITCONFIG" > {out}/env; exec sleep 30\n', newline="\n")
+    (root / "run.sh").chmod(0o755)
+    (stub / "runuser").write_text(f'#!/bin/bash\nprintf "%s\\n" "$@" > {out}/args; shift 3; exec "$@"\n', newline="\n")
     (stub / "install").write_text('#!/bin/bash\na=(); while [ $# -gt 0 ]; do case $1 in -o|-g) shift 2;; *) a+=("$1"); shift;; esac; done\n'
                                   'exec /usr/bin/install "${a[@]}"\n', newline="\n")
     for f in stub.iterdir():
@@ -650,13 +652,22 @@ def test_runner_start_keeps_the_jit_config_out_of_every_command_line(tmp_path):
             break
         time.sleep(0.05)
     assert (out / "env").read_text() == jit, "the runner gets the config through its environment"
-    assert (out / "args").read_text().split() == ["-u", user, "--", "./run.sh"]
     assert (out / "cwd").read_text().strip() == str(home / "runners" / "me.app.1")
     for c in Path("/proc").glob("[0-9]*/cmdline"):
         try:
             assert jit.encode() not in c.read_bytes(), c
         except OSError:
             pass
+    # environments: only the runner process (run.sh, exec'd into sleep here) holds it, not runner.sh's long-lived root `_run` shell
+    holders = []
+    for e in Path("/proc").glob("[0-9]*/environ"):
+        try:
+            if jit.encode() in e.read_bytes():
+                holders.append(e.parent.name)
+        except OSError:
+            pass
+    assert holders == [(out / "pid").read_text().strip()], holders
+    assert (out / "args").read_text().splitlines()[:4] == ["-u", user, "--", "bash"]
     assert jit not in "".join(p.read_text(errors="replace") for p in tmp_path.rglob("*") if p.is_file() and p.parent != out)
     assert run("list").stdout.split() == ["me.app.1"]
     assert run("start", "me.app.1", inp=jit + "\n").returncode != 0, "a live slot is not started twice"
@@ -668,11 +679,41 @@ def test_runner_start_keeps_the_jit_config_out_of_every_command_line(tmp_path):
     assert not (home / "runners" / "me.app.1").exists() and run("list").stdout == ""
 
 
+@needs_sandbox
+def test_restore_and_checkpoint_keep_the_state_clone_private(boxes):
+    a = boxes("100")
+    a.seed()
+    ok(a.ckpt("first"))   # no restore before: checkpoint.sh creates the clone
+    assert stat.S_IMODE(a.sr.stat().st_mode) == 0o700
+    b = boxes("200")
+    b.sr.mkdir(mode=0o700)   # as setup.sh leaves it; restore.sh replaces it with a fresh clone, which must be private again
+    ok(b.run("restore.sh"), "restore")
+    assert (b.sr / "manifest.json").exists() and stat.S_IMODE(b.sr.stat().st_mode) == 0o700
+
+
+@needs_sandbox
+@pytest.mark.skipif(not hasattr(os, "geteuid") or os.geteuid() != 0 or not shutil.which("setpriv"),
+                    reason="needs root and setpriv to act as another user (WSL: run pytest with `wsl -u root`)")
+def test_another_user_is_denied_the_state_clone_after_restore(boxes):
+    good_checkpoint(boxes)
+    b = boxes("200")
+    ok(b.run("restore.sh"), "restore")
+    b.root.chmod(0o755)   # the sandbox root is traversable, like /var/tmp: only the clone's own mode keeps others out
+    as_nobody = lambda *c: subprocess.run(["setpriv", "--reuid=65534", "--regid=65534", "--clear-groups", *c],  # noqa: E731
+                                          capture_output=True, text=True, timeout=30)
+    assert as_nobody("ls", str(b.root)).returncode == 0
+    cp = as_nobody("ls", str(b.sr))
+    assert cp.returncode != 0 and "Permission denied" in cp.stderr, cp
+
+
 def test_setup_creates_an_unprivileged_ci_user_that_cannot_read_dev():
     s = (LEASE / "setup.sh").read_text()
     assert "useradd -m -d /ci -U -s /bin/bash ci" in s and "gpasswd -d ci" in s
     assert "chmod 700 $D $C /ci" in s and "chmod 750 /work" in s and "-m 700 /var/tmp/ddc-state" in s
     assert not re.search(r"usermod[^\n]*\bci\b|NOPASSWD", s)
+    cps = re.findall(r"ControlPath\s+(\S+)", s)
+    assert cps == ["~/.ssh/cm-%C"], "dev's ssh control sockets stay in ~/.ssh (700), never in a dir ci can write"
+    assert not any(c.startswith(("/tmp", "/var/tmp", "/dev/shm")) for c in cps)
     r = (LEASE / "runner.sh").read_text()
     assert "SHA=baebf204307bac6193480852732f0aba2ae97b6c5597c244f4d5558390147c40" in r and "sha256sum -c" in r
     assert "--jitconfig" not in r, "the JIT config is never passed as an argument"

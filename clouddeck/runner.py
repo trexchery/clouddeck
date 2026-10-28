@@ -84,14 +84,30 @@ def up_pass(d: dict[str, Any], want: dict[str, int]) -> list[str]:
     return started
 
 
+def _drop_idle(repo: str, dseq: str) -> None:
+    """Delete this box's idle registrations (ddc-<dseq>-*) in `repo`: a runner whose box is gone never comes online again."""
+    for rn in gh(f"repos/{repo}/actions/runners?per_page=100")["runners"]:
+        if _ours(rn) and rn["name"].startswith(f"ddc-{dseq}-") and not rn["busy"]:
+            gh(f"repos/{repo}/actions/runners/{rn['id']}", "DELETE", ok=(404,))
+            ddc.log(f"{repo}: removed {rn['name']}")
+
+
+def _require_private(d: dict[str, Any], want: dict[str, int]) -> None:
+    """Checked before every pass: a repo made public while --watch runs loses this box's idle registrations (their listeners then exit)."""
+    public = [r for r in want if gh(f"repos/{r}").get("private") is not True]
+    if public:
+        for r in public:
+            _drop_idle(r, d["dseq"])
+        ddc.die(f"{', '.join(public)} is public (or unreadable): self-hosted runners would run untrusted pull-request code; "
+                "keep it on GitHub-hosted runners")
+
+
 def cmd_up(repos: list[str], slots: int, watch: bool) -> None:
     if not 1 <= slots <= 16:
         ddc.die("--slots must be 1..16")
     d = _box()   # checked before any GitHub call
     want = {r: slots for r in _repos(repos)}
-    for r in want:
-        if gh(f"repos/{r}").get("private") is not True:
-            ddc.die(f"{r} is public (or unreadable): self-hosted runners would run untrusted pull-request code; keep it on GitHub-hosted runners")
+    _require_private(d, want)
     ok = _root(d, "id ci >/dev/null && test -x /opt/ddc/runner.sh && echo ok", timeout=60).strip()
     if ok != "ok":
         ddc.die("this dev box was provisioned before runner support (no `ci` user); it gets it at the next `ddc start`")
@@ -115,7 +131,10 @@ def cmd_up(repos: list[str], slots: int, watch: bool) -> None:
         nd = ddc.dev_box()
         if not nd or nd["dseq"] != d["dseq"]:
             ddc.log("dev box is gone: runner loop ends (queued jobs fall back as configured in the repos)")
+            for r in want:
+                _drop_idle(r, d["dseq"])
             return
+        _require_private(d, want)
 
 
 def cmd_down(repos: list[str], force: bool) -> None:

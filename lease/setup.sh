@@ -39,13 +39,14 @@ dev hard nproc 1048576
 EOF
 
 # Worker key lets the dev box reach workers; workers never receive any private key.
+# Control sockets live in ~/.ssh (700): in world-writable /tmp user ci could pre-create or hijack dev's github.com / state-repo sockets.
 cat > $D/.ssh/config <<'EOF'
 Include ~/.ssh/config.d/*
 Host *
   ServerAliveInterval 15
   ServerAliveCountMax 4
   ControlMaster auto
-  ControlPath /tmp/ssh-%C
+  ControlPath ~/.ssh/cm-%C
   ControlPersist 10m
 EOF
 chown -R dev: $D/.ssh $C

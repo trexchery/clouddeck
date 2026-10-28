@@ -47,6 +47,7 @@ heads=$(ddc_state_heads) || exit 1
 ddc_state_identity "$heads" || exit 1
 remote_main=$(awk '$2 == "main" {print $1}' <<<"$heads")
 remote_prev=$(awk '$2 == "prev" {print $1}' <<<"$heads")
+mkdir -p "$SR"; chmod 700 "$SR"   # same as restore.sh: the state clone stays private to dev
 [ -d "$SR/.git" ] || git init -q -b main "$SR"
 git -C "$SR" remote add origin "$(ddc_remote)" 2>/dev/null || git -C "$SR" remote set-url origin "$(ddc_remote)"
 local_main=$(git -C "$SR" rev-parse -q --verify refs/heads/main || true)
