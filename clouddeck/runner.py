@@ -88,8 +88,15 @@ def _drop_idle(repo: str, dseq: str) -> None:
     """Delete this box's idle registrations (ddc-<dseq>-*) in `repo`: a runner whose box is gone never comes online again."""
     for rn in gh(f"repos/{repo}/actions/runners?per_page=100")["runners"]:
         if _ours(rn) and rn["name"].startswith(f"ddc-{dseq}-") and not rn["busy"]:
-            gh(f"repos/{repo}/actions/runners/{rn['id']}", "DELETE", ok=(404,))
+            # 422: it picked up a job since the listing; it is ephemeral and unregisters itself when done
+            if gh(f"repos/{repo}/actions/runners/{rn['id']}", "DELETE", ok=(404, 422)) == 422:
+                ddc.log(f"{repo}: {rn['name']} took a job; left to finish")
+                continue
             ddc.log(f"{repo}: removed {rn['name']}")
+
+
+class PublicRepo(ddc.DdcError):
+    """A confirmed answer from GitHub that a repo is not private (not a failed request)."""
 
 
 def _require_private(d: dict[str, Any], want: dict[str, int]) -> None:
@@ -98,7 +105,7 @@ def _require_private(d: dict[str, Any], want: dict[str, int]) -> None:
     if public:
         for r in public:
             _drop_idle(r, d["dseq"])
-        ddc.die(f"{', '.join(public)} is public (or unreadable): self-hosted runners would run untrusted pull-request code; "
+        raise PublicRepo(f"{', '.join(public)} is public (or unreadable): self-hosted runners would run untrusted pull-request code; "
                 "keep it on GitHub-hosted runners")
 
 
@@ -112,19 +119,24 @@ def cmd_up(repos: list[str], slots: int, watch: bool) -> None:
     if ok != "ok":
         ddc.die("this dev box was provisioned before runner support (no `ci` user); it gets it at the next `ddc start`")
     ddc.write_json(ddc.STATE_DIR / "runners.json", _saved() | want)
-    fails = 0
+    fails, recheck = 0, False
     while True:
         try:
+            if recheck:   # inside the try: a failed GitHub request counts toward the three strikes; only a real answer stops
+                _require_private(d, want)
+            recheck = True
             for s in up_pass(d, want):
                 ddc.log(f"runner started: {s}")
             fails = 0
+        except PublicRepo:
+            raise
         except (ddc.DdcError, subprocess.SubprocessError, OSError) as e:
             if not watch:
                 raise
             fails += 1
             ddc.log(f"runner refresh failed ({fails}/3): {e}")
             if fails >= 3:
-                ddc.die("dev box unreachable three times in a row; stopping the runner loop")
+                ddc.die("runner refresh failed three times in a row; stopping the runner loop")
         if not watch:
             return
         time.sleep(WATCH_S)
@@ -134,7 +146,6 @@ def cmd_up(repos: list[str], slots: int, watch: bool) -> None:
             for r in want:
                 _drop_idle(r, d["dseq"])
             return
-        _require_private(d, want)
 
 
 def cmd_down(repos: list[str], force: bool) -> None:

@@ -622,8 +622,8 @@ def test_agent_without_a_ci_user_is_not_busy(boxes):
 
 @needs_sandbox
 @pytest.mark.skipif(not Path("/proc/self/cmdline").exists() or not shutil.which("setsid"), reason="needs Linux /proc and setsid")
-def test_runner_start_keeps_the_jit_config_out_of_every_command_line(tmp_path):
-    jit = "SyntheticJit" + "Q" * 60
+def test_runner_start_keeps_the_jit_config_out_of_every_command_line(tmp_path, request):
+    jit = "SyntheticJit" + os.urandom(30).hex()   # per run: a leftover listener from an earlier run cannot count as a holder
     root, home, st, out, stub = (tmp_path / n for n in ("opt", "ci", "state", "out", "bin"))
     for d in (root / "bin", out, stub):
         d.mkdir(parents=True)
@@ -638,6 +638,13 @@ def test_runner_start_keeps_the_jit_config_out_of_every_command_line(tmp_path):
                                   'exec /usr/bin/install "${a[@]}"\n', newline="\n")
     for f in stub.iterdir():
         f.chmod(0o755)
+
+    def kill_listener():   # the stub listener (sleep 30) never outlives the test, even when an assertion fails before `stop`
+        try:
+            os.kill(int((out / "pid").read_text()), 9)
+        except (OSError, ValueError):
+            pass
+    request.addfinalizer(kill_listener)
     user = subprocess.run(["id", "-un"], capture_output=True, text=True).stdout.strip()
     env = {**os.environ, "PATH": f"{stub}:{os.environ['PATH']}", "DDC_RUNNER_ROOT": str(root), "DDC_CI_HOME": str(home),
            "DDC_RUNNER_STATE": str(st), "DDC_CI_USER": user}
