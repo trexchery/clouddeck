@@ -14,13 +14,16 @@ BOX = {"dseq": "4242", "host": "box.example", "port": 22, "role": "dev", "status
 
 @pytest.fixture
 def world(monkeypatch):
-    w = types.SimpleNamespace(calls=[], private=True, alive="", runners=[], box=dict(BOX))
+    w = types.SimpleNamespace(calls=[], errors={}, private=True, alive="", runners=[], box=dict(BOX))
 
     def fake_run(args, input=None, **k):
         args = list(args)
         w.calls.append((args, input))
         if args[0] == "gh":
             path = args[4]
+            errs = w.errors.get(path)
+            if errs and (err := errs.pop(0)):   # queued per path: None = answer normally, a string = gh fails with it
+                return types.SimpleNamespace(returncode=1, stdout=b"", stderr=err.encode())
             if path.endswith("generate-jitconfig"):
                 out = {"encoded_jit_config": JIT, "runner": {"id": 7}}
             elif "/actions/runners?" in path:
@@ -133,3 +136,37 @@ def test_watch_rechecks_private_on_every_pass(world, monkeypatch):
         runner.cmd_up(["me/app"], 1, True)
     assert len(gh_calls(world, "generate-jitconfig")) == 1, "no runner after the repo went public"
     assert deletes(world) == ["repos/me/app/actions/runners/1"]
+
+
+GH_502 = "gh: Server Error (HTTP 502)"
+
+
+def test_watch_survives_a_transient_github_error_in_the_private_recheck(world, monkeypatch):
+    world.errors["repos/me/app"] = [None, GH_502]   # the first check (before the loop) answers; the first recheck fails
+    world.runners = [{"id": 1, "name": "ddc-4242-1", "busy": False, "labels": LAB}]
+    naps = []
+
+    def sleep(s):
+        naps.append(s)
+        if len(naps) == 2:
+            world.box = None
+    monkeypatch.setattr(runner.time, "sleep", sleep)
+    runner.cmd_up(["me/app"], 1, True)   # ends because the box is gone, not on the 502
+    assert len(naps) == 2 and deletes(world) == ["repos/me/app/actions/runners/1"]
+
+
+def test_watch_stops_after_three_failed_private_rechecks_in_a_row(world, monkeypatch):
+    world.errors["repos/me/app"] = [None, GH_502, GH_502, GH_502]
+    naps = []
+    monkeypatch.setattr(runner.time, "sleep", naps.append)
+    with pytest.raises(ddc.DdcError, match="three times"):
+        runner.cmd_up(["me/app"], 1, True)
+    assert len(naps) == 3 and not deletes(world), "a failed request is not a public repo: registrations stay"
+
+
+def test_drop_idle_skips_a_runner_that_took_a_job_and_removes_the_rest(world):
+    world.runners = [{"id": 1, "name": "ddc-4242-1", "busy": False, "labels": LAB},
+                     {"id": 2, "name": "ddc-4242-2", "busy": False, "labels": LAB}]
+    world.errors["repos/me/app/actions/runners/1"] = ["gh: Validation Failed (HTTP 422)"]
+    runner._drop_idle("me/app", "4242")
+    assert deletes(world) == ["repos/me/app/actions/runners/1", "repos/me/app/actions/runners/2"]
