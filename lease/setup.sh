@@ -86,6 +86,14 @@ EOF
     install -d -o dev -g dev -m 700 $D/.claude
     install -m 600 -o dev -g dev $C/claude-credentials.json $D/.claude/.credentials.json
   fi
+  # CI user for `ddc runner` (lease/runner.sh): own home /ci, no sudo, no ssh login, and no way into what dev holds:
+  # home (deploy keys, backup.pass, worker_key, Claude login), the checkpointed /work, the state repo clone.
+  id ci >/dev/null 2>&1 || useradd -m -d /ci -U -s /bin/bash ci
+  for g in sudo dev; do gpasswd -d ci "$g" >/dev/null 2>&1 || true; done
+  rm -f /etc/sudoers.d/ci
+  chmod 700 $D $C /ci
+  chmod 750 /work
+  install -d -o dev -g dev -m 700 /var/tmp/ddc-state
   [ -f $D/.claude.json ] || { echo '{"hasCompletedOnboarding":true,"theme":"dark"}' > $D/.claude.json; chown dev: $D/.claude.json; }
   # Activity/idle tracker + periodic checkpoints (single instance).
   if ! pgrep -u dev -f /opt/ddc/agent.sh >/dev/null; then

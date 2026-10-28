@@ -71,3 +71,13 @@ ddc_busy_procs() {
   done <<<"$out"
   return 1
 }
+
+# 0 = a GitHub Actions job is running (a Runner.Worker process of the ci user), 1 = none (or no ci user), 2 = could not look.
+# An idle Runner.Listener is deliberately NOT busy: waiting for jobs must not keep a paid box alive.
+ddc_ci_job() {
+  local uid out
+  uid=$(id -u "${DDC_CI_USER:-ci}" 2>/dev/null) || return 1
+  out=$(ps -e -o uid=,comm= 2>/dev/null) || return 2
+  [ -n "$out" ] || return 2
+  awk -v u="$uid" '$1 == u && $2 == "Runner.Worker" {f=1} END {exit !f}' <<<"$out"
+}

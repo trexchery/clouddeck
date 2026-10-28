@@ -7,7 +7,8 @@
 # Idle detection fails towards "busy": if the process scan itself fails the box counts as active
 # (active_reason "procs_detect_error"), so a detection error can delay an idle shutdown but never causes one.
 # The cost of that direction is bounded by the max-runtime request and the platform hard stop.
-# Busy processes: DDC_BUSY_DEFAULT in ddc-lib.sh plus an optional DDC_BUSY_REGEX (ERE) appended to it.
+# Busy processes: DDC_BUSY_DEFAULT in ddc-lib.sh plus an optional DDC_BUSY_REGEX (ERE) appended to it, among dev's processes;
+# plus a running GitHub Actions job of user ci (ddc_ci_job; an idle runner waiting for work does not count).
 # Test seams: DDC_AGENT_INTERVAL (seconds between samples, default 60), DDC_AGENT_ONCE=1 (one sample, then exit),
 # DDC_CGROUP_CPU_STAT (file read for our CPU use, default /sys/fs/cgroup/cpu.stat; unreadable = active_reason "cpu_detect_error", busy),
 # DDC_PTS_GLOB (terminals checked for recent input, default '/dev/pts/[0-9]*'; tests point it at nothing so a real terminal cannot count).
@@ -62,6 +63,10 @@ while :; do
   if [ -z "$why" ]; then
     ddc_busy_procs "$busy_re"
     case $? in 0) why=procs ;; 2) why=procs_detect_error ;; esac   # starts with "procs": the watchdog keeps workers too
+  fi
+  if [ -z "$why" ]; then
+    ddc_ci_job
+    case $? in 0) why=ci_job ;; 2) why=ci_detect_error ;; esac   # `ddc runner` jobs run as user ci, which the scan above does not see
   fi
   if [ -z "$why" ]; then
     # shellcheck disable=SC2231  # the glob in DDC_PTS_GLOB must expand

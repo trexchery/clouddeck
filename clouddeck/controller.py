@@ -3565,6 +3565,15 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("run", help="run one non-interactive shell command on the dev box (as dev), print its output")
     s.add_argument("command")
     s.add_argument("--timeout", type=int, default=1800)
+    s = sub.add_parser("runner", help="ephemeral GitHub Actions runners (user ci) on the running dev box; never starts a lease (docs/RUNNERS.md)")
+    rs = s.add_subparsers(dest="runner_cmd", required=True)
+    s = rs.add_parser("up", help="keep N JIT runners per private repo on the dev box (re-runnable)")
+    s.add_argument("repos", nargs="+", metavar="OWNER/REPO")
+    s.add_argument("--slots", type=int, default=1, help="runners per repo (default 1)")
+    s.add_argument("--watch", action="store_true", help="keep refreshing used slots every 30 s until the dev box is gone")
+    s = rs.add_parser("down", help="remove our runners via the GitHub API and stop idle ones on the box")
+    s.add_argument("repos", nargs="*", metavar="OWNER/REPO", help="default: every repo `runner up` was given")
+    s.add_argument("--force", action="store_true", help="also remove busy runners and kill their running jobs")
     s = sub.add_parser("job", help="run a batch job on one short-lived lease, minimal paid idle time (`ddc job --help`)", add_help=False)
     s.add_argument("job_args", nargs=argparse.REMAINDER)   # listed for --help only: `ddc job ...` is handed to the job CLI untouched (argparse cannot pass a leading --help through REMAINDER)
     toks = list(sys.argv[1:] if argv is None else argv)
@@ -3605,6 +3614,9 @@ def main(argv: list[str] | None = None) -> int:
             d = dev_box() or die("no dev box running")
             cp = subprocess.run(ssh_args(d) + [a.command], timeout=a.timeout)
             return cp.returncode
+        if a.cmd == "runner":
+            from .runner import main as runner_main
+            return runner_main(a)
         if a.cmd == "verify":
             verify_checkpoint()
             return 0
